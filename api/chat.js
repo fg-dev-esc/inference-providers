@@ -92,7 +92,7 @@ async function parseImages(messages, images, origin) {
       messages: [{
         role: 'user',
         content: [
-          { type: 'text', text: `Extrae el contexto visual relevante para responder esta pregunta:\n${lastUserText}` },
+          { type: 'text', text: lastUserText },
           ...images.map((image) => ({ type: 'image_url', image_url: { url: image } })),
         ],
       }],

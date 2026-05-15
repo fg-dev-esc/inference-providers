@@ -741,7 +741,7 @@ Profundizar en:
       }
 
       emptyState.style.display = 'none';
-      const userText = text || 'Describe la imagen.';
+      const userText = text || '[Imagen adjunta]';
       messages.push({ role: 'user', content: userText, imageCount: images.length });
       appendMessage('user', images.length ? `${userText}\n\n[${images.length} imagen${images.length > 1 ? 'es' : ''} adjunta${images.length > 1 ? 's' : ''}]` : userText);
       chatInput.value = '';
