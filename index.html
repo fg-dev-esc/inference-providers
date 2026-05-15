@@ -153,7 +153,19 @@ Profundizar en:
     </main>
 
     <div class="input-area">
+      <div class="image-attachments" id="imageAttachments">
+        <div class="image-preview" id="imagePreview"></div>
+        <span id="imageCounter"></span>
+      </div>
       <div class="input-box">
+        <input id="imageInput" type="file" accept="image/*" multiple hidden>
+        <button class="image-btn" id="imageBtn" type="button" aria-label="Adjuntar imágenes" title="Adjuntar imágenes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+        </button>
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje…" aria-label="Mensaje"
           autocomplete="off" spellcheck="true"></textarea>
         <button class="send-btn" id="sendBtn" aria-label="Enviar" disabled>
@@ -245,8 +257,11 @@ Profundizar en:
       cerebras: 'https://api.cerebras.ai/v1/chat/completions',
     };
 
+    const MAX_IMAGES = 5;
+
     let selectedModel = MODELS.find(m => m.id === 'llama3.1-8b') || MODELS[0];
     let messages = [];
+    let attachedImages = [];
     let isLoading = false;
     let currentTheme = 'dark';
     window.dbReady = false;
@@ -261,7 +276,11 @@ Profundizar en:
     const emptyState = document.getElementById('emptyState');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
+    const imageInput = document.getElementById('imageInput');
+    const imageBtn = document.getElementById('imageBtn');
     const charCounter = document.getElementById('charCounter');
+    const imageCounter = document.getElementById('imageCounter');
+    const imagePreview = document.getElementById('imagePreview');
     const toastEl = document.getElementById('toast');
     const drawerBtn = document.getElementById('drawerBtn');
     const drawer = document.getElementById('drawer');
@@ -521,6 +540,10 @@ Profundizar en:
       emptyState.style.display = '';
       chatInput.value = '';
       chatInput.style.height = 'auto';
+      attachedImages = [];
+      imageInput.value = '';
+      imageCounter.textContent = '';
+      renderImagePreview();
       updateSendBtn();
     }
 
@@ -532,7 +555,10 @@ Profundizar en:
       }
       emptyState.style.display = 'none';
       messages.forEach(msg => {
-        appendMessage(msg.role, msg.content, msg.model);
+        const displayContent = msg.role === 'user' && msg.imageCount
+          ? `${msg.content}\n\n[${msg.imageCount} imagen${msg.imageCount > 1 ? 'es' : ''} adjunta${msg.imageCount > 1 ? 's' : ''}]`
+          : msg.content;
+        appendMessage(msg.role, displayContent, msg.model);
       });
     }
 
@@ -637,8 +663,53 @@ Profundizar en:
     chatInput.addEventListener('keydown', e => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
     });
+    chatInput.addEventListener('paste', async e => {
+      const files = [...(e.clipboardData?.files || [])].filter(file => file.type.startsWith('image/'));
+      if (files.length) await addImageFiles(files);
+    });
     function updateSendBtn() {
-      sendBtn.disabled = isLoading || !chatInput.value.trim() || !selectedModel;
+      sendBtn.disabled = isLoading || (!chatInput.value.trim() && attachedImages.length === 0) || !selectedModel;
+    }
+
+    imageBtn.addEventListener('click', () => imageInput.click());
+    imageInput.addEventListener('change', async () => {
+      await addImageFiles([...imageInput.files]);
+      imageInput.value = '';
+    });
+
+    async function addImageFiles(files) {
+      const availableSlots = MAX_IMAGES - attachedImages.length;
+      const images = await Promise.all(files.filter(file => file.type.startsWith('image/')).slice(0, availableSlots).map(fileToDataUrl));
+      attachedImages = [...attachedImages, ...images];
+      if (files.length > availableSlots) showToast(`Máximo ${MAX_IMAGES} imágenes por envío`);
+      renderImagePreview();
+      updateSendBtn();
+    }
+
+    function renderImagePreview() {
+      imageCounter.textContent = attachedImages.length ? `${attachedImages.length} imagen${attachedImages.length > 1 ? 'es' : ''}` : '';
+      imagePreview.innerHTML = attachedImages.map((image, index) => `
+        <button class="image-preview-item" type="button" data-index="${index}" title="Quitar imagen">
+          <img src="${image}" alt="Imagen adjunta ${index + 1}">
+        </button>
+      `).join('');
+    }
+
+    imagePreview.addEventListener('click', e => {
+      const item = e.target.closest('.image-preview-item');
+      if (!item) return;
+      attachedImages.splice(Number(item.dataset.index), 1);
+      renderImagePreview();
+      updateSendBtn();
+    });
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
     }
 
     document.querySelectorAll('.hint-chip').forEach(c => {
@@ -661,24 +732,30 @@ Profundizar en:
 
     async function handleSend() {
       const text = chatInput.value.trim();
-      if (!text || isLoading || !selectedModel) return;
+      const images = attachedImages;
+      if ((!text && images.length === 0) || isLoading || !selectedModel) return;
 
       if (!currentConversationId) {
         createConversation();
       }
 
       emptyState.style.display = 'none';
-      messages.push({ role: 'user', content: text });
-      appendMessage('user', text);
+      const userText = text || 'Describe la imagen.';
+      messages.push({ role: 'user', content: userText, imageCount: images.length });
+      appendMessage('user', images.length ? `${userText}\n\n[${images.length} imagen${images.length > 1 ? 'es' : ''} adjunta${images.length > 1 ? 's' : ''}]` : userText);
       chatInput.value = '';
       chatInput.style.height = 'auto';
+      attachedImages = [];
+      imageInput.value = '';
+      imageCounter.textContent = '';
+      renderImagePreview();
       charCounter.textContent = '';
       isLoading = true;
       updateSendBtn();
 
       const typing = appendTyping();
       try {
-        const reply = await callProvider(selectedModel.provider, selectedModel.id, messages);
+        const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images);
         typing.remove();
         messages.push({ role: 'assistant', content: reply, model: selectedModel });
         appendMessage('assistant', reply, selectedModel);
@@ -701,14 +778,15 @@ Profundizar en:
       }
     }
 
-    async function callProvider(provider, model, msgs) {
+    async function callProvider(provider, model, msgs, images = []) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           provider,
           model,
-          messages: msgs.map(({ role, content }) => ({ role, content }))
+          messages: msgs.map(({ role, content }) => ({ role, content })),
+          images
         })
       });
       const data = await res.json();

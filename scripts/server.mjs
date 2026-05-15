@@ -28,6 +28,10 @@ const API_KEYS = {
   cerebras: process.env.CEREBRAS_API_KEY,
 };
 
+const IMAGE_PARSER_PROVIDER = 'groq';
+const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+const MAX_IMAGES = 5;
+
 createServer(async (req, res) => {
   try {
     if (req.url === '/api/chat') return handleChat(req, res);
@@ -41,7 +45,19 @@ createServer(async (req, res) => {
 });
 
 async function handleChat(req, res) {
-  const { provider, model, messages } = await readJson(req);
+  const { provider, model, messages, images = [] } = await readJson(req);
+  const limitedImages = images.slice(0, MAX_IMAGES);
+  const cleanMessages = messages.map(({ role, content }) => ({ role, content }));
+  const imageContext = limitedImages.length ? await parseImages(cleanMessages, limitedImages) : '';
+  const finalMessages = imageContext
+    ? [
+        ...cleanMessages.slice(0, -1),
+        {
+          role: 'user',
+          content: `${cleanMessages.at(-1)?.content || ''}\n\nContexto visual extraído previamente por ${IMAGE_PARSER_MODEL}:\n${imageContext}`,
+        },
+      ]
+    : cleanMessages;
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `Bearer ${API_KEYS[provider]}`,
@@ -57,7 +73,7 @@ async function handleChat(req, res) {
     headers,
     body: JSON.stringify({
       model,
-      messages: messages.map(({ role, content }) => ({ role, content })),
+      messages: finalMessages,
       stream: false,
     }),
   });
@@ -72,6 +88,39 @@ async function handleChat(req, res) {
 
   const choice = data.choices?.[0];
   json(res, 200, { content: choice?.message?.content || choice?.text || '' });
+}
+
+async function parseImages(messages, images) {
+  const lastUserText = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${API_KEYS[IMAGE_PARSER_PROVIDER]}`,
+  };
+
+  if (IMAGE_PARSER_PROVIDER === 'openrouter') {
+    headers['HTTP-Referer'] = `http://localhost:${port}`;
+    headers['X-Title'] = 'Inferencia';
+  }
+
+  const response = await fetch(ENDPOINTS[IMAGE_PARSER_PROVIDER], {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      model: IMAGE_PARSER_MODEL,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'text', text: `Extrae el contexto visual relevante para responder esta pregunta:\n${lastUserText}` },
+          ...images.map((image) => ({ type: 'image_url', image_url: { url: image } })),
+        ],
+      }],
+      stream: false,
+    }),
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data?.error?.message || data?.message || `Vision HTTP ${response.status}`);
+  return data.choices?.[0]?.message?.content || '';
 }
 
 async function handleConversations(req, res) {
