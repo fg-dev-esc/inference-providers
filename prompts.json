@@ -1,0 +1,417 @@
+[
+  {
+    "title": "Base",
+    "items": [
+      {
+        "label": "Curso completo de JavaScript a React por capas",
+        "prompt": "Quiero que actúes como mi tutor de programación y me des un curso progresivo para conectar JavaScript puro con React.\n\nNo me des el código final completo de una sola vez.\n\nTrabaja por capas en este orden:\n\n1. Concepto base de JavaScript.\n2. Función simple.\n3. Método de array.\n4. Ejemplo pequeño ejecutable en consola.\n5. Integración de varias funciones.\n6. Proyecto React desde cero con Vite.\n7. Componente React.\n8. Hook correspondiente.\n9. Flujo completo de datos.\n10. Mini ejercicio para practicar.\n\nSi es JavaScript puro, dime exactamente cómo abrir la consola del navegador y cómo ejecutar cada snippet.\n\nSi es React, empieza con npm create vite@latest, luego npm install, luego dependencia extra si aplica, luego crear componente, importar componente y conectarlo en App.jsx.\n\nExplica términos técnicos la primera vez que aparezcan.\n\nExplica por qué se usa cada pieza.\n\nNo incluyas testing, login ni debugging."
+      },
+      {
+        "label": "Modo ultra lento para aprender código",
+        "prompt": "Quiero aprender programación con ejemplos de funciones, arrays y React en modo ultra lento.\n\nDame solo una capa a la vez.\n\nNo avances hasta que yo diga siguiente.\n\nEmpieza por funciones JavaScript.\n\nLuego pasa a parámetros y return.\n\nLuego pasa a callbacks.\n\nLuego pasa a map.\n\nLuego pasa a filter.\n\nLuego pasa a reduce.\n\nLuego pasa a useState.\n\nLuego pasa a renderizar listas en React.\n\nEn cada capa incluye:\n\n1. Qué significa.\n2. Por qué existe.\n3. Ejemplo mínimo.\n4. Cómo ejecutarlo si es consola.\n5. Cómo se conectaría con React si aplica.\n6. Una pregunta para comprobar que entendí.\n\nNo me des el proyecto final completo de una vez."
+      },
+      {
+        "label": "Explicación siempre con flujo completo",
+        "prompt": "Enséñame funciones, métodos de array y hooks de React explicando siempre la ruta completa del flujo.\n\nCada explicación debe decir:\n\n1. Qué dato existe al inicio.\n2. Qué función lo recibe.\n3. Qué método lo transforma, filtra, busca u ordena.\n4. Qué resultado sale.\n5. Dónde se guarda ese resultado.\n6. Cómo se muestra.\n7. Qué acción del usuario lo cambia si está en React.\n8. Qué se vuelve a ejecutar después del cambio.\n\nEmpieza con JavaScript puro en consola.\n\nDespués lleva el mismo ejemplo a React desde cero con Vite.\n\nNo incluyas testing, login ni debugging."
+      },
+      {
+        "label": "Curso sin código final de golpe",
+        "prompt": "Quiero un curso práctico de JavaScript y React, pero con una regla estricta: no me des el código final completo de golpe.\n\nPrimero explícame el concepto.\n\nDespués dame una función simple.\n\nDespués muéstrame cómo usar esa función con un array.\n\nDespués enséñame un método de array.\n\nDespués crea un ejemplo pequeño en consola.\n\nDespués conviértelo a un componente React.\n\nDespués agrega el hook necesario.\n\nDespués escribe el flujo completo paso a paso.\n\nUsa ejemplos de productos, tareas, usuarios, tabs, carrito y formularios simples.\n\nAvanza por bloques y espera mi confirmación cuando una sección sea larga."
+      }
+    ]
+  },
+  {
+    "title": "Funciones",
+    "items": [
+      {
+        "label": "Funciones desde cero con calculadora simple",
+        "prompt": "Enséñame funciones JavaScript desde cero usando una calculadora simple.\n\nPrimero muéstrame código repetido sin función.\n\nDespués explícame por qué repetir código se vuelve incómodo.\n\nDespués crea una función sumar.\n\nDespués agrega parámetros.\n\nDespués usa return.\n\nDespués ejecuta la función varias veces en consola.\n\nDespués crea funciones restar, multiplicar y calcularTotal.\n\nDespués explica el flujo completo: dato entra, función procesa, return devuelve, resultado se usa.\n\nDime cómo abrir la consola del navegador y qué debo pegar.\n\nNo uses React todavía.\n\nNo incluyas testing, login ni debugging."
+      },
+      {
+        "label": "Parámetros y argumentos con productos",
+        "prompt": "Explícame parámetros y argumentos usando productos.\n\nPrimero crea una función sin parámetros que imprima el precio fijo de un producto.\n\nDespués muestra por qué eso no sirve si tengo varios productos.\n\nDespués crea una función mostrarPrecio que reciba nombre y precio.\n\nDespués explica qué es parámetro y qué es argumento.\n\nDespués crea una función calcularSubtotal que reciba precio y cantidad.\n\nDespués usa return para devolver el subtotal.\n\nDespués ejecuta todo en consola del navegador.\n\nExplica el flujo completo: valores reales entran como argumentos, la función los recibe como parámetros, se calcula el subtotal y return devuelve el resultado."
+      },
+      {
+        "label": "Return vs console.log con carrito",
+        "prompt": "Enséñame la diferencia entre return y console.log usando un carrito simple.\n\nPrimero crea una función que solo use console.log.\n\nDespués muestra por qué ese resultado no se puede reutilizar fácilmente.\n\nDespués crea la misma función usando return.\n\nDespués guarda el resultado en una variable.\n\nDespués usa ese resultado dentro de otra función.\n\nDespués crea un ejemplo de subtotal y total.\n\nDespués ejecuta todo en consola.\n\nExplica el flujo completo: console.log muestra, return devuelve, una variable guarda, otra función reutiliza."
+      },
+      {
+        "label": "Arrow functions con ejemplos reales",
+        "prompt": "Enséñame arrow functions con ejemplos reales y progresivos.\n\nPrimero escribe una función tradicional que calcule el doble de un número.\n\nDespués reescribe la misma función como arrow function.\n\nDespués usa return explícito.\n\nDespués usa return implícito.\n\nDespués crea una arrow function para calcular subtotal.\n\nDespués usa esa arrow function dentro de map.\n\nDespués explica cómo se usa una arrow function dentro de un onClick en React.\n\nExplica los símbolos =>, paréntesis, llaves y return.\n\nPrimero todo en consola, después conexión mental con React."
+      },
+      {
+        "label": "Callbacks con pedidos de comida",
+        "prompt": "Enséñame callbacks usando una analogía de pedidos de comida.\n\nPrimero crea una función saludar normal.\n\nDespués crea una función procesarPedido que reciba otra función.\n\nDespués ejecuta esa función recibida dentro de procesarPedido.\n\nDespués nombra esa función recibida como callback.\n\nDespués usa un callback con map para transformar una lista de comidas.\n\nDespués usa un callback con filter para filtrar comidas disponibles.\n\nDespués conecta la idea con onClick en React.\n\nExplica quién llama a quién, cuándo se ejecuta el callback y qué datos viajan.\n\nUsa ejemplos ejecutables en consola."
+      },
+      {
+        "label": "Funciones puras con tareas",
+        "prompt": "Explícame funciones puras usando una lista de tareas.\n\nPrimero crea una función impura que modifica una variable externa.\n\nDespués explica por qué eso puede causar confusión.\n\nDespués crea una función pura que recibe una tarea y devuelve una nueva tarea.\n\nDespués crea una función pura que recibe un array de tareas y devuelve un nuevo array.\n\nDespués explica por qué no mutar ayuda cuando usamos React.\n\nDespués conecta la idea con useState y actualización de listas.\n\nPrimero todo en consola del navegador.\n\nNo me des código React completo todavía, solo la conexión mental."
+      }
+    ]
+  },
+  {
+    "title": "Arrays",
+    "items": [
+      {
+        "label": "map con productos",
+        "prompt": "Enséñame map por capas usando una lista de productos.\n\nPrimero explícame qué problema resuelve map.\n\nDespués crea una función simple que transforme un producto en texto.\n\nDespués crea un array de productos con nombre y precio.\n\nDespués usa map para convertir cada producto en una frase.\n\nDespués muestra la salida en consola.\n\nDespués usa map para crear una lista de nombres.\n\nDespués usa map para crear una lista de subtotales.\n\nDespués lleva la idea a React para renderizar productos.\n\nSi pasamos a React, empieza desde npm create vite@latest, npm install, sin dependencia extra, crear ProductList.jsx, importar en App.jsx y conectarlo.\n\nExplica el flujo completo: array original, callback, nuevo array, render en pantalla."
+      },
+      {
+        "label": "filter con buscador de productos",
+        "prompt": "Enséñame filter por capas creando un buscador de productos.\n\nPrimero explica qué significa filtrar.\n\nDespués crea una función coincideProducto que devuelva true o false.\n\nDespués crea un array de productos.\n\nDespués usa filter para encontrar productos activos.\n\nDespués usa filter para buscar por texto.\n\nDespués ejecuta el ejemplo en consola.\n\nDespués conviértelo a React con un input de búsqueda.\n\nEn React empieza desde Vite, instala dependencias base, indica que no se necesita dependencia extra, crea ProductSearch.jsx, impórtalo en App.jsx y conéctalo.\n\nExplica el flujo completo: usuario escribe, estado cambia, filter calcula visibles, map renderiza resultados."
+      },
+      {
+        "label": "find con detalle de usuario",
+        "prompt": "Enséñame find por capas creando un selector de usuario.\n\nPrimero explica la diferencia entre filter y find.\n\nDespués crea un array de usuarios con id, nombre y rol.\n\nDespués usa find para buscar un usuario por id.\n\nDespués explica qué significa undefined cuando no hay coincidencia.\n\nDespués ejecuta el ejemplo en consola.\n\nDespués lleva el ejemplo a React con botones para seleccionar usuario.\n\nEn React empieza desde Vite, crea UserSelector.jsx, importa el componente en App.jsx y conéctalo.\n\nExplica el flujo completo: click, guardar id seleccionado, find busca usuario, React muestra detalle."
+      },
+      {
+        "label": "reduce con carrito",
+        "prompt": "Enséñame reduce muy despacio usando un carrito de compras.\n\nPrimero explica qué significa acumular.\n\nDespués suma números manualmente sin reduce.\n\nDespués crea una función acumuladora.\n\nDespués explica accumulator, currentValue y valor inicial.\n\nDespués usa reduce con números.\n\nDespués crea un array de productos con precio y cantidad.\n\nDespués usa reduce para calcular el total del carrito.\n\nDespués ejecuta todo en consola.\n\nDespués lleva el total a React.\n\nEn React empieza desde Vite, crea CartTotal.jsx, importa en App.jsx y conecta el componente.\n\nExplica el flujo completo: productos, reduce, acumulador, total, render."
+      },
+      {
+        "label": "some y every con tareas",
+        "prompt": "Enséñame some y every comparándolos con una lista de tareas.\n\nPrimero explica qué pregunta responde some.\n\nDespués explica qué pregunta responde every.\n\nDespués crea tareas con completed true o false.\n\nDespués usa some para saber si hay tareas pendientes.\n\nDespués usa every para saber si todas están completadas.\n\nDespués ejecuta el ejemplo en consola.\n\nDespués lleva la idea a React para habilitar o deshabilitar un botón.\n\nEn React empieza desde Vite, crea TaskStatus.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: lista de tareas, condición, booleano, UI cambia."
+      },
+      {
+        "label": "includes con categorías seleccionadas",
+        "prompt": "Enséñame includes usando categorías seleccionadas.\n\nPrimero explica qué pregunta responde includes.\n\nDespués crea un array de categorías seleccionadas.\n\nDespués revisa si la categoría ropa está seleccionada.\n\nDespués revisa si la categoría tecnología está seleccionada.\n\nDespués ejecuta todo en consola.\n\nDespués combina includes con filter para mostrar productos de categorías seleccionadas.\n\nDespués lleva la idea a React con botones de categorías.\n\nEn React empieza desde Vite, crea CategoryFilter.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: usuario elige categoría, estado guarda seleccionadas, includes revisa, filter muestra productos."
+      },
+      {
+        "label": "sort sin mutar productos",
+        "prompt": "Enséñame sort sin mutar usando productos.\n\nPrimero explica qué significa ordenar.\n\nDespués muestra sort con números.\n\nDespués explica que sort modifica el array original.\n\nDespués crea una copia con spread antes de ordenar.\n\nDespués ordena productos por precio.\n\nDespués ordena productos por nombre.\n\nDespués ejecuta todo en consola.\n\nDespués lleva la idea a React con un selector de orden.\n\nEn React empieza desde Vite, crea ProductSorter.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: estado original, copia, sort, render ordenado."
+      },
+      {
+        "label": "slice y splice con lista de tareas",
+        "prompt": "Enséñame slice y splice usando una lista de tareas.\n\nPrimero explica qué significa copiar una parte.\n\nDespués usa slice para obtener las primeras dos tareas.\n\nDespués muestra que el array original no cambia.\n\nDespués usa splice para quitar una tarea.\n\nDespués muestra que el array original sí cambia.\n\nDespués explica por qué en React normalmente preferimos no mutar.\n\nDespués lleva la idea a React con una lista donde se elimina una tarea usando filter en lugar de splice.\n\nEmpieza con consola del navegador.\n\nDespués crea un componente TaskList.jsx desde Vite y conéctalo en App.jsx."
+      },
+      {
+        "label": "Encadenar map, filter y reduce",
+        "prompt": "Enséñame a encadenar filter, map y reduce con productos.\n\nPrimero crea productos con nombre, precio, cantidad y activo.\n\nDespués usa filter para quedarte con productos activos.\n\nDespués usa map para calcular subtotales.\n\nDespués usa reduce para sumar el total.\n\nDespués ejecuta cada paso separado en consola.\n\nDespués encadena los métodos en una sola expresión.\n\nDespués explica cuándo conviene separar pasos y cuándo encadenar.\n\nDespués lleva el flujo a React.\n\nEn React empieza desde Vite, crea ActiveProductsTotal.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: productos, filter, map, reduce, total, render."
+      }
+    ]
+  },
+  {
+    "title": "React base listo",
+    "items": [
+      {
+        "label": "Crear proyecto React con Vite y primer componente",
+        "prompt": "Enséñame a crear un proyecto React desde cero con Vite y conectar mi primer componente.\n\nNo me des todo el proyecto final de golpe.\n\nPrimero explica qué es Vite y por qué se usa.\n\nDespués dame el comando npm create vite@latest.\n\nDespués dime cómo elegir React.\n\nDespués dime cómo entrar a la carpeta.\n\nDespués dame npm install.\n\nDespués explica cuándo se instala una dependencia extra y cuándo no.\n\nDespués crea un componente WelcomeCard.jsx.\n\nDespués importa WelcomeCard en App.jsx.\n\nDespués conecta el componente.\n\nDespués ejecuta npm run dev.\n\nDespués explica el flujo completo: main.jsx, App.jsx, componente importado, pantalla.\n\nNo incluyas testing, login ni debugging."
+      },
+      {
+        "label": "Props con tarjeta de producto",
+        "prompt": "Enséñame props en React creando una tarjeta de producto.\n\nEmpieza desde cero con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProductCard.jsx.\n\nPrimero haz una tarjeta con texto fijo.\n\nDespués explica el problema de tener texto fijo.\n\nDespués pasa nombre, precio y stock como props.\n\nDespués importa ProductCard en App.jsx.\n\nDespués renderiza varias tarjetas.\n\nDespués explica el flujo completo: App tiene datos, App pasa props, ProductCard recibe props, ProductCard renderiza.\n\nNo me des la versión final completa desde el inicio."
+      },
+      {
+        "label": "Eventos con contador",
+        "prompt": "Enséñame eventos en React creando un contador.\n\nEmpieza desde cero con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea CounterButtons.jsx.\n\nPrimero explica qué es un evento del usuario.\n\nDespués crea un botón sin estado.\n\nDespués crea una función handler.\n\nDespués conecta onClick.\n\nDespués agrega useState.\n\nDespués crea botones para sumar, restar y reiniciar.\n\nDespués importa y conecta el componente en App.jsx.\n\nDespués explica el flujo completo: click, handler, setState, nuevo estado, nuevo render."
+      },
+      {
+        "label": "Input controlado con nombre",
+        "prompt": "Enséñame inputs controlados en React creando un formulario de nombre.\n\nEmpieza desde cero con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea NameForm.jsx.\n\nPrimero explica qué es un input normal.\n\nDespués explica qué significa que React controle el valor.\n\nDespués crea estado name con useState.\n\nDespués conecta value.\n\nDespués conecta onChange.\n\nDespués muestra el nombre escrito en pantalla.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: escribir, evento, setName, estado, render."
+      },
+      {
+        "label": "Renderizar lista con map",
+        "prompt": "Enséñame a renderizar una lista en React usando map.\n\nEmpieza desde cero con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProductList.jsx.\n\nPrimero crea un array de productos.\n\nDespués explica qué es JSX.\n\nDespués usa map para crear elementos visuales.\n\nDespués explica qué es key y por qué React la pide.\n\nDespués importa ProductList en App.jsx.\n\nDespués conecta el componente.\n\nDespués explica el flujo completo: array, map, JSX, key, pantalla."
+      }
+    ]
+  },
+  {
+    "title": "Hooks",
+    "items": [
+      {
+        "label": "useState con contador",
+        "prompt": "Enséñame useState por capas creando un contador.\n\nPrimero explica por qué una variable normal no actualiza la pantalla.\n\nDespués explica qué problema resuelve useState.\n\nDespués crea un proyecto con Vite.\n\nDespués ejecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea Counter.jsx.\n\nDespués crea estado count.\n\nDespués crea botones para aumentar y disminuir.\n\nDespués importa Counter en App.jsx.\n\nDespués conecta el componente.\n\nDespués explica el flujo completo: click, función handler, setCount, nuevo estado, React renderiza otra vez.\n\nNo me des el código final completo de una sola vez."
+      },
+      {
+        "label": "useState con lista editable",
+        "prompt": "Enséñame useState usando una lista editable de tareas.\n\nPrimero haz la idea en JavaScript puro con un array de tareas.\n\nDespués explica cómo agregar una tarea creando un nuevo array.\n\nDespués explica cómo eliminar una tarea con filter.\n\nDespués explica cómo editar una tarea con map.\n\nDespués crea proyecto React con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea EditableTasks.jsx.\n\nDespués conecta agregar, eliminar y editar.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: acción del usuario, función, nuevo array, setTasks, render."
+      },
+      {
+        "label": "useEffect con título de página",
+        "prompt": "Enséñame useEffect por capas cambiando el título de la página.\n\nPrimero explica qué es render.\n\nDespués explica qué significa ejecutar algo después del render.\n\nDespués explica qué es un efecto.\n\nDespués explica qué es el array de dependencias.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea PageTitleCounter.jsx.\n\nDespués usa useState para count.\n\nDespués usa useEffect para cambiar document.title cuando count cambie.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: click, estado cambia, render, useEffect corre, título cambia.\n\nNo uses fetch todavía."
+      },
+      {
+        "label": "useRef con enfoque de input",
+        "prompt": "Enséñame useRef por capas enfocando un input.\n\nPrimero explica qué es una referencia.\n\nDespués explica la diferencia entre useRef y useState.\n\nDespués explica qué es ref.current.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea FocusInput.jsx.\n\nDespués crea un input.\n\nDespués conecta useRef al input.\n\nDespués crea un botón que haga focus.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: click, ref apunta al input, ref.current.focus ejecuta enfoque."
+      },
+      {
+        "label": "useMemo con filtro de productos",
+        "prompt": "Enséñame useMemo por capas con un filtro de productos.\n\nPrimero crea una versión sin useMemo.\n\nDespués explica qué es un cálculo derivado.\n\nDespués explica cuándo NO usar useMemo.\n\nDespués explica cuándo sí puede ayudar.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea MemoProductFilter.jsx.\n\nDespués crea estado search.\n\nDespués filtra productos.\n\nDespués agrega useMemo para memorizar productos filtrados.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: texto cambia, estado cambia, dependencias cambian, cálculo se actualiza, render muestra resultados."
+      },
+      {
+        "label": "useReducer con contador",
+        "prompt": "Enséñame useReducer por capas con un contador.\n\nPrimero crea el contador con useState.\n\nDespués explica por qué useState puede volverse incómodo con muchas acciones.\n\nDespués explica qué es action.\n\nDespués explica qué es reducer.\n\nDespués explica qué es dispatch.\n\nDespués muestra state + action -> newState en JavaScript puro.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea ReducerCounter.jsx.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: click, dispatch, action, reducer, nuevo estado, render."
+      },
+      {
+        "label": "useContext con tema claro y oscuro",
+        "prompt": "Enséñame useContext por capas con tema claro y oscuro.\n\nPrimero crea una versión pasando props manualmente.\n\nDespués explica el problema de pasar props por muchos niveles.\n\nDespués explica qué es Context.\n\nDespués explica qué es Provider.\n\nDespués explica qué consume useContext.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea ThemeContext.jsx.\n\nDespués crea ThemePanel.jsx.\n\nDespués envuelve App con Provider.\n\nDespués importa y conecta todo.\n\nDespués explica el flujo completo: Provider entrega value, componente lee con useContext, botón cambia tema, UI renderiza."
+      },
+      {
+        "label": "Custom hook useCounter",
+        "prompt": "Enséñame custom hooks por capas creando useCounter.\n\nPrimero crea un contador normal dentro de un componente.\n\nDespués explica qué lógica está mezclada con la UI.\n\nDespués explica qué es un custom hook.\n\nDespués explica por qué el nombre empieza con use.\n\nDespués crea proyecto con Vite.\n\nDespués npm install.\n\nIndica que no se necesita dependencia extra.\n\nDespués crea src/hooks/useCounter.js.\n\nDespués mueve la lógica del contador al hook.\n\nDespués crea CounterWithHook.jsx.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo: componente llama hook, hook maneja estado, hook devuelve datos y funciones, componente renderiza."
+      }
+    ]
+  },
+  {
+    "title": "Features",
+    "items": [
+      {
+        "label": "Buscador de productos completo por capas",
+        "prompt": "Quiero construir un buscador de productos por capas.\n\nPrimero trabaja en JavaScript puro en consola.\n\nCrea productos con nombre, categoría, precio y activo.\n\nCrea una función coincideTexto.\n\nUsa filter para obtener productos visibles.\n\nUsa map para mostrar nombres.\n\nExplica cada paso.\n\nDespués llévalo a React desde cero.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProductSearchCourse.jsx.\n\nUsa useState para guardar el texto.\n\nUsa filter para calcular productos visibles.\n\nUsa map para renderizar.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: usuario escribe, onChange recibe evento, setSearch actualiza estado, componente renderiza, filter recalcula, map pinta productos.\n\nNo me des todo el código final de golpe."
+      },
+      {
+        "label": "Carrito de compras simple por capas",
+        "prompt": "Quiero construir un carrito de compras simple por capas.\n\nPrimero trabaja en consola.\n\nCrea un producto con nombre, precio y cantidad.\n\nCrea una función subtotal.\n\nCrea un array de carrito.\n\nUsa map para ver subtotales.\n\nUsa reduce para calcular total.\n\nExplica la ruta completa de datos.\n\nDespués llévalo a React desde cero.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea SimpleCart.jsx.\n\nRenderiza productos con map.\n\nCalcula total con reduce.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: carrito inicial, map para filas, reduce para total, JSX para pantalla.\n\nNo agregues checkout, login, testing ni debugging."
+      },
+      {
+        "label": "Tabs simples por capas",
+        "prompt": "Quiero construir tabs simples por capas.\n\nPrimero trabaja en consola.\n\nCrea un array de tabs con id, label y content.\n\nCrea una variable activeTabId.\n\nUsa find para obtener el tab activo.\n\nExplica qué ocurre si cambia activeTabId.\n\nDespués llévalo a React desde cero.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea SimpleTabs.jsx.\n\nUsa useState para activeTabId.\n\nUsa map para botones.\n\nUsa find para contenido activo.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: click, setActiveTabId, nuevo estado, find busca contenido, React renderiza tab activo."
+      },
+      {
+        "label": "Formulario de contacto simple por capas",
+        "prompt": "Quiero construir un formulario de contacto simple por capas.\n\nPrimero explica el modelo mental de un formulario como objeto.\n\nDespués crea un objeto formData en JavaScript puro.\n\nDespués crea una función actualizarCampo.\n\nDespués muestra cómo cambiar nombre, email y mensaje.\n\nDespués lleva esa idea a React desde cero.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ContactForm.jsx.\n\nUsa useState para formData.\n\nCrea inputs controlados.\n\nCrea handleChange.\n\nCrea handleSubmit simple.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: usuario escribe, onChange detecta campo, handleChange crea nuevo objeto, setFormData actualiza estado, pantalla se sincroniza.\n\nNo agregues validaciones avanzadas."
+      },
+      {
+        "label": "Lista editable de tareas por capas",
+        "prompt": "Quiero construir una lista editable de tareas por capas.\n\nPrimero trabaja en consola.\n\nCrea un array de tareas.\n\nAgrega una tarea usando spread.\n\nElimina una tarea usando filter.\n\nEdita una tarea usando map.\n\nExplica por qué cada operación devuelve un nuevo array.\n\nDespués llévalo a React desde cero.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea EditableTaskList.jsx.\n\nUsa useState para tasks.\n\nCrea handlers para agregar, eliminar y completar.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: evento del usuario, función handler, método de array, nuevo estado, render actualizado.\n\nNo me des todo el código final de una sola vez."
+      }
+    ]
+  },
+  {
+    "title": "Variantes didácticas",
+    "items": [
+      {
+        "label": "Variante socrática con map",
+        "prompt": "Quiero aprender map como tutor socrático.\n\nNo me des la respuesta completa al inicio.\n\nHazme preguntas para que yo descubra:\n\n1. Qué dato tengo al inicio.\n2. Qué quiero obtener al final.\n3. Si necesito transformar, filtrar o acumular.\n4. Qué función debería aplicarse a cada item.\n5. Qué devuelve map.\n6. Cómo se vería eso en React.\n\nUsa una lista de productos.\n\nCuando responda, corrige con pistas pequeñas.\n\nAl final dame una implementación en consola y luego una versión React desde Vite."
+      },
+      {
+        "label": "Variante socrática con reduce",
+        "prompt": "Quiero aprender reduce como tutor socrático.\n\nNo empieces con código completo.\n\nHazme preguntas para que entienda:\n\n1. Qué significa acumular.\n2. Qué valor inicial necesito.\n3. Qué representa accumulator.\n4. Qué representa currentValue.\n5. Qué se devuelve en cada vuelta.\n6. Cómo se obtiene el total final.\n\nUsa un carrito de compras.\n\nDespués de mis respuestas, dame ejemplo en consola.\n\nLuego lleva el mismo ejemplo a React desde cero."
+      },
+      {
+        "label": "Variante con analogías para hooks",
+        "prompt": "Explícame useState, useEffect, useRef, useMemo, useReducer, useContext y custom hooks usando analogías simples.\n\nPara cada hook haz esto:\n\n1. Analogía.\n2. Qué problema resuelve.\n3. Ejemplo mínimo.\n4. Cuándo usarlo.\n5. Cuándo no usarlo.\n6. Flujo completo.\n\nDespués elige uno y constrúyelo en React desde cero con Vite.\n\nNo me des todos los proyectos completos a la vez."
+      },
+      {
+        "label": "Variante mini retos de arrays",
+        "prompt": "Dame mini retos para practicar métodos de array con productos, tareas y usuarios.\n\nQuiero retos para:\n\n1. map.\n2. filter.\n3. find.\n4. reduce.\n5. some.\n6. every.\n7. includes.\n8. sort.\n9. slice.\n10. splice.\n\nNo me des las soluciones al inicio.\n\nDame primero el reto de map.\n\nCuando yo responda, revisa mi solución.\n\nDespués muestra una solución simple y explica el flujo completo."
+      },
+      {
+        "label": "Variante comparación de métodos",
+        "prompt": "Compárame map, filter, find, reduce, some, every, includes, sort, slice y splice con ejemplos concretos.\n\nPara cada método explica:\n\n1. Qué pregunta responde.\n2. Qué devuelve.\n3. Si modifica el array original.\n4. Cuándo usarlo.\n5. Un ejemplo en consola.\n6. Cómo se usaría en React.\n\nNo me des solo una tabla.\n\nQuiero explicación paso a paso y flujo completo."
+      },
+      {
+        "label": "Variante refactor para aprender",
+        "prompt": "Quiero aprender a mejorar una feature de productos sin sobreingeniería.\n\nCrea primero una versión simple de una lista de productos con búsqueda.\n\nDespués explícame qué está bien de esa versión.\n\nDespués explícame qué se puede mejorar.\n\nDespués mejora nombres de variables.\n\nDespués separa una función solo si ayuda a entender.\n\nDespués compara versión simple contra versión más limpia.\n\nDespués explica el trade-off.\n\nNo incluyas testing, login ni debugging.\n\nLa meta es aprender cómo pensar mejor la feature, no hacerla perfecta."
+      },
+      {
+        "label": "Variante ruta de práctica de 7 días",
+        "prompt": "Créame una ruta de práctica de 7 días para aprender funciones, métodos de array y hooks de React.\n\nCada día debe tener:\n\n1. Concepto principal.\n2. Ejemplo en consola.\n3. Mini ejercicio.\n4. Conexión con React.\n5. Pregunta de repaso.\n\nDistribuye los días así:\n\nDía 1 funciones, parámetros y return.\n\nDía 2 callbacks y arrow functions.\n\nDía 3 map, filter y find.\n\nDía 4 reduce, some y every.\n\nDía 5 React con componentes, props y eventos.\n\nDía 6 useState, useEffect y useRef.\n\nDía 7 useMemo, useReducer, useContext y custom hooks.\n\nNo incluyas testing, login ni debugging."
+      }
+    ]
+  },
+  {
+    "title": "Repaso",
+    "items": [
+      {
+        "label": "Repaso activo de funciones",
+        "prompt": "Hazme un repaso activo de funciones JavaScript.\n\nNo me des respuestas primero.\n\nPregúntame una cosa a la vez sobre:\n\n1. Qué es una función.\n2. Qué son parámetros.\n3. Qué son argumentos.\n4. Qué hace return.\n5. Diferencia entre return y console.log.\n6. Qué es una arrow function.\n7. Qué es un callback.\n8. Qué es una función pura.\n\nDespués de cada respuesta mía, dime qué estuvo bien, qué faltó y dame un ejemplo mínimo en consola."
+      },
+      {
+        "label": "Repaso activo de métodos de array",
+        "prompt": "Hazme un repaso activo de métodos de array.\n\nNo me des respuestas primero.\n\nPregúntame una cosa a la vez sobre map, filter, find, reduce, some, every, includes, sort, slice y splice.\n\nPara cada método pregúntame:\n\n1. Qué problema resuelve.\n2. Qué devuelve.\n3. Si modifica el array original.\n4. Un caso real donde lo usaría.\n\nDespués de mi respuesta, corrige, da ejemplo en consola y explica el flujo completo."
+      },
+      {
+        "label": "Repaso activo de hooks",
+        "prompt": "Hazme un repaso activo de hooks de React.\n\nNo me des respuestas primero.\n\nPregúntame una cosa a la vez sobre useState, useEffect, useRef, useMemo, useReducer, useContext y custom hooks.\n\nPara cada hook pregúntame:\n\n1. Qué problema resuelve.\n2. Cuándo lo usaría.\n3. Qué dato entra.\n4. Qué dato sale.\n5. Cómo se conecta con el render.\n\nDespués de mi respuesta, corrige con explicación corta y da un ejemplo pequeño."
+      }
+    ]
+  },
+  {
+    "title": "Objetos y sintaxis",
+    "items": [
+      {
+        "label": "Objetos con perfil de usuario",
+        "prompt": "Enséñame objetos en JavaScript usando un perfil de usuario.\n\nPrimero explica qué es un objeto y por qué sirve para agrupar datos relacionados.\n\nDespués crea un usuario con nombre, edad, email y rol.\n\nDespués muéstrame cómo leer una propiedad con punto.\n\nDespués muéstrame cómo leer una propiedad con corchetes.\n\nDespués crea una función que reciba un usuario y devuelva una frase descriptiva.\n\nDespués ejecuta todo en consola del navegador.\n\nDespués conecta la idea con React usando una tarjeta de usuario.\n\nSi pasamos a React, empieza desde npm create vite@latest, npm install, sin dependencia extra, crear UserCard.jsx, importar en App.jsx y conectarlo.\n\nExplica el flujo completo: objeto usuario, función recibe objeto, componente recibe props, JSX muestra propiedades."
+      },
+      {
+        "label": "Destructuring con producto",
+        "prompt": "Enséñame destructuring en JavaScript usando un producto.\n\nPrimero crea un objeto producto con nombre, precio, categoría y stock.\n\nDespués muestra cómo leer propiedades una por una.\n\nDespués explica por qué eso puede repetirse.\n\nDespués usa destructuring para extraer nombre, precio y stock.\n\nDespués crea una función mostrarProducto que use destructuring en el cuerpo.\n\nDespués crea otra función que use destructuring directo en los parámetros.\n\nDespués ejecuta todo en consola.\n\nDespués lleva la idea a React con props destructuradas en ProductCard.jsx.\n\nExplica el flujo completo: objeto entra, destructuring extrae propiedades, función usa valores, componente renderiza."
+      },
+      {
+        "label": "Spread con tareas",
+        "prompt": "Enséñame spread operator usando una lista de tareas.\n\nPrimero crea un array de tareas en consola.\n\nDespués agrega una tarea mutando el array con push.\n\nDespués explica por qué mutar puede ser mala idea en React.\n\nDespués agrega una tarea creando un nuevo array con spread.\n\nDespués actualiza una tarea creando un nuevo objeto con spread.\n\nDespués combina map y spread para marcar una tarea como completada.\n\nDespués lleva la idea a React con useState.\n\nEn React empieza desde Vite, crea TasksWithSpread.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: evento, handler, spread crea copia, setTasks guarda nuevo array, React renderiza."
+      },
+      {
+        "label": "Rest parameters con carrito",
+        "prompt": "Enséñame rest parameters usando un carrito de compras.\n\nPrimero crea una función sumarDosProductos que reciba dos precios.\n\nDespués explica por qué esa función se queda corta si tengo más productos.\n\nDespués crea una función sumarPrecios usando rest parameters.\n\nDespués explica qué significa recibir muchos argumentos como array.\n\nDespués usa reduce para calcular el total.\n\nDespués ejecuta todo en consola.\n\nDespués conecta la idea con una función helper dentro de React.\n\nExplica el flujo completo: argumentos entran, rest los agrupa, reduce acumula, return devuelve total."
+      },
+      {
+        "label": "Optional chaining con perfil incompleto",
+        "prompt": "Enséñame optional chaining usando un perfil de usuario incompleto.\n\nPrimero crea un usuario con dirección completa.\n\nDespués lee usuario.direccion.ciudad.\n\nDespués crea otro usuario sin dirección.\n\nDespués muestra qué problema aparece al intentar leer una propiedad profunda.\n\nDespués usa optional chaining para leer ciudad sin romper el flujo.\n\nDespués agrega un valor por defecto con nullish coalescing.\n\nDespués ejecuta todo en consola.\n\nDespués conecta la idea con React mostrando datos opcionales en una tarjeta.\n\nExplica el flujo completo: objeto puede venir completo o incompleto, optional chaining evita romper lectura, valor por defecto mantiene UI estable."
+      },
+      {
+        "label": "Template literals con factura",
+        "prompt": "Enséñame template literals usando una factura simple.\n\nPrimero crea variables cliente, producto, precio y cantidad.\n\nDespués crea un mensaje usando concatenación con +.\n\nDespués explica por qué se vuelve difícil de leer.\n\nDespués crea el mismo mensaje con template literals.\n\nDespués agrega un cálculo dentro del template literal.\n\nDespués crea una función generarResumenFactura.\n\nDespués ejecuta todo en consola.\n\nDespués conecta la idea con React mostrando un resumen de compra.\n\nExplica el flujo completo: datos base, cálculo, string interpolado, texto final mostrado."
+      },
+      {
+        "label": "Ternario con estados visuales",
+        "prompt": "Enséñame el operador ternario usando estados visuales simples.\n\nPrimero crea una variable isActive.\n\nDespués usa if/else para decidir un texto.\n\nDespués convierte ese if/else en ternario.\n\nDespués crea ejemplos con producto disponible, tarea completada y usuario premium.\n\nDespués ejecuta todo en consola.\n\nDespués lleva la idea a React para mostrar texto condicional y clases condicionales.\n\nEn React empieza desde Vite, crea StatusBadge.jsx, importa y conecta en App.jsx.\n\nExplica el flujo completo: booleano, condición, resultado elegido, JSX renderizado."
+      }
+    ]
+  },
+  {
+    "title": "Render y composición",
+    "items": [
+      {
+        "label": "Render condicional con tarjeta de producto",
+        "prompt": "Enséñame render condicional en React usando una tarjeta de producto.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProductAvailability.jsx.\n\nPrimero crea un producto con stock mayor a cero.\n\nDespués muestra texto fijo.\n\nDespués usa un if fuera del JSX.\n\nDespués usa un ternario dentro del JSX.\n\nDespués usa && para mostrar una etiqueta solo si hay descuento.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: producto tiene datos, condición evalúa stock, JSX decide qué mostrar, pantalla refleja disponibilidad."
+      },
+      {
+        "label": "Estado vacío con lista de tareas",
+        "prompt": "Enséñame a manejar estado vacío en React usando una lista de tareas.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea EmptyTasks.jsx.\n\nPrimero renderiza una lista con tareas.\n\nDespués cambia el array a vacío.\n\nDespués explica qué debería ver el usuario cuando no hay datos.\n\nDespués usa condición para mostrar mensaje vacío.\n\nDespués agrega un botón para crear una tarea inicial.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: array vacío, condición revisa length, UI muestra mensaje, click agrega tarea, render cambia a lista."
+      },
+      {
+        "label": "Composición con Card reutilizable",
+        "prompt": "Enséñame composición en React creando un componente Card reutilizable.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea ProductCard con estructura repetida.\n\nDespués crea UserCard con estructura parecida.\n\nDespués identifica qué se repite.\n\nDespués crea un componente Card.jsx que reciba title, subtitle y children.\n\nDespués usa Card para producto y usuario.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: componente genérico recibe props, children recibe contenido flexible, componentes específicos reutilizan estructura."
+      },
+      {
+        "label": "Children con layout simple",
+        "prompt": "Enséñame children en React creando un layout simple.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea PageSection.jsx.\n\nPrimero muestra contenido fijo dentro del componente.\n\nDespués explica el problema de no poder cambiar el contenido.\n\nDespués usa children para pasar contenido desde App.jsx.\n\nDespués crea dos secciones diferentes usando el mismo componente.\n\nDespués explica por qué children permite composición.\n\nExplica el flujo completo: App envuelve contenido, PageSection recibe children, PageSection decide marco visual, children se renderiza dentro."
+      },
+      {
+        "label": "Lifting state con selector de producto",
+        "prompt": "Enséñame lifting state up usando un selector de producto.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea ProductList con estado interno de selección.\n\nDespués crea ProductDetail separado.\n\nDespués explica por qué ProductDetail no conoce el producto seleccionado.\n\nDespués sube el estado selectedProductId al componente padre.\n\nDespués pasa datos y funciones por props.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: hijo dispara click, padre actualiza estado, padre calcula producto seleccionado, otro hijo recibe detalle por props."
+      },
+      {
+        "label": "Estado derivado con total de carrito",
+        "prompt": "Enséñame estado derivado en React usando un carrito.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea un array de productos en estado.\n\nDespués calcula total con reduce.\n\nDespués explica por qué el total no necesita su propio useState si se deriva del carrito.\n\nDespués muestra productos con map.\n\nDespués muestra total derivado.\n\nDespués agrega botón para aumentar cantidad.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: carrito cambia, componente renderiza, reduce recalcula total, UI muestra valor actualizado."
+      }
+    ]
+  },
+  {
+    "title": "Formularios",
+    "items": [
+      {
+        "label": "Formulario con un solo input",
+        "prompt": "Enséñame un formulario React con un solo input para capturar nombre.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea SingleInputForm.jsx.\n\nPrimero crea un input sin estado.\n\nDespués explica por qué React todavía no controla el valor.\n\nDespués agrega useState para name.\n\nDespués conecta value.\n\nDespués conecta onChange.\n\nDespués muestra el nombre en pantalla.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: usuario escribe, evento trae valor, setName actualiza estado, input refleja estado, texto se renderiza."
+      },
+      {
+        "label": "Formulario con objeto formData",
+        "prompt": "Enséñame un formulario React usando un objeto formData.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProfileForm.jsx.\n\nCrea campos nombre, email y ciudad.\n\nUsa useState con un objeto inicial.\n\nCrea handleChange usando name y value.\n\nActualiza el objeto con spread.\n\nMuestra el resultado debajo del formulario.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: input tiene name, onChange lee name y value, spread conserva campos anteriores, setFormData actualiza un campo, render muestra objeto actualizado."
+      },
+      {
+        "label": "Select con categorías",
+        "prompt": "Enséñame un select controlado en React usando categorías de productos.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea CategorySelect.jsx.\n\nCrea un array de categorías.\n\nUsa useState para selectedCategory.\n\nRenderiza options con map.\n\nConecta value y onChange.\n\nFiltra productos según la categoría seleccionada.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: usuario elige opción, estado guarda categoría, filter calcula productos, map renderiza resultados."
+      },
+      {
+        "label": "Checkbox con tareas completadas",
+        "prompt": "Enséñame checkbox controlado en React con tareas completadas.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea TaskCheckboxes.jsx.\n\nCrea un array de tareas con completed.\n\nRenderiza cada tarea con checkbox.\n\nConecta checked.\n\nConecta onChange para alternar completed usando map.\n\nMuestra cuántas tareas están completas.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: checkbox cambia, handler recibe id, map crea nuevo array, tarea cambia completed, setTasks actualiza, UI se sincroniza."
+      },
+      {
+        "label": "Radio buttons con plan seleccionado",
+        "prompt": "Enséñame radio buttons en React usando planes de suscripción simples.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea PlanSelector.jsx.\n\nCrea planes Básico, Pro y Premium.\n\nUsa useState para selectedPlan.\n\nRenderiza radios con map.\n\nConecta checked comparando selectedPlan.\n\nConecta onChange para cambiar plan.\n\nMuestra el plan seleccionado.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: usuario selecciona radio, estado cambia, checked se recalcula, UI marca una sola opción."
+      },
+      {
+        "label": "Formulario dividido en componentes",
+        "prompt": "Enséñame a dividir un formulario React en componentes pequeños.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea ContactForm completo en un solo archivo.\n\nDespués identifica qué se repite en los inputs.\n\nDespués crea TextInput.jsx.\n\nDespués pasa label, name, value y onChange por props.\n\nDespués usa TextInput dentro de ContactForm.\n\nDespués importa ContactForm en App.jsx.\n\nExplica el flujo completo: componente padre guarda estado, input hijo recibe value y onChange, usuario escribe, hijo dispara evento, padre actualiza estado."
+      }
+    ]
+  },
+  {
+    "title": "Custom hooks",
+    "items": [
+      {
+        "label": "useToggle con modal simple",
+        "prompt": "Enséñame a crear un custom hook useToggle usando un modal simple.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea un componente con useState para abrir y cerrar.\n\nDespués explica qué lógica se repite.\n\nDespués crea src/hooks/useToggle.js.\n\nDespués mueve la lógica open, close y toggle al hook.\n\nDespués crea SimpleModal.jsx usando useToggle.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: componente llama useToggle, hook devuelve estado y funciones, botón abre, modal usa estado, botón cierra."
+      },
+      {
+        "label": "useForm con formulario de perfil",
+        "prompt": "Enséñame a crear un custom hook useForm usando un formulario de perfil.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea ProfileForm con useState y handleChange dentro del componente.\n\nDespués explica qué lógica se puede reutilizar.\n\nDespués crea src/hooks/useForm.js.\n\nDespués mueve formData, handleChange y resetForm al hook.\n\nDespués usa useForm dentro de ProfileForm.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: input cambia, handleChange del hook actualiza formData, componente recibe formData, render muestra valores."
+      },
+      {
+        "label": "useArray con lista editable",
+        "prompt": "Enséñame a crear un custom hook useArray usando una lista editable.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea una lista con useState normal.\n\nDespués crea funciones addItem, removeItem y updateItem.\n\nDespués explica qué se puede extraer.\n\nDespués crea src/hooks/useArray.js.\n\nDespués mueve la lógica de array al hook.\n\nDespués crea EditableProducts.jsx usando useArray.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: UI llama función del hook, hook crea nuevo array, setItems actualiza estado, componente renderiza lista."
+      },
+      {
+        "label": "useDebounce con buscador",
+        "prompt": "Enséñame a crear un custom hook useDebounce usando un buscador de productos.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea un buscador que filtra inmediatamente.\n\nDespués explica qué significa esperar antes de aplicar un valor.\n\nDespués crea src/hooks/useDebounce.js usando useState y useEffect.\n\nDespués usa el valor debounced para filtrar productos.\n\nDespués crea DebouncedProductSearch.jsx.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: usuario escribe, search cambia rápido, useDebounce espera, debouncedSearch cambia después, filter usa valor estable, render muestra resultados.\n\nNo lo conviertas en debugging ni optimización avanzada; úsalo solo como aprendizaje de flujo."
+      },
+      {
+        "label": "usePrevious con contador",
+        "prompt": "Enséñame a crear un custom hook usePrevious usando un contador.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero crea un contador con useState.\n\nDespués explica qué significa recordar el valor anterior.\n\nDespués crea src/hooks/usePrevious.js usando useRef y useEffect.\n\nDespués muestra count actual y count anterior.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: render muestra valor actual, useEffect guarda valor en ref, siguiente render puede leer valor anterior, UI compara ambos."
+      },
+      {
+        "label": "useLocalStorage con notas simples",
+        "prompt": "Enséñame a crear un custom hook useLocalStorage usando notas simples.\n\nEmpieza desde cero con Vite.\n\nEjecuta npm install.\n\nIndica que no se necesita dependencia extra.\n\nPrimero explica qué es localStorage y para qué sirve.\n\nDespués crea una nota con useState normal.\n\nDespués guarda manualmente en localStorage.\n\nDespués crea src/hooks/useLocalStorage.js.\n\nDespués usa el hook para guardar y leer notas.\n\nDespués crea NotesLocal.jsx.\n\nDespués importa y conecta en App.jsx.\n\nExplica el flujo completo: estado cambia, hook sincroniza con localStorage, recarga conserva dato, componente renderiza valor guardado.\n\nNo incluyas login, backend ni debugging."
+      }
+    ]
+  },
+  {
+    "title": "Mini proyectos",
+    "items": [
+      {
+        "label": "Catálogo con búsqueda, categoría y orden",
+        "prompt": "Quiero construir un catálogo de productos con búsqueda, filtro por categoría y orden por precio.\n\nNo me des todo el código final de golpe.\n\nPrimero hazlo en JavaScript puro en consola.\n\nCrea productos con nombre, categoría, precio y stock.\n\nAplica filter por texto.\n\nAplica filter por categoría.\n\nAplica sort por precio sin mutar.\n\nUsa map para mostrar nombres.\n\nExplica cada paso separado.\n\nDespués llévalo a React desde cero con Vite.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ProductCatalog.jsx.\n\nUsa useState para búsqueda, categoría y orden.\n\nCalcula productos visibles por capas.\n\nRenderiza controles y lista.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: controles cambian estado, estado alimenta filtros, filtros producen lista visible, sort ordena copia, map renderiza."
+      },
+      {
+        "label": "Notas locales con agregar y eliminar",
+        "prompt": "Quiero construir una app simple de notas locales.\n\nNo me des todo el código final de golpe.\n\nPrimero trabaja en consola.\n\nCrea un array de notas.\n\nCrea función agregarNota.\n\nCrea función eliminarNota con filter.\n\nCrea función buscarNotas con filter.\n\nExplica cómo cambia el array en cada paso.\n\nDespués llévalo a React desde cero con Vite.\n\nUsa npm create vite@latest.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea NotesApp.jsx.\n\nUsa useState para notas, texto nuevo y búsqueda.\n\nRenderiza formulario y lista.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: usuario escribe nota, submit crea objeto, spread agrega, filter busca, botón elimina, render actualiza."
+      },
+      {
+        "label": "Control de gastos con reduce",
+        "prompt": "Quiero construir un control de gastos simple para aprender reduce en React.\n\nPrimero trabaja en consola.\n\nCrea gastos con nombre, categoría y monto.\n\nUsa reduce para total general.\n\nUsa filter y reduce para total por categoría.\n\nUsa map para mostrar renglones.\n\nExplica la ruta de datos.\n\nDespués crea proyecto con Vite.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea ExpenseTracker.jsx.\n\nUsa useState para gastos.\n\nCrea formulario simple para agregar gasto.\n\nMuestra lista y total.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: gasto entra por formulario, se agrega al array, reduce recalcula total, UI muestra lista y resumen."
+      },
+      {
+        "label": "Hábitos semanales con map y every",
+        "prompt": "Quiero construir un tracker simple de hábitos semanales.\n\nPrimero trabaja en consola.\n\nCrea hábitos con nombre y días completados.\n\nUsa map para mostrar resumen.\n\nUsa every para saber si un hábito completó toda la semana.\n\nUsa some para saber si hay hábitos pendientes.\n\nExplica cada método.\n\nDespués crea proyecto React con Vite.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea HabitTracker.jsx.\n\nUsa useState para hábitos.\n\nPermite alternar un día como completado.\n\nMuestra progreso por hábito.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: click en día, map actualiza hábito, nuevo estado, every recalcula completado, render muestra progreso."
+      },
+      {
+        "label": "Kanban simple sin drag and drop",
+        "prompt": "Quiero construir un kanban simple sin drag and drop para aprender estado y filtros.\n\nPrimero trabaja en consola.\n\nCrea tareas con título y status: pendiente, en progreso y hecho.\n\nUsa filter para separar columnas.\n\nUsa map para mostrar tarjetas.\n\nCrea una función moverTarea que cambie status usando map.\n\nExplica el flujo.\n\nDespués crea proyecto React con Vite.\n\nUsa npm install.\n\nIndica que no se necesita dependencia extra.\n\nCrea SimpleKanban.jsx.\n\nUsa useState para tareas.\n\nRenderiza tres columnas con filter.\n\nAgrega botones para mover tarea entre estados.\n\nImporta y conecta en App.jsx.\n\nExplica el flujo completo: botón envía id y nuevo status, map crea nuevo array, setTasks actualiza, columnas se recalculan con filter."
+      }
+    ]
+  },
+  {
+    "title": "Convertir y profundizar",
+    "items": [
+      {
+        "label": "Convertir snippet de consola a componente React",
+        "prompt": "Voy a pegar después de este mensaje un snippet de JavaScript puro.\n\nQuiero que lo conviertas a React por capas.\n\nPrimero explícame qué hace el snippet en consola.\n\nDespués identifica datos iniciales.\n\nDespués identifica funciones.\n\nDespués identifica métodos de array.\n\nDespués dime qué sería estado en React.\n\nDespués crea proyecto desde npm create vite@latest.\n\nDespués npm install.\n\nDespués indica dependencia extra solo si realmente aplica.\n\nDespués crea el componente.\n\nDespués importa y conecta en App.jsx.\n\nDespués explica el flujo completo.\n\nNo me des el componente final completo hasta explicar la versión de consola."
+      },
+      {
+        "label": "Convertir componente grande a capas",
+        "prompt": "Voy a pegar después de este mensaje un componente React grande.\n\nQuiero que me lo expliques y lo dividas mentalmente por capas.\n\nPrimero identifica datos.\n\nDespués identifica estado.\n\nDespués identifica funciones handler.\n\nDespués identifica métodos de array.\n\nDespués identifica render condicional.\n\nDespués identifica props.\n\nDespués identifica qué podría extraerse a componentes pequeños.\n\nDespués identifica qué podría extraerse a custom hook.\n\nNo refactorices todo de golpe.\n\nPrimero dame el mapa mental y la ruta completa del flujo."
+      },
+      {
+        "label": "De feature a estructura de archivos",
+        "prompt": "Quiero construir una feature de catálogo de productos con búsqueda, filtro y orden.\n\nNo me des código final todavía.\n\nPrimero proponme una estructura de archivos simple para React.\n\nIncluye App.jsx, componentes, hooks si realmente hacen falta y datos mock.\n\nDespués explica qué responsabilidad tiene cada archivo.\n\nDespués dime qué archivo crearía primero.\n\nDespués dime qué archivo conectaría después.\n\nDespués empieza con la versión más simple y avanza por capas.\n\nExplica el flujo completo: datos mock, estado de filtros, cálculo de productos visibles, render de lista, eventos de usuario."
+      },
+      {
+        "label": "De feature simple a custom hook",
+        "prompt": "Quiero aprender cuándo una feature debería convertirse en custom hook.\n\nUsa una lista editable de tareas.\n\nPrimero crea mentalmente la versión simple dentro de un componente.\n\nDespués identifica qué lógica es de estado.\n\nDespués identifica qué lógica es de UI.\n\nDespués explica qué se puede extraer.\n\nDespués crea useTasks.\n\nDespués muestra cómo el componente queda más limpio.\n\nDespués explica el trade-off de extraer lógica.\n\nNo lo hagas por arquitectura perfecta; hazlo para aprender claridad y reutilización."
+      },
+      {
+        "label": "Explicar código como si lo estuviera escribiendo",
+        "prompt": "Voy a pegar después de este mensaje un bloque de código JavaScript o React.\n\nQuiero que me lo expliques como si yo lo estuviera escribiendo desde cero.\n\nPrimero dime qué escribiría primero.\n\nDespués qué escribiría segundo.\n\nDespués qué problema resuelve cada línea importante.\n\nDespués qué dato entra.\n\nDespués qué dato sale.\n\nDespués qué parte conecta con otra.\n\nDespués escribe la ruta completa del flujo.\n\nNo me des una explicación superficial.\n\nExplícame términos técnicos la primera vez que aparezcan."
+      }
+    ]
+  },
+  {
+    "title": "Rutas",
+    "items": [
+      {
+        "label": "Ruta de 14 días JavaScript a React",
+        "prompt": "Créame una ruta de 14 días para aprender JavaScript moderno y React por capas.\n\nCada día debe tener:\n\n1. Concepto principal.\n2. Ejemplo en consola si es JavaScript.\n3. Ejemplo en React si aplica.\n4. Mini ejercicio.\n5. Pregunta de repaso.\n6. Qué debería dominar antes de avanzar.\n\nDistribuye así:\n\nDía 1 funciones, parámetros y return.\n\nDía 2 arrow functions y callbacks.\n\nDía 3 objetos y destructuring.\n\nDía 4 spread, rest y copias sin mutar.\n\nDía 5 map, filter y find.\n\nDía 6 reduce, some y every.\n\nDía 7 sort, includes, slice y splice.\n\nDía 8 React con Vite, App.jsx y componentes.\n\nDía 9 props, children y composición.\n\nDía 10 eventos, inputs y formularios controlados.\n\nDía 11 useState y estado derivado.\n\nDía 12 useEffect y useRef.\n\nDía 13 useMemo, useReducer y useContext.\n\nDía 14 custom hooks y mini proyecto final.\n\nNo incluyas testing, login ni debugging."
+      },
+      {
+        "label": "Ruta de 30 prompts para practicar",
+        "prompt": "Dame 30 prompts de práctica para aprender JavaScript y React.\n\nLos prompts deben estar listos para copiar.\n\nNo deben depender de backend, login, testing ni debugging.\n\nDeben cubrir funciones, arrays, objetos, métodos de array, componentes, props, eventos, formularios, hooks y custom hooks.\n\nCada prompt debe obligar a explicar por capas y escribir el flujo completo.\n\nCada prompt debe pedir primero JavaScript puro cuando aplique y luego React desde Vite cuando aplique.\n\nOrganiza los 30 prompts en dificultad progresiva: principiante, intermedio y mini features."
+      },
+      {
+        "label": "Curso con checkpoints",
+        "prompt": "Quiero un curso de JavaScript a React con checkpoints.\n\nCheckpoint 1: entiendo funciones, parámetros, argumentos y return.\n\nCheckpoint 2: entiendo callbacks y arrow functions.\n\nCheckpoint 3: entiendo objetos, arrays y destructuring.\n\nCheckpoint 4: entiendo map, filter, find y reduce.\n\nCheckpoint 5: entiendo React con componentes y props.\n\nCheckpoint 6: entiendo eventos, formularios y estado.\n\nCheckpoint 7: entiendo hooks principales.\n\nCheckpoint 8: puedo construir una feature simple por capas.\n\nPara cada checkpoint dame explicación, ejemplo, ejercicio, pregunta de validación y señal de que ya puedo avanzar.\n\nNo me des todos los códigos finales de golpe."
+      }
+    ]
+  }
+]

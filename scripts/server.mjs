@@ -32,6 +32,21 @@ const IMAGE_PARSER_PROVIDER = 'groq';
 const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
+const THINKING_EXTRACTORS = [
+  { provider: 'mistral', model: 'mistral-small-latest', label: 'Mistral Small 4' },
+  { provider: 'groq', model: 'openai/gpt-oss-20b', label: 'GPT OSS 20B' },
+  { provider: 'cerebras', model: 'zai-glm-4.7', label: 'ZAI GLM 4.7' },
+];
+const THINKING_INTEGRATOR = { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' };
+const THINKING_CRITIC = { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' };
+const THINKING_FINAL_MODELS = [
+  { provider: 'cohere', model: 'command-a-reasoning-08-2025', label: 'Command A Reasoning' },
+  { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
+  { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
+  { provider: 'groq', model: 'openai/gpt-oss-120b', label: 'GPT OSS 120B' },
+  { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' },
+];
+
 createServer(async (req, res) => {
   try {
     if (req.url === '/api/chat') return handleChat(req, res);
@@ -45,7 +60,7 @@ createServer(async (req, res) => {
 });
 
 async function handleChat(req, res) {
-  const { provider, model, messages, images = [] } = await readJson(req);
+  const { provider, model, messages, images = [], thinking = false } = await readJson(req);
   const limitedImages = images.slice(0, MAX_IMAGES);
   const cleanMessages = messages.map(({ role, content }) => ({ role, content }));
   const imageContext = limitedImages.length ? await parseImages(cleanMessages, limitedImages) : '';
@@ -58,8 +73,21 @@ async function handleChat(req, res) {
         },
       ]
     : cleanMessages;
+
+  const content = thinking
+    ? await runThinkingPipeline({ provider, model, messages: finalMessages })
+    : await callChatCompletion(provider, model, finalMessages);
+
+  json(res, 200, { content });
+}
+
+async function callChatCompletion(provider, model, messages) {
+  if (!ENDPOINTS[provider]) throw new Error(`Proveedor no soportado: ${provider}`);
+  if (!API_KEYS[provider]) throw new Error(`Falta API key para ${provider}`);
+
   const headers = {
     'Content-Type': 'application/json',
+    Accept: 'application/json',
     Authorization: `Bearer ${API_KEYS[provider]}`,
   };
 
@@ -68,59 +96,147 @@ async function handleChat(req, res) {
     headers['X-Title'] = 'Inferencia';
   }
 
+  const body = {
+    model,
+    messages,
+    stream: false,
+  };
+
+  if (provider === 'cerebras') {
+    body.max_completion_tokens = 65000;
+    body.temperature = 1;
+    body.top_p = 0.95;
+    if (model === 'gpt-oss-120b') body.reasoning_effort = 'high';
+  }
+
   const response = await fetch(ENDPOINTS[provider], {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      model,
-      messages: finalMessages,
-      stream: false,
-    }),
+    body: JSON.stringify(body),
   });
 
-  const data = await response.json();
+  const raw = await response.text();
+  let data = {};
+
+  if (raw) {
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      throw new Error(`${provider}/${model} devolvio una respuesta no JSON`);
+    }
+  }
 
   if (!response.ok) {
-    return json(res, response.status, {
-      error: data?.error?.message || data?.message || `HTTP ${response.status}`,
-    });
+    throw new Error(data?.error?.message || data?.message || `${provider}/${model} HTTP ${response.status}`);
   }
 
   const choice = data.choices?.[0];
-  json(res, 200, { content: choice?.message?.content || choice?.text || '' });
+  return choice?.message?.content || choice?.text || '';
 }
 
 async function parseImages(messages, images) {
   const lastUserText = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${API_KEYS[IMAGE_PARSER_PROVIDER]}`,
-  };
+  return callChatCompletion(IMAGE_PARSER_PROVIDER, IMAGE_PARSER_MODEL, [{
+    role: 'user',
+    content: [
+      { type: 'text', text: lastUserText },
+      ...images.map((image) => ({ type: 'image_url', image_url: { url: image } })),
+    ],
+  }]);
+}
 
-  if (IMAGE_PARSER_PROVIDER === 'openrouter') {
-    headers['HTTP-Referer'] = `http://localhost:${port}`;
-    headers['X-Title'] = 'Inferencia';
-  }
+async function runThinkingPipeline({ provider, model, messages }) {
+  const finalModel = THINKING_FINAL_MODELS.find((m) => m.provider === provider && m.model === model);
+  if (!finalModel) throw new Error('Modelo final no permitido en Thinking Mode');
 
-  const response = await fetch(ENDPOINTS[IMAGE_PARSER_PROVIDER], {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      model: IMAGE_PARSER_MODEL,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'text', text: lastUserText },
-          ...images.map((image) => ({ type: 'image_url', image_url: { url: image } })),
-        ],
-      }],
-      stream: false,
-    }),
-  });
+  const evidence = await Promise.all(THINKING_EXTRACTORS.map(async (extractor) => ({
+    ...extractor,
+    content: await callChatCompletion(extractor.provider, extractor.model, extractorMessages(messages, extractor)),
+  })));
 
-  const data = await response.json();
-  if (!response.ok) throw new Error(data?.error?.message || data?.message || `Vision HTTP ${response.status}`);
-  return data.choices?.[0]?.message?.content || '';
+  const integrated = await callChatCompletion(
+    THINKING_INTEGRATOR.provider,
+    THINKING_INTEGRATOR.model,
+    integrationMessages(messages, evidence),
+  );
+
+  const draft = await callChatCompletion(
+    finalModel.provider,
+    finalModel.model,
+    finalMessages(messages, integrated),
+  );
+
+  const critique = await callChatCompletion(
+    THINKING_CRITIC.provider,
+    THINKING_CRITIC.model,
+    criticMessages(messages, integrated, draft),
+  );
+
+  return callChatCompletion(
+    finalModel.provider,
+    finalModel.model,
+    revisionMessages(messages, integrated, draft, critique),
+  );
+}
+
+function extractorMessages(messages, extractor) {
+  return [
+    {
+      role: 'system',
+      content: `Eres un extractor de evidencia. No respondas la pregunta final.
+Devuelve solo JSON valido con: facts, claims, concepts, assumptions, risks, counterarguments, unknowns, questions, recommendations.
+No uses markdown. No inventes datos. Conserva detalles utiles.`,
+    },
+    { role: 'user', content: `Extractor: ${extractor.label}\n\nConversacion:\n${formatMessages(messages)}` },
+  ];
+}
+
+function integrationMessages(messages, evidence) {
+  return [
+    {
+      role: 'system',
+      content: `Eres el integrador. Fusiona evidencia, elimina duplicados, marca consenso, contradicciones, incertidumbres, riesgos y estrategia de respuesta.
+Devuelve solo JSON valido. No respondas al usuario todavia.`,
+    },
+    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nEvidencia:\n${JSON.stringify(evidence, null, 2)}` },
+  ];
+}
+
+function finalMessages(messages, integrated) {
+  return [
+    {
+      role: 'system',
+      content: `Eres el modelo final. Responde al usuario usando la evidencia integrada.
+No menciones el pipeline interno. No reveles cadena de pensamiento. Responde en el idioma del usuario.`,
+    },
+    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nEvidencia integrada:\n${integrated}\n\nGenera un borrador final.` },
+  ];
+}
+
+function criticMessages(messages, integrated, draft) {
+  return [
+    {
+      role: 'system',
+      content: `Eres el critico. Revisa si el borrador esta soportado por la evidencia.
+Devuelve solo JSON valido con: verdict, critical_issues, unsupported_claims, missing_context, revision_instructions.`,
+    },
+    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nEvidencia integrada:\n${integrated}\n\nBorrador:\n${draft}` },
+  ];
+}
+
+function revisionMessages(messages, integrated, draft, critique) {
+  return [
+    {
+      role: 'system',
+      content: `Redacta la respuesta final visible para el usuario.
+Aplica la critica solo si mejora precision o claridad. No menciones JSON, prompts, etapas internas ni cadena de pensamiento.`,
+    },
+    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nEvidencia integrada:\n${integrated}\n\nBorrador:\n${draft}\n\nCritica:\n${critique}` },
+  ];
+}
+
+function formatMessages(messages) {
+  return JSON.stringify(messages, null, 2);
 }
 
 async function handleConversations(req, res) {
@@ -175,6 +291,8 @@ function serveStatic(req, res) {
     '.html': 'text/html; charset=utf-8',
     '.css': 'text/css; charset=utf-8',
     '.js': 'text/javascript; charset=utf-8',
+    '.json': 'application/json; charset=utf-8',
+    '.txt': 'text/plain; charset=utf-8',
     '.svg': 'image/svg+xml; charset=utf-8',
   }[extname(file)] || 'application/octet-stream';
 

@@ -52,6 +52,12 @@
             <div class="dropdown-body" id="dropdownBody"></div>
           </div>
         </div>
+
+        <button class="thinking-toggle" id="thinkingToggleBtn" type="button" aria-pressed="false"
+          title="Thinking Mode">
+          <span class="thinking-dot" aria-hidden="true"></span>
+          <span class="thinking-label">Thinking</span>
+        </button>
       </div>
 
       <div class="topbar-actions">
@@ -77,78 +83,8 @@
           </svg>
         </div>
         <h2>.js</h2>
-        <div class="empty-hints">
-          <button class="hint-chip"
-            data-prompt='
-## Objetivo
-Generar entre 5 y 8 snippets de JavaScript ejecutables en la consola del navegador con enfoque técnico-pedagógico, incluyendo:
-- Explicación de conceptos (closures, prototipos, asincronía, etc.).
-- Buenas prácticas.
-- Errores comunes y cómo evitarlos.
-- Comparación con alternativas equivalentes.
-- Referencias útiles (MDN u otras).
-
----
-
-## Temas a cubrir
-Cada snippet debe tratar un tema distinto:
-- Arrays (`map`, `filter`, `reduce` vs bucles).
-- Objetos (`this`, prototipos, destructuring, métodos estáticos).
-- DOM (selectores, atributos, eventos).
-- Asincronía (`fetch`, `async/await`, `try/catch`).
-- Funciones (closures, pure functions, parámetros por defecto).
-- Eventos (delegación, `EventTarget`).
-- Algoritmos simples.
-
----
-
-## Estructura de cada snippet
-
-### 1. Título
-Ejemplo: `Arrays: reduce vs for`
-
-### 2. Explicación técnica
-- Qué problema resuelve.
-- Conceptos clave.
-- Diferencias frente a otras soluciones.
-
-### 3. Código ejecutable
-- Dentro de backticks.
-- Comentarios técnicos inline.
-- Salida esperada como comentario.
-
-### 4. Buenas prácticas
-Ejemplo:
-- Evitar mutaciones.
-- Manejo correcto de errores.
-- Código legible e inmutable.
-
-### 5. Errores comunes
-Ejemplo:
-- Olvidar asignar el resultado de `map`.
-- No usar `await`.
-- Mutar arrays accidentalmente.
-
-### 6. Referencias
-Links oficiales de MDN o recursos técnicos.
-
----
-
-## Nivel técnico esperado
-Profundizar en:
-- Closures y scope.
-- Event Loop.
-- Prototipos vs `class`.
-- Web APIs (`localStorage`, `IntersectionObserver`, etc.).
-- Patrones de diseño básicos.
-
----
-
-## Requisitos importantes
-- Todo debe poder copiarse y ejecutarse directamente en la consola.
-- Explicar el "por qué", no solo el "cómo".
-- Priorizar claridad, legibilidad y buenas prácticas modernas.'>Ejercicios en consola
-            </button>
+        <div class="empty-hints" id="promptTree">
+          <span class="prompt-loading">Cargando prompts...</span>
         </div>
       </div>
     </main>
@@ -236,16 +172,34 @@ Profundizar en:
       { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
       { id: 'mistral-large-latest', label: 'Mistral Large 3', provider: 'mistral', tag: 'Mistral' },
       { id: 'openai/gpt-oss-120b', label: 'GPT OSS 120B', provider: 'groq', tag: 'Groq' },
-      { id: 'qwen-3-235b-a22b-instruct-2507', label: 'Qwen 3 235B', provider: 'cerebras', tag: 'Cerebras' },
+      { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
+      { id: 'gpt-oss-120b', label: 'GPT OSS 120B', provider: 'cerebras', tag: 'Cerebras' },
+      { id: 'zai-glm-4.7', label: 'ZAI GLM 4.7', provider: 'cerebras', tag: 'Cerebras' },
       { id: 'mistral-small-latest', label: 'Mistral Small 4', provider: 'mistral', tag: 'Mistral' },
       { id: 'DeepSeek-V3.1', label: 'DeepSeek V3.1', provider: 'sambanova', tag: 'SambaNova' },
       { id: 'command-a-reasoning-08-2025', label: 'Command A Reasoning', provider: 'cohere', tag: 'Cohere' },
-      { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
       { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B', provider: 'groq', tag: 'Groq' },
+      { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
       { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', provider: 'google', tag: 'Google' },
       { id: 'open-mistral-nemo', label: 'Mistral NeMo', provider: 'mistral', tag: 'Mistral' },
       { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
-      { id: 'llama3.1-8b', label: 'Llama 3.1 8B', provider: 'cerebras', tag: 'Cerebras' },
+    ];
+
+    const THINKING_FINAL_MODEL_IDS = [
+      'command-a-reasoning-08-2025',
+      'DeepSeek-V3.1',
+      'mistral-large-latest',
+      'openai/gpt-oss-120b',
+      'gpt-oss-120b',
+    ];
+    const DEFAULT_THINKING_MODEL_ID = 'mistral-large-latest';
+    const THINKING_LOADING_STEPS = [
+      'Preparando contexto...',
+      'Extrayendo evidencia...',
+      'Integrando hallazgos...',
+      'Razonando respuesta...',
+      'Validando con critico...',
+      'Redactando respuesta final...',
     ];
 
     const ENDPOINTS = {
@@ -259,11 +213,13 @@ Profundizar en:
     };
 
     const MAX_IMAGES = 5;
+    const PROMPTS_FILE = '/prompts.json';
 
     let selectedModel = MODELS.find(m => m.id === 'codestral-latest') || MODELS[0];
     let messages = [];
     let attachedImages = [];
     let isLoading = false;
+    let thinkingMode = false;
     let currentTheme = 'dark';
     window.dbReady = false;
 
@@ -273,6 +229,8 @@ Profundizar en:
     const modelDropdown = document.getElementById('modelDropdown');
     const modelSearch = document.getElementById('modelSearch');
     const dropdownBody = document.getElementById('dropdownBody');
+    const thinkingToggleBtn = document.getElementById('thinkingToggleBtn');
+    const promptTree = document.getElementById('promptTree');
     const messagesWrap = document.getElementById('messagesWrap');
     const emptyState = document.getElementById('emptyState');
     const chatInput = document.getElementById('chatInput');
@@ -601,9 +559,39 @@ Profundizar en:
       });
     }
 
+    function thinkingModels() {
+      return MODELS.filter(m => THINKING_FINAL_MODEL_IDS.includes(m.id));
+    }
+
+    function availableModels() {
+      return thinkingMode ? thinkingModels() : MODELS;
+    }
+
+    function updateModelDisplay() {
+      const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
+      const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
+      if (iconEl && p) iconEl.style.color = p.color;
+      modelLabel.textContent = p
+        ? `${thinkingMode ? 'Final · ' : ''}${p.name} · ${selectedModel.label}`
+        : selectedModel.label;
+    }
+
+    function setThinkingMode(enabled) {
+      thinkingMode = enabled;
+      if (thinkingMode && !THINKING_FINAL_MODEL_IDS.includes(selectedModel.id)) {
+        selectedModel = MODELS.find(m => m.id === DEFAULT_THINKING_MODEL_ID) || thinkingModels()[0];
+      }
+      thinkingToggleBtn.classList.toggle('active', thinkingMode);
+      thinkingToggleBtn.setAttribute('aria-pressed', String(thinkingMode));
+      modelSearch.placeholder = thinkingMode ? 'Buscar modelo final...' : 'Buscar modelo...';
+      updateModelDisplay();
+      buildDropdown();
+      updateSendBtn();
+    }
+
     function buildDropdown() {
       dropdownBody.innerHTML = '';
-      MODELS.forEach(m => {
+      availableModels().forEach(m => {
         const p = PROVIDERS.find(pp => pp.id === m.provider);
         const opt = document.createElement('div');
         opt.className = 'model-option' + (selectedModel?.id === m.id ? ' selected' : '');
@@ -621,10 +609,7 @@ Profundizar en:
 
     function selectModel(m) {
       selectedModel = m;
-      const p = PROVIDERS.find(pp => pp.id === m.provider);
-      const iconEl = modelBtn.querySelector('[data-lucide="brain"]');
-      if (iconEl) iconEl.style.color = p.color;
-      modelLabel.textContent = `${p.name} · ${m.label}`;
+      updateModelDisplay();
       closeDropdown();
       buildDropdown();
       updateSendBtn();
@@ -643,6 +628,7 @@ Profundizar en:
     }
 
     modelBtn.addEventListener('click', () => modelDropdown.classList.contains('open') ? closeDropdown() : openDropdown());
+    thinkingToggleBtn.addEventListener('click', () => setThinkingMode(!thinkingMode));
     document.addEventListener('click', e => { if (!modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) closeDropdown(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
     modelSearch.addEventListener('input', () => filterModels(modelSearch.value.trim().toLowerCase()));
@@ -713,12 +699,50 @@ Profundizar en:
       });
     }
 
-    document.querySelectorAll('.hint-chip').forEach(c => {
-      c.addEventListener('click', () => {
-        chatInput.value = c.dataset.prompt;
-        chatInput.dispatchEvent(new Event('input'));
-        chatInput.focus();
-      });
+    async function loadPromptTree() {
+      try {
+        const res = await fetch(PROMPTS_FILE);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        renderPromptTree(await res.json());
+      } catch (err) {
+        promptTree.innerHTML = `<span class="prompt-loading">No se pudieron cargar los prompts: ${err.message}</span>`;
+      }
+    }
+
+    function renderPromptTree(categories) {
+      promptTree.innerHTML = categories.map((category, index) => `
+        <details class="prompt-group" ${index < 2 ? 'open' : ''}>
+          <summary>
+            <span class="prompt-count">${category.items.length}</span>
+            <span class="prompt-title">${escapeHtml(category.title)}</span>
+            <span class="prompt-toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="prompt-items">
+            ${category.items.map(item => `
+              <button class="hint-chip" type="button" data-prompt="${escapeHtml(item.prompt)}">
+                ${escapeHtml(item.label)}
+              </button>
+            `).join('')}
+          </div>
+        </details>
+      `).join('');
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    promptTree.addEventListener('click', e => {
+      const chip = e.target.closest('.hint-chip');
+      if (!chip) return;
+      chatInput.value = chip.dataset.prompt;
+      chatInput.dispatchEvent(new Event('input'));
+      chatInput.focus();
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
@@ -754,9 +778,11 @@ Profundizar en:
       isLoading = true;
       updateSendBtn();
 
-      const typing = appendTyping();
+      const typing = appendTyping(thinkingMode ? THINKING_LOADING_STEPS[0] : '');
+      const stopLoading = thinkingMode ? startThinkingLoading(typing) : null;
       try {
-        const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images);
+        const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images, thinkingMode);
+        if (stopLoading) stopLoading();
         typing.remove();
         messages.push({ role: 'assistant', content: reply, model: selectedModel });
         appendMessage('assistant', reply, selectedModel);
@@ -769,6 +795,7 @@ Profundizar en:
           renderConversations(conversationSearch.value.trim());
         }
       } catch (err) {
+        if (stopLoading) stopLoading();
         typing.remove();
         showToast(` ${err.message}`);
         messages.pop();
@@ -779,7 +806,7 @@ Profundizar en:
       }
     }
 
-    async function callProvider(provider, model, msgs, images = []) {
+    async function callProvider(provider, model, msgs, images = [], thinking = false) {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -787,10 +814,12 @@ Profundizar en:
           provider,
           model,
           messages: msgs.map(({ role, content }) => ({ role, content })),
-          images
+          images,
+          thinking
         })
       });
-      const data = await res.json();
+      const raw = await res.text();
+      const data = raw ? JSON.parse(raw) : {};
       if (!res.ok) throw new Error(data?.error?.message || data?.error || data?.message || `HTTP ${res.status}`);
       return data.content || '';
     }
@@ -853,18 +882,33 @@ Profundizar en:
       });
     }
 
-    function appendTyping() {
+    function startThinkingLoading(wrap) {
+      const statusEl = wrap.querySelector('.thinking-status');
+      if (!statusEl) return null;
+      let step = 0;
+      const timer = setInterval(() => {
+        step = (step + 1) % THINKING_LOADING_STEPS.length;
+        statusEl.textContent = THINKING_LOADING_STEPS[step];
+      }, 2200);
+      return () => clearInterval(timer);
+    }
+
+    function appendTyping(statusText = '') {
       const wrap = document.createElement('div');
       wrap.className = 'msg assistant';
       const meta = document.createElement('div');
       meta.className = 'msg-meta';
       if (selectedModel) {
         const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
-        meta.innerHTML = `<span style="color:${p.color}">●</span> ${p.name} · ${selectedModel.label}`;
+        meta.innerHTML = thinkingMode
+          ? `<span style="color:${p.color}">●</span> Thinking Mode · ${selectedModel.label}`
+          : `<span style="color:${p.color}">●</span> ${p.name} · ${selectedModel.label}`;
       }
       const ind = document.createElement('div');
-      ind.className = 'typing-indicator';
-      ind.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      ind.className = `typing-indicator${statusText ? ' thinking-loading' : ''}`;
+      ind.innerHTML = statusText
+        ? `<span class="thinking-status">${statusText}</span><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`
+        : '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
       wrap.appendChild(meta);
       wrap.appendChild(ind);
       messagesWrap.appendChild(wrap);
@@ -908,17 +952,16 @@ Profundizar en:
     });
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
 
-    const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
-    modelLabel.textContent = `${p.name} · ${selectedModel.label}`;
+    updateModelDisplay();
     buildDropdown();
     updateSendBtn();
     
     if (window.lucide) {
       lucide.createIcons();
-      const iconEl = document.getElementById('modelIcon');
-      if (iconEl) iconEl.style.color = p.color;
+      updateModelDisplay();
     }
 
+    loadPromptTree();
     initDB();
   </script>
 </body>

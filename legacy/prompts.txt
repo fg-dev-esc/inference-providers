@@ -1,0 +1,2207 @@
+- 00 — Prompts base listos
+    - Curso completo de JavaScript a React por capas
+        
+        Quiero que actúes como mi tutor de programación y me des un curso progresivo para conectar JavaScript puro con React.
+        
+        No me des el código final completo de una sola vez.
+        
+        Trabaja por capas en este orden:
+        
+        1. Concepto base de JavaScript.
+        2. Función simple.
+        3. Método de array.
+        4. Ejemplo pequeño ejecutable en consola.
+        5. Integración de varias funciones.
+        6. Proyecto React desde cero con Vite.
+        7. Componente React.
+        8. Hook correspondiente.
+        9. Flujo completo de datos.
+        10. Mini ejercicio para practicar.
+        
+        Si es JavaScript puro, dime exactamente cómo abrir la consola del navegador y cómo ejecutar cada snippet.
+        
+        Si es React, empieza con npm create vite@latest, luego npm install, luego dependencia extra si aplica, luego crear componente, importar componente y conectarlo en App.jsx.
+        
+        Explica términos técnicos la primera vez que aparezcan.
+        
+        Explica por qué se usa cada pieza.
+        
+        No incluyas testing, login ni debugging.
+        
+    - Modo ultra lento para aprender código
+        
+        Quiero aprender programación con ejemplos de funciones, arrays y React en modo ultra lento.
+        
+        Dame solo una capa a la vez.
+        
+        No avances hasta que yo diga siguiente.
+        
+        Empieza por funciones JavaScript.
+        
+        Luego pasa a parámetros y return.
+        
+        Luego pasa a callbacks.
+        
+        Luego pasa a map.
+        
+        Luego pasa a filter.
+        
+        Luego pasa a reduce.
+        
+        Luego pasa a useState.
+        
+        Luego pasa a renderizar listas en React.
+        
+        En cada capa incluye:
+        
+        1. Qué significa.
+        2. Por qué existe.
+        3. Ejemplo mínimo.
+        4. Cómo ejecutarlo si es consola.
+        5. Cómo se conectaría con React si aplica.
+        6. Una pregunta para comprobar que entendí.
+        
+        No me des el proyecto final completo de una vez.
+        
+    - Explicación siempre con flujo completo
+        
+        Enséñame funciones, métodos de array y hooks de React explicando siempre la ruta completa del flujo.
+        
+        Cada explicación debe decir:
+        
+        1. Qué dato existe al inicio.
+        2. Qué función lo recibe.
+        3. Qué método lo transforma, filtra, busca u ordena.
+        4. Qué resultado sale.
+        5. Dónde se guarda ese resultado.
+        6. Cómo se muestra.
+        7. Qué acción del usuario lo cambia si está en React.
+        8. Qué se vuelve a ejecutar después del cambio.
+        
+        Empieza con JavaScript puro en consola.
+        
+        Después lleva el mismo ejemplo a React desde cero con Vite.
+        
+        No incluyas testing, login ni debugging.
+        
+    - Curso sin código final de golpe
+        
+        Quiero un curso práctico de JavaScript y React, pero con una regla estricta: no me des el código final completo de golpe.
+        
+        Primero explícame el concepto.
+        
+        Después dame una función simple.
+        
+        Después muéstrame cómo usar esa función con un array.
+        
+        Después enséñame un método de array.
+        
+        Después crea un ejemplo pequeño en consola.
+        
+        Después conviértelo a un componente React.
+        
+        Después agrega el hook necesario.
+        
+        Después escribe el flujo completo paso a paso.
+        
+        Usa ejemplos de productos, tareas, usuarios, tabs, carrito y formularios simples.
+        
+        Avanza por bloques y espera mi confirmación cuando una sección sea larga.
+        
+- 01 — Funciones JavaScript listas
+    - Funciones desde cero con calculadora simple
+        
+        Enséñame funciones JavaScript desde cero usando una calculadora simple.
+        
+        Primero muéstrame código repetido sin función.
+        
+        Después explícame por qué repetir código se vuelve incómodo.
+        
+        Después crea una función sumar.
+        
+        Después agrega parámetros.
+        
+        Después usa return.
+        
+        Después ejecuta la función varias veces en consola.
+        
+        Después crea funciones restar, multiplicar y calcularTotal.
+        
+        Después explica el flujo completo: dato entra, función procesa, return devuelve, resultado se usa.
+        
+        Dime cómo abrir la consola del navegador y qué debo pegar.
+        
+        No uses React todavía.
+        
+        No incluyas testing, login ni debugging.
+        
+    - Parámetros y argumentos con productos
+        
+        Explícame parámetros y argumentos usando productos.
+        
+        Primero crea una función sin parámetros que imprima el precio fijo de un producto.
+        
+        Después muestra por qué eso no sirve si tengo varios productos.
+        
+        Después crea una función mostrarPrecio que reciba nombre y precio.
+        
+        Después explica qué es parámetro y qué es argumento.
+        
+        Después crea una función calcularSubtotal que reciba precio y cantidad.
+        
+        Después usa return para devolver el subtotal.
+        
+        Después ejecuta todo en consola del navegador.
+        
+        Explica el flujo completo: valores reales entran como argumentos, la función los recibe como parámetros, se calcula el subtotal y return devuelve el resultado.
+        
+    - Return vs console.log con carrito
+        
+        Enséñame la diferencia entre return y console.log usando un carrito simple.
+        
+        Primero crea una función que solo use console.log.
+        
+        Después muestra por qué ese resultado no se puede reutilizar fácilmente.
+        
+        Después crea la misma función usando return.
+        
+        Después guarda el resultado en una variable.
+        
+        Después usa ese resultado dentro de otra función.
+        
+        Después crea un ejemplo de subtotal y total.
+        
+        Después ejecuta todo en consola.
+        
+        Explica el flujo completo: console.log muestra, return devuelve, una variable guarda, otra función reutiliza.
+        
+    - Arrow functions con ejemplos reales
+        
+        Enséñame arrow functions con ejemplos reales y progresivos.
+        
+        Primero escribe una función tradicional que calcule el doble de un número.
+        
+        Después reescribe la misma función como arrow function.
+        
+        Después usa return explícito.
+        
+        Después usa return implícito.
+        
+        Después crea una arrow function para calcular subtotal.
+        
+        Después usa esa arrow function dentro de map.
+        
+        Después explica cómo se usa una arrow function dentro de un onClick en React.
+        
+        Explica los símbolos =>, paréntesis, llaves y return.
+        
+        Primero todo en consola, después conexión mental con React.
+        
+    - Callbacks con pedidos de comida
+        
+        Enséñame callbacks usando una analogía de pedidos de comida.
+        
+        Primero crea una función saludar normal.
+        
+        Después crea una función procesarPedido que reciba otra función.
+        
+        Después ejecuta esa función recibida dentro de procesarPedido.
+        
+        Después nombra esa función recibida como callback.
+        
+        Después usa un callback con map para transformar una lista de comidas.
+        
+        Después usa un callback con filter para filtrar comidas disponibles.
+        
+        Después conecta la idea con onClick en React.
+        
+        Explica quién llama a quién, cuándo se ejecuta el callback y qué datos viajan.
+        
+        Usa ejemplos ejecutables en consola.
+        
+    - Funciones puras con tareas
+        
+        Explícame funciones puras usando una lista de tareas.
+        
+        Primero crea una función impura que modifica una variable externa.
+        
+        Después explica por qué eso puede causar confusión.
+        
+        Después crea una función pura que recibe una tarea y devuelve una nueva tarea.
+        
+        Después crea una función pura que recibe un array de tareas y devuelve un nuevo array.
+        
+        Después explica por qué no mutar ayuda cuando usamos React.
+        
+        Después conecta la idea con useState y actualización de listas.
+        
+        Primero todo en consola del navegador.
+        
+        No me des código React completo todavía, solo la conexión mental.
+        
+- 02 — Métodos de array listos
+    - map con productos
+        
+        Enséñame map por capas usando una lista de productos.
+        
+        Primero explícame qué problema resuelve map.
+        
+        Después crea una función simple que transforme un producto en texto.
+        
+        Después crea un array de productos con nombre y precio.
+        
+        Después usa map para convertir cada producto en una frase.
+        
+        Después muestra la salida en consola.
+        
+        Después usa map para crear una lista de nombres.
+        
+        Después usa map para crear una lista de subtotales.
+        
+        Después lleva la idea a React para renderizar productos.
+        
+        Si pasamos a React, empieza desde npm create vite@latest, npm install, sin dependencia extra, crear ProductList.jsx, importar en App.jsx y conectarlo.
+        
+        Explica el flujo completo: array original, callback, nuevo array, render en pantalla.
+        
+    - filter con buscador de productos
+        
+        Enséñame filter por capas creando un buscador de productos.
+        
+        Primero explica qué significa filtrar.
+        
+        Después crea una función coincideProducto que devuelva true o false.
+        
+        Después crea un array de productos.
+        
+        Después usa filter para encontrar productos activos.
+        
+        Después usa filter para buscar por texto.
+        
+        Después ejecuta el ejemplo en consola.
+        
+        Después conviértelo a React con un input de búsqueda.
+        
+        En React empieza desde Vite, instala dependencias base, indica que no se necesita dependencia extra, crea ProductSearch.jsx, impórtalo en App.jsx y conéctalo.
+        
+        Explica el flujo completo: usuario escribe, estado cambia, filter calcula visibles, map renderiza resultados.
+        
+    - find con detalle de usuario
+        
+        Enséñame find por capas creando un selector de usuario.
+        
+        Primero explica la diferencia entre filter y find.
+        
+        Después crea un array de usuarios con id, nombre y rol.
+        
+        Después usa find para buscar un usuario por id.
+        
+        Después explica qué significa undefined cuando no hay coincidencia.
+        
+        Después ejecuta el ejemplo en consola.
+        
+        Después lleva el ejemplo a React con botones para seleccionar usuario.
+        
+        En React empieza desde Vite, crea UserSelector.jsx, importa el componente en App.jsx y conéctalo.
+        
+        Explica el flujo completo: click, guardar id seleccionado, find busca usuario, React muestra detalle.
+        
+    - reduce con carrito
+        
+        Enséñame reduce muy despacio usando un carrito de compras.
+        
+        Primero explica qué significa acumular.
+        
+        Después suma números manualmente sin reduce.
+        
+        Después crea una función acumuladora.
+        
+        Después explica accumulator, currentValue y valor inicial.
+        
+        Después usa reduce con números.
+        
+        Después crea un array de productos con precio y cantidad.
+        
+        Después usa reduce para calcular el total del carrito.
+        
+        Después ejecuta todo en consola.
+        
+        Después lleva el total a React.
+        
+        En React empieza desde Vite, crea CartTotal.jsx, importa en App.jsx y conecta el componente.
+        
+        Explica el flujo completo: productos, reduce, acumulador, total, render.
+        
+    - some y every con tareas
+        
+        Enséñame some y every comparándolos con una lista de tareas.
+        
+        Primero explica qué pregunta responde some.
+        
+        Después explica qué pregunta responde every.
+        
+        Después crea tareas con completed true o false.
+        
+        Después usa some para saber si hay tareas pendientes.
+        
+        Después usa every para saber si todas están completadas.
+        
+        Después ejecuta el ejemplo en consola.
+        
+        Después lleva la idea a React para habilitar o deshabilitar un botón.
+        
+        En React empieza desde Vite, crea TaskStatus.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: lista de tareas, condición, booleano, UI cambia.
+        
+    - includes con categorías seleccionadas
+        
+        Enséñame includes usando categorías seleccionadas.
+        
+        Primero explica qué pregunta responde includes.
+        
+        Después crea un array de categorías seleccionadas.
+        
+        Después revisa si la categoría ropa está seleccionada.
+        
+        Después revisa si la categoría tecnología está seleccionada.
+        
+        Después ejecuta todo en consola.
+        
+        Después combina includes con filter para mostrar productos de categorías seleccionadas.
+        
+        Después lleva la idea a React con botones de categorías.
+        
+        En React empieza desde Vite, crea CategoryFilter.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario elige categoría, estado guarda seleccionadas, includes revisa, filter muestra productos.
+        
+    - sort sin mutar productos
+        
+        Enséñame sort sin mutar usando productos.
+        
+        Primero explica qué significa ordenar.
+        
+        Después muestra sort con números.
+        
+        Después explica que sort modifica el array original.
+        
+        Después crea una copia con spread antes de ordenar.
+        
+        Después ordena productos por precio.
+        
+        Después ordena productos por nombre.
+        
+        Después ejecuta todo en consola.
+        
+        Después lleva la idea a React con un selector de orden.
+        
+        En React empieza desde Vite, crea ProductSorter.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: estado original, copia, sort, render ordenado.
+        
+    - slice y splice con lista de tareas
+        
+        Enséñame slice y splice usando una lista de tareas.
+        
+        Primero explica qué significa copiar una parte.
+        
+        Después usa slice para obtener las primeras dos tareas.
+        
+        Después muestra que el array original no cambia.
+        
+        Después usa splice para quitar una tarea.
+        
+        Después muestra que el array original sí cambia.
+        
+        Después explica por qué en React normalmente preferimos no mutar.
+        
+        Después lleva la idea a React con una lista donde se elimina una tarea usando filter en lugar de splice.
+        
+        Empieza con consola del navegador.
+        
+        Después crea un componente TaskList.jsx desde Vite y conéctalo en App.jsx.
+        
+    - Encadenar map, filter y reduce
+        
+        Enséñame a encadenar filter, map y reduce con productos.
+        
+        Primero crea productos con nombre, precio, cantidad y activo.
+        
+        Después usa filter para quedarte con productos activos.
+        
+        Después usa map para calcular subtotales.
+        
+        Después usa reduce para sumar el total.
+        
+        Después ejecuta cada paso separado en consola.
+        
+        Después encadena los métodos en una sola expresión.
+        
+        Después explica cuándo conviene separar pasos y cuándo encadenar.
+        
+        Después lleva el flujo a React.
+        
+        En React empieza desde Vite, crea ActiveProductsTotal.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: productos, filter, map, reduce, total, render.
+        
+- 03 — React desde cero listo
+    - Crear proyecto React con Vite y primer componente
+        
+        Enséñame a crear un proyecto React desde cero con Vite y conectar mi primer componente.
+        
+        No me des todo el proyecto final de golpe.
+        
+        Primero explica qué es Vite y por qué se usa.
+        
+        Después dame el comando npm create vite@latest.
+        
+        Después dime cómo elegir React.
+        
+        Después dime cómo entrar a la carpeta.
+        
+        Después dame npm install.
+        
+        Después explica cuándo se instala una dependencia extra y cuándo no.
+        
+        Después crea un componente WelcomeCard.jsx.
+        
+        Después importa WelcomeCard en App.jsx.
+        
+        Después conecta el componente.
+        
+        Después ejecuta npm run dev.
+        
+        Después explica el flujo completo: main.jsx, App.jsx, componente importado, pantalla.
+        
+        No incluyas testing, login ni debugging.
+        
+    - Props con tarjeta de producto
+        
+        Enséñame props en React creando una tarjeta de producto.
+        
+        Empieza desde cero con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProductCard.jsx.
+        
+        Primero haz una tarjeta con texto fijo.
+        
+        Después explica el problema de tener texto fijo.
+        
+        Después pasa nombre, precio y stock como props.
+        
+        Después importa ProductCard en App.jsx.
+        
+        Después renderiza varias tarjetas.
+        
+        Después explica el flujo completo: App tiene datos, App pasa props, ProductCard recibe props, ProductCard renderiza.
+        
+        No me des la versión final completa desde el inicio.
+        
+    - Eventos con contador
+        
+        Enséñame eventos en React creando un contador.
+        
+        Empieza desde cero con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea CounterButtons.jsx.
+        
+        Primero explica qué es un evento del usuario.
+        
+        Después crea un botón sin estado.
+        
+        Después crea una función handler.
+        
+        Después conecta onClick.
+        
+        Después agrega useState.
+        
+        Después crea botones para sumar, restar y reiniciar.
+        
+        Después importa y conecta el componente en App.jsx.
+        
+        Después explica el flujo completo: click, handler, setState, nuevo estado, nuevo render.
+        
+    - Input controlado con nombre
+        
+        Enséñame inputs controlados en React creando un formulario de nombre.
+        
+        Empieza desde cero con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea NameForm.jsx.
+        
+        Primero explica qué es un input normal.
+        
+        Después explica qué significa que React controle el valor.
+        
+        Después crea estado name con useState.
+        
+        Después conecta value.
+        
+        Después conecta onChange.
+        
+        Después muestra el nombre escrito en pantalla.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: escribir, evento, setName, estado, render.
+        
+    - Renderizar lista con map
+        
+        Enséñame a renderizar una lista en React usando map.
+        
+        Empieza desde cero con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProductList.jsx.
+        
+        Primero crea un array de productos.
+        
+        Después explica qué es JSX.
+        
+        Después usa map para crear elementos visuales.
+        
+        Después explica qué es key y por qué React la pide.
+        
+        Después importa ProductList en App.jsx.
+        
+        Después conecta el componente.
+        
+        Después explica el flujo completo: array, map, JSX, key, pantalla.
+        
+- 04 — Hooks listos
+    - useState con contador
+        
+        Enséñame useState por capas creando un contador.
+        
+        Primero explica por qué una variable normal no actualiza la pantalla.
+        
+        Después explica qué problema resuelve useState.
+        
+        Después crea un proyecto con Vite.
+        
+        Después ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea Counter.jsx.
+        
+        Después crea estado count.
+        
+        Después crea botones para aumentar y disminuir.
+        
+        Después importa Counter en App.jsx.
+        
+        Después conecta el componente.
+        
+        Después explica el flujo completo: click, función handler, setCount, nuevo estado, React renderiza otra vez.
+        
+        No me des el código final completo de una sola vez.
+        
+    - useState con lista editable
+        
+        Enséñame useState usando una lista editable de tareas.
+        
+        Primero haz la idea en JavaScript puro con un array de tareas.
+        
+        Después explica cómo agregar una tarea creando un nuevo array.
+        
+        Después explica cómo eliminar una tarea con filter.
+        
+        Después explica cómo editar una tarea con map.
+        
+        Después crea proyecto React con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea EditableTasks.jsx.
+        
+        Después conecta agregar, eliminar y editar.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: acción del usuario, función, nuevo array, setTasks, render.
+        
+    - useEffect con título de página
+        
+        Enséñame useEffect por capas cambiando el título de la página.
+        
+        Primero explica qué es render.
+        
+        Después explica qué significa ejecutar algo después del render.
+        
+        Después explica qué es un efecto.
+        
+        Después explica qué es el array de dependencias.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea PageTitleCounter.jsx.
+        
+        Después usa useState para count.
+        
+        Después usa useEffect para cambiar document.title cuando count cambie.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: click, estado cambia, render, useEffect corre, título cambia.
+        
+        No uses fetch todavía.
+        
+    - useRef con enfoque de input
+        
+        Enséñame useRef por capas enfocando un input.
+        
+        Primero explica qué es una referencia.
+        
+        Después explica la diferencia entre useRef y useState.
+        
+        Después explica qué es ref.current.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea FocusInput.jsx.
+        
+        Después crea un input.
+        
+        Después conecta useRef al input.
+        
+        Después crea un botón que haga focus.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: click, ref apunta al input, ref.current.focus ejecuta enfoque.
+        
+    - useMemo con filtro de productos
+        
+        Enséñame useMemo por capas con un filtro de productos.
+        
+        Primero crea una versión sin useMemo.
+        
+        Después explica qué es un cálculo derivado.
+        
+        Después explica cuándo NO usar useMemo.
+        
+        Después explica cuándo sí puede ayudar.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea MemoProductFilter.jsx.
+        
+        Después crea estado search.
+        
+        Después filtra productos.
+        
+        Después agrega useMemo para memorizar productos filtrados.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: texto cambia, estado cambia, dependencias cambian, cálculo se actualiza, render muestra resultados.
+        
+    - useReducer con contador
+        
+        Enséñame useReducer por capas con un contador.
+        
+        Primero crea el contador con useState.
+        
+        Después explica por qué useState puede volverse incómodo con muchas acciones.
+        
+        Después explica qué es action.
+        
+        Después explica qué es reducer.
+        
+        Después explica qué es dispatch.
+        
+        Después muestra state + action -> newState en JavaScript puro.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea ReducerCounter.jsx.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: click, dispatch, action, reducer, nuevo estado, render.
+        
+    - useContext con tema claro y oscuro
+        
+        Enséñame useContext por capas con tema claro y oscuro.
+        
+        Primero crea una versión pasando props manualmente.
+        
+        Después explica el problema de pasar props por muchos niveles.
+        
+        Después explica qué es Context.
+        
+        Después explica qué es Provider.
+        
+        Después explica qué consume useContext.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea ThemeContext.jsx.
+        
+        Después crea ThemePanel.jsx.
+        
+        Después envuelve App con Provider.
+        
+        Después importa y conecta todo.
+        
+        Después explica el flujo completo: Provider entrega value, componente lee con useContext, botón cambia tema, UI renderiza.
+        
+    - Custom hook useCounter
+        
+        Enséñame custom hooks por capas creando useCounter.
+        
+        Primero crea un contador normal dentro de un componente.
+        
+        Después explica qué lógica está mezclada con la UI.
+        
+        Después explica qué es un custom hook.
+        
+        Después explica por qué el nombre empieza con use.
+        
+        Después crea proyecto con Vite.
+        
+        Después npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Después crea src/hooks/useCounter.js.
+        
+        Después mueve la lógica del contador al hook.
+        
+        Después crea CounterWithHook.jsx.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo: componente llama hook, hook maneja estado, hook devuelve datos y funciones, componente renderiza.
+        
+- 05 — Features completas listas
+    - Buscador de productos completo por capas
+        
+        Quiero construir un buscador de productos por capas.
+        
+        Primero trabaja en JavaScript puro en consola.
+        
+        Crea productos con nombre, categoría, precio y activo.
+        
+        Crea una función coincideTexto.
+        
+        Usa filter para obtener productos visibles.
+        
+        Usa map para mostrar nombres.
+        
+        Explica cada paso.
+        
+        Después llévalo a React desde cero.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProductSearchCourse.jsx.
+        
+        Usa useState para guardar el texto.
+        
+        Usa filter para calcular productos visibles.
+        
+        Usa map para renderizar.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario escribe, onChange recibe evento, setSearch actualiza estado, componente renderiza, filter recalcula, map pinta productos.
+        
+        No me des todo el código final de golpe.
+        
+    - Carrito de compras simple por capas
+        
+        Quiero construir un carrito de compras simple por capas.
+        
+        Primero trabaja en consola.
+        
+        Crea un producto con nombre, precio y cantidad.
+        
+        Crea una función subtotal.
+        
+        Crea un array de carrito.
+        
+        Usa map para ver subtotales.
+        
+        Usa reduce para calcular total.
+        
+        Explica la ruta completa de datos.
+        
+        Después llévalo a React desde cero.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea SimpleCart.jsx.
+        
+        Renderiza productos con map.
+        
+        Calcula total con reduce.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: carrito inicial, map para filas, reduce para total, JSX para pantalla.
+        
+        No agregues checkout, login, testing ni debugging.
+        
+    - Tabs simples por capas
+        
+        Quiero construir tabs simples por capas.
+        
+        Primero trabaja en consola.
+        
+        Crea un array de tabs con id, label y content.
+        
+        Crea una variable activeTabId.
+        
+        Usa find para obtener el tab activo.
+        
+        Explica qué ocurre si cambia activeTabId.
+        
+        Después llévalo a React desde cero.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea SimpleTabs.jsx.
+        
+        Usa useState para activeTabId.
+        
+        Usa map para botones.
+        
+        Usa find para contenido activo.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: click, setActiveTabId, nuevo estado, find busca contenido, React renderiza tab activo.
+        
+    - Formulario de contacto simple por capas
+        
+        Quiero construir un formulario de contacto simple por capas.
+        
+        Primero explica el modelo mental de un formulario como objeto.
+        
+        Después crea un objeto formData en JavaScript puro.
+        
+        Después crea una función actualizarCampo.
+        
+        Después muestra cómo cambiar nombre, email y mensaje.
+        
+        Después lleva esa idea a React desde cero.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ContactForm.jsx.
+        
+        Usa useState para formData.
+        
+        Crea inputs controlados.
+        
+        Crea handleChange.
+        
+        Crea handleSubmit simple.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario escribe, onChange detecta campo, handleChange crea nuevo objeto, setFormData actualiza estado, pantalla se sincroniza.
+        
+        No agregues validaciones avanzadas.
+        
+    - Lista editable de tareas por capas
+        
+        Quiero construir una lista editable de tareas por capas.
+        
+        Primero trabaja en consola.
+        
+        Crea un array de tareas.
+        
+        Agrega una tarea usando spread.
+        
+        Elimina una tarea usando filter.
+        
+        Edita una tarea usando map.
+        
+        Explica por qué cada operación devuelve un nuevo array.
+        
+        Después llévalo a React desde cero.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea EditableTaskList.jsx.
+        
+        Usa useState para tasks.
+        
+        Crea handlers para agregar, eliminar y completar.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: evento del usuario, función handler, método de array, nuevo estado, render actualizado.
+        
+        No me des todo el código final de una sola vez.
+        
+- 06 — Variantes didácticas listas
+    - Variante socrática con map
+        
+        Quiero aprender map como tutor socrático.
+        
+        No me des la respuesta completa al inicio.
+        
+        Hazme preguntas para que yo descubra:
+        
+        1. Qué dato tengo al inicio.
+        2. Qué quiero obtener al final.
+        3. Si necesito transformar, filtrar o acumular.
+        4. Qué función debería aplicarse a cada item.
+        5. Qué devuelve map.
+        6. Cómo se vería eso en React.
+        
+        Usa una lista de productos.
+        
+        Cuando responda, corrige con pistas pequeñas.
+        
+        Al final dame una implementación en consola y luego una versión React desde Vite.
+        
+    - Variante socrática con reduce
+        
+        Quiero aprender reduce como tutor socrático.
+        
+        No empieces con código completo.
+        
+        Hazme preguntas para que entienda:
+        
+        1. Qué significa acumular.
+        2. Qué valor inicial necesito.
+        3. Qué representa accumulator.
+        4. Qué representa currentValue.
+        5. Qué se devuelve en cada vuelta.
+        6. Cómo se obtiene el total final.
+        
+        Usa un carrito de compras.
+        
+        Después de mis respuestas, dame ejemplo en consola.
+        
+        Luego lleva el mismo ejemplo a React desde cero.
+        
+    - Variante con analogías para hooks
+        
+        Explícame useState, useEffect, useRef, useMemo, useReducer, useContext y custom hooks usando analogías simples.
+        
+        Para cada hook haz esto:
+        
+        1. Analogía.
+        2. Qué problema resuelve.
+        3. Ejemplo mínimo.
+        4. Cuándo usarlo.
+        5. Cuándo no usarlo.
+        6. Flujo completo.
+        
+        Después elige uno y constrúyelo en React desde cero con Vite.
+        
+        No me des todos los proyectos completos a la vez.
+        
+    - Variante mini retos de arrays
+        
+        Dame mini retos para practicar métodos de array con productos, tareas y usuarios.
+        
+        Quiero retos para:
+        
+        1. map.
+        2. filter.
+        3. find.
+        4. reduce.
+        5. some.
+        6. every.
+        7. includes.
+        8. sort.
+        9. slice.
+        10. splice.
+        
+        No me des las soluciones al inicio.
+        
+        Dame primero el reto de map.
+        
+        Cuando yo responda, revisa mi solución.
+        
+        Después muestra una solución simple y explica el flujo completo.
+        
+    - Variante comparación de métodos
+        
+        Compárame map, filter, find, reduce, some, every, includes, sort, slice y splice con ejemplos concretos.
+        
+        Para cada método explica:
+        
+        1. Qué pregunta responde.
+        2. Qué devuelve.
+        3. Si modifica el array original.
+        4. Cuándo usarlo.
+        5. Un ejemplo en consola.
+        6. Cómo se usaría en React.
+        
+        No me des solo una tabla.
+        
+        Quiero explicación paso a paso y flujo completo.
+        
+    - Variante refactor para aprender
+        
+        Quiero aprender a mejorar una feature de productos sin sobreingeniería.
+        
+        Crea primero una versión simple de una lista de productos con búsqueda.
+        
+        Después explícame qué está bien de esa versión.
+        
+        Después explícame qué se puede mejorar.
+        
+        Después mejora nombres de variables.
+        
+        Después separa una función solo si ayuda a entender.
+        
+        Después compara versión simple contra versión más limpia.
+        
+        Después explica el trade-off.
+        
+        No incluyas testing, login ni debugging.
+        
+        La meta es aprender cómo pensar mejor la feature, no hacerla perfecta.
+        
+    - Variante ruta de práctica de 7 días
+        
+        Créame una ruta de práctica de 7 días para aprender funciones, métodos de array y hooks de React.
+        
+        Cada día debe tener:
+        
+        1. Concepto principal.
+        2. Ejemplo en consola.
+        3. Mini ejercicio.
+        4. Conexión con React.
+        5. Pregunta de repaso.
+        
+        Distribuye los días así:
+        
+        Día 1 funciones, parámetros y return.
+        
+        Día 2 callbacks y arrow functions.
+        
+        Día 3 map, filter y find.
+        
+        Día 4 reduce, some y every.
+        
+        Día 5 React con componentes, props y eventos.
+        
+        Día 6 useState, useEffect y useRef.
+        
+        Día 7 useMemo, useReducer, useContext y custom hooks.
+        
+        No incluyas testing, login ni debugging.
+        
+- 07 — Prompts de repaso listos
+    - Repaso activo de funciones
+        
+        Hazme un repaso activo de funciones JavaScript.
+        
+        No me des respuestas primero.
+        
+        Pregúntame una cosa a la vez sobre:
+        
+        1. Qué es una función.
+        2. Qué son parámetros.
+        3. Qué son argumentos.
+        4. Qué hace return.
+        5. Diferencia entre return y console.log.
+        6. Qué es una arrow function.
+        7. Qué es un callback.
+        8. Qué es una función pura.
+        
+        Después de cada respuesta mía, dime qué estuvo bien, qué faltó y dame un ejemplo mínimo en consola.
+        
+    - Repaso activo de métodos de array
+        
+        Hazme un repaso activo de métodos de array.
+        
+        No me des respuestas primero.
+        
+        Pregúntame una cosa a la vez sobre map, filter, find, reduce, some, every, includes, sort, slice y splice.
+        
+        Para cada método pregúntame:
+        
+        1. Qué problema resuelve.
+        2. Qué devuelve.
+        3. Si modifica el array original.
+        4. Un caso real donde lo usaría.
+        
+        Después de mi respuesta, corrige, da ejemplo en consola y explica el flujo completo.
+        
+    - Repaso activo de hooks
+        
+        Hazme un repaso activo de hooks de React.
+        
+        No me des respuestas primero.
+        
+        Pregúntame una cosa a la vez sobre useState, useEffect, useRef, useMemo, useReducer, useContext y custom hooks.
+        
+        Para cada hook pregúntame:
+        
+        1. Qué problema resuelve.
+        2. Cuándo lo usaría.
+        3. Qué dato entra.
+        4. Qué dato sale.
+        5. Cómo se conecta con el render.
+        
+        Después de mi respuesta, corrige con explicación corta y da un ejemplo pequeño.
+        
+- 08 — JavaScript objetos y sintaxis moderna
+    - Objetos con perfil de usuario
+        
+        Enséñame objetos en JavaScript usando un perfil de usuario.
+        
+        Primero explica qué es un objeto y por qué sirve para agrupar datos relacionados.
+        
+        Después crea un usuario con nombre, edad, email y rol.
+        
+        Después muéstrame cómo leer una propiedad con punto.
+        
+        Después muéstrame cómo leer una propiedad con corchetes.
+        
+        Después crea una función que reciba un usuario y devuelva una frase descriptiva.
+        
+        Después ejecuta todo en consola del navegador.
+        
+        Después conecta la idea con React usando una tarjeta de usuario.
+        
+        Si pasamos a React, empieza desde npm create vite@latest, npm install, sin dependencia extra, crear UserCard.jsx, importar en App.jsx y conectarlo.
+        
+        Explica el flujo completo: objeto usuario, función recibe objeto, componente recibe props, JSX muestra propiedades.
+        
+    - Destructuring con producto
+        
+        Enséñame destructuring en JavaScript usando un producto.
+        
+        Primero crea un objeto producto con nombre, precio, categoría y stock.
+        
+        Después muestra cómo leer propiedades una por una.
+        
+        Después explica por qué eso puede repetirse.
+        
+        Después usa destructuring para extraer nombre, precio y stock.
+        
+        Después crea una función mostrarProducto que use destructuring en el cuerpo.
+        
+        Después crea otra función que use destructuring directo en los parámetros.
+        
+        Después ejecuta todo en consola.
+        
+        Después lleva la idea a React con props destructuradas en ProductCard.jsx.
+        
+        Explica el flujo completo: objeto entra, destructuring extrae propiedades, función usa valores, componente renderiza.
+        
+    - Spread con tareas
+        
+        Enséñame spread operator usando una lista de tareas.
+        
+        Primero crea un array de tareas en consola.
+        
+        Después agrega una tarea mutando el array con push.
+        
+        Después explica por qué mutar puede ser mala idea en React.
+        
+        Después agrega una tarea creando un nuevo array con spread.
+        
+        Después actualiza una tarea creando un nuevo objeto con spread.
+        
+        Después combina map y spread para marcar una tarea como completada.
+        
+        Después lleva la idea a React con useState.
+        
+        En React empieza desde Vite, crea TasksWithSpread.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: evento, handler, spread crea copia, setTasks guarda nuevo array, React renderiza.
+        
+    - Rest parameters con carrito
+        
+        Enséñame rest parameters usando un carrito de compras.
+        
+        Primero crea una función sumarDosProductos que reciba dos precios.
+        
+        Después explica por qué esa función se queda corta si tengo más productos.
+        
+        Después crea una función sumarPrecios usando rest parameters.
+        
+        Después explica qué significa recibir muchos argumentos como array.
+        
+        Después usa reduce para calcular el total.
+        
+        Después ejecuta todo en consola.
+        
+        Después conecta la idea con una función helper dentro de React.
+        
+        Explica el flujo completo: argumentos entran, rest los agrupa, reduce acumula, return devuelve total.
+        
+    - Optional chaining con perfil incompleto
+        
+        Enséñame optional chaining usando un perfil de usuario incompleto.
+        
+        Primero crea un usuario con dirección completa.
+        
+        Después lee usuario.direccion.ciudad.
+        
+        Después crea otro usuario sin dirección.
+        
+        Después muestra qué problema aparece al intentar leer una propiedad profunda.
+        
+        Después usa optional chaining para leer ciudad sin romper el flujo.
+        
+        Después agrega un valor por defecto con nullish coalescing.
+        
+        Después ejecuta todo en consola.
+        
+        Después conecta la idea con React mostrando datos opcionales en una tarjeta.
+        
+        Explica el flujo completo: objeto puede venir completo o incompleto, optional chaining evita romper lectura, valor por defecto mantiene UI estable.
+        
+    - Template literals con factura
+        
+        Enséñame template literals usando una factura simple.
+        
+        Primero crea variables cliente, producto, precio y cantidad.
+        
+        Después crea un mensaje usando concatenación con +.
+        
+        Después explica por qué se vuelve difícil de leer.
+        
+        Después crea el mismo mensaje con template literals.
+        
+        Después agrega un cálculo dentro del template literal.
+        
+        Después crea una función generarResumenFactura.
+        
+        Después ejecuta todo en consola.
+        
+        Después conecta la idea con React mostrando un resumen de compra.
+        
+        Explica el flujo completo: datos base, cálculo, string interpolado, texto final mostrado.
+        
+    - Ternario con estados visuales
+        
+        Enséñame el operador ternario usando estados visuales simples.
+        
+        Primero crea una variable isActive.
+        
+        Después usa if/else para decidir un texto.
+        
+        Después convierte ese if/else en ternario.
+        
+        Después crea ejemplos con producto disponible, tarea completada y usuario premium.
+        
+        Después ejecuta todo en consola.
+        
+        Después lleva la idea a React para mostrar texto condicional y clases condicionales.
+        
+        En React empieza desde Vite, crea StatusBadge.jsx, importa y conecta en App.jsx.
+        
+        Explica el flujo completo: booleano, condición, resultado elegido, JSX renderizado.
+        
+- 09 — React render y composición
+    - Render condicional con tarjeta de producto
+        
+        Enséñame render condicional en React usando una tarjeta de producto.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProductAvailability.jsx.
+        
+        Primero crea un producto con stock mayor a cero.
+        
+        Después muestra texto fijo.
+        
+        Después usa un if fuera del JSX.
+        
+        Después usa un ternario dentro del JSX.
+        
+        Después usa && para mostrar una etiqueta solo si hay descuento.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: producto tiene datos, condición evalúa stock, JSX decide qué mostrar, pantalla refleja disponibilidad.
+        
+    - Estado vacío con lista de tareas
+        
+        Enséñame a manejar estado vacío en React usando una lista de tareas.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea EmptyTasks.jsx.
+        
+        Primero renderiza una lista con tareas.
+        
+        Después cambia el array a vacío.
+        
+        Después explica qué debería ver el usuario cuando no hay datos.
+        
+        Después usa condición para mostrar mensaje vacío.
+        
+        Después agrega un botón para crear una tarea inicial.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: array vacío, condición revisa length, UI muestra mensaje, click agrega tarea, render cambia a lista.
+        
+    - Composición con Card reutilizable
+        
+        Enséñame composición en React creando un componente Card reutilizable.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea ProductCard con estructura repetida.
+        
+        Después crea UserCard con estructura parecida.
+        
+        Después identifica qué se repite.
+        
+        Después crea un componente Card.jsx que reciba title, subtitle y children.
+        
+        Después usa Card para producto y usuario.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: componente genérico recibe props, children recibe contenido flexible, componentes específicos reutilizan estructura.
+        
+    - Children con layout simple
+        
+        Enséñame children en React creando un layout simple.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea PageSection.jsx.
+        
+        Primero muestra contenido fijo dentro del componente.
+        
+        Después explica el problema de no poder cambiar el contenido.
+        
+        Después usa children para pasar contenido desde App.jsx.
+        
+        Después crea dos secciones diferentes usando el mismo componente.
+        
+        Después explica por qué children permite composición.
+        
+        Explica el flujo completo: App envuelve contenido, PageSection recibe children, PageSection decide marco visual, children se renderiza dentro.
+        
+    - Lifting state con selector de producto
+        
+        Enséñame lifting state up usando un selector de producto.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea ProductList con estado interno de selección.
+        
+        Después crea ProductDetail separado.
+        
+        Después explica por qué ProductDetail no conoce el producto seleccionado.
+        
+        Después sube el estado selectedProductId al componente padre.
+        
+        Después pasa datos y funciones por props.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: hijo dispara click, padre actualiza estado, padre calcula producto seleccionado, otro hijo recibe detalle por props.
+        
+    - Estado derivado con total de carrito
+        
+        Enséñame estado derivado en React usando un carrito.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea un array de productos en estado.
+        
+        Después calcula total con reduce.
+        
+        Después explica por qué el total no necesita su propio useState si se deriva del carrito.
+        
+        Después muestra productos con map.
+        
+        Después muestra total derivado.
+        
+        Después agrega botón para aumentar cantidad.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: carrito cambia, componente renderiza, reduce recalcula total, UI muestra valor actualizado.
+        
+- 10 — Formularios React listos
+    - Formulario con un solo input
+        
+        Enséñame un formulario React con un solo input para capturar nombre.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea SingleInputForm.jsx.
+        
+        Primero crea un input sin estado.
+        
+        Después explica por qué React todavía no controla el valor.
+        
+        Después agrega useState para name.
+        
+        Después conecta value.
+        
+        Después conecta onChange.
+        
+        Después muestra el nombre en pantalla.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario escribe, evento trae valor, setName actualiza estado, input refleja estado, texto se renderiza.
+        
+    - Formulario con objeto formData
+        
+        Enséñame un formulario React usando un objeto formData.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProfileForm.jsx.
+        
+        Crea campos nombre, email y ciudad.
+        
+        Usa useState con un objeto inicial.
+        
+        Crea handleChange usando name y value.
+        
+        Actualiza el objeto con spread.
+        
+        Muestra el resultado debajo del formulario.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: input tiene name, onChange lee name y value, spread conserva campos anteriores, setFormData actualiza un campo, render muestra objeto actualizado.
+        
+    - Select con categorías
+        
+        Enséñame un select controlado en React usando categorías de productos.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea CategorySelect.jsx.
+        
+        Crea un array de categorías.
+        
+        Usa useState para selectedCategory.
+        
+        Renderiza options con map.
+        
+        Conecta value y onChange.
+        
+        Filtra productos según la categoría seleccionada.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario elige opción, estado guarda categoría, filter calcula productos, map renderiza resultados.
+        
+    - Checkbox con tareas completadas
+        
+        Enséñame checkbox controlado en React con tareas completadas.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea TaskCheckboxes.jsx.
+        
+        Crea un array de tareas con completed.
+        
+        Renderiza cada tarea con checkbox.
+        
+        Conecta checked.
+        
+        Conecta onChange para alternar completed usando map.
+        
+        Muestra cuántas tareas están completas.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: checkbox cambia, handler recibe id, map crea nuevo array, tarea cambia completed, setTasks actualiza, UI se sincroniza.
+        
+    - Radio buttons con plan seleccionado
+        
+        Enséñame radio buttons en React usando planes de suscripción simples.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea PlanSelector.jsx.
+        
+        Crea planes Básico, Pro y Premium.
+        
+        Usa useState para selectedPlan.
+        
+        Renderiza radios con map.
+        
+        Conecta checked comparando selectedPlan.
+        
+        Conecta onChange para cambiar plan.
+        
+        Muestra el plan seleccionado.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario selecciona radio, estado cambia, checked se recalcula, UI marca una sola opción.
+        
+    - Formulario dividido en componentes
+        
+        Enséñame a dividir un formulario React en componentes pequeños.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea ContactForm completo en un solo archivo.
+        
+        Después identifica qué se repite en los inputs.
+        
+        Después crea TextInput.jsx.
+        
+        Después pasa label, name, value y onChange por props.
+        
+        Después usa TextInput dentro de ContactForm.
+        
+        Después importa ContactForm en App.jsx.
+        
+        Explica el flujo completo: componente padre guarda estado, input hijo recibe value y onChange, usuario escribe, hijo dispara evento, padre actualiza estado.
+        
+- 11 — Custom hooks extendidos
+    - useToggle con modal simple
+        
+        Enséñame a crear un custom hook useToggle usando un modal simple.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea un componente con useState para abrir y cerrar.
+        
+        Después explica qué lógica se repite.
+        
+        Después crea src/hooks/useToggle.js.
+        
+        Después mueve la lógica open, close y toggle al hook.
+        
+        Después crea SimpleModal.jsx usando useToggle.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: componente llama useToggle, hook devuelve estado y funciones, botón abre, modal usa estado, botón cierra.
+        
+    - useForm con formulario de perfil
+        
+        Enséñame a crear un custom hook useForm usando un formulario de perfil.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea ProfileForm con useState y handleChange dentro del componente.
+        
+        Después explica qué lógica se puede reutilizar.
+        
+        Después crea src/hooks/useForm.js.
+        
+        Después mueve formData, handleChange y resetForm al hook.
+        
+        Después usa useForm dentro de ProfileForm.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: input cambia, handleChange del hook actualiza formData, componente recibe formData, render muestra valores.
+        
+    - useArray con lista editable
+        
+        Enséñame a crear un custom hook useArray usando una lista editable.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea una lista con useState normal.
+        
+        Después crea funciones addItem, removeItem y updateItem.
+        
+        Después explica qué se puede extraer.
+        
+        Después crea src/hooks/useArray.js.
+        
+        Después mueve la lógica de array al hook.
+        
+        Después crea EditableProducts.jsx usando useArray.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: UI llama función del hook, hook crea nuevo array, setItems actualiza estado, componente renderiza lista.
+        
+    - useDebounce con buscador
+        
+        Enséñame a crear un custom hook useDebounce usando un buscador de productos.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea un buscador que filtra inmediatamente.
+        
+        Después explica qué significa esperar antes de aplicar un valor.
+        
+        Después crea src/hooks/useDebounce.js usando useState y useEffect.
+        
+        Después usa el valor debounced para filtrar productos.
+        
+        Después crea DebouncedProductSearch.jsx.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario escribe, search cambia rápido, useDebounce espera, debouncedSearch cambia después, filter usa valor estable, render muestra resultados.
+        
+        No lo conviertas en debugging ni optimización avanzada; úsalo solo como aprendizaje de flujo.
+        
+    - usePrevious con contador
+        
+        Enséñame a crear un custom hook usePrevious usando un contador.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero crea un contador con useState.
+        
+        Después explica qué significa recordar el valor anterior.
+        
+        Después crea src/hooks/usePrevious.js usando useRef y useEffect.
+        
+        Después muestra count actual y count anterior.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: render muestra valor actual, useEffect guarda valor en ref, siguiente render puede leer valor anterior, UI compara ambos.
+        
+    - useLocalStorage con notas simples
+        
+        Enséñame a crear un custom hook useLocalStorage usando notas simples.
+        
+        Empieza desde cero con Vite.
+        
+        Ejecuta npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Primero explica qué es localStorage y para qué sirve.
+        
+        Después crea una nota con useState normal.
+        
+        Después guarda manualmente en localStorage.
+        
+        Después crea src/hooks/useLocalStorage.js.
+        
+        Después usa el hook para guardar y leer notas.
+        
+        Después crea NotesLocal.jsx.
+        
+        Después importa y conecta en App.jsx.
+        
+        Explica el flujo completo: estado cambia, hook sincroniza con localStorage, recarga conserva dato, componente renderiza valor guardado.
+        
+        No incluyas login, backend ni debugging.
+        
+- 12 — Mini proyectos guiados listos
+    - Catálogo con búsqueda, categoría y orden
+        
+        Quiero construir un catálogo de productos con búsqueda, filtro por categoría y orden por precio.
+        
+        No me des todo el código final de golpe.
+        
+        Primero hazlo en JavaScript puro en consola.
+        
+        Crea productos con nombre, categoría, precio y stock.
+        
+        Aplica filter por texto.
+        
+        Aplica filter por categoría.
+        
+        Aplica sort por precio sin mutar.
+        
+        Usa map para mostrar nombres.
+        
+        Explica cada paso separado.
+        
+        Después llévalo a React desde cero con Vite.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ProductCatalog.jsx.
+        
+        Usa useState para búsqueda, categoría y orden.
+        
+        Calcula productos visibles por capas.
+        
+        Renderiza controles y lista.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: controles cambian estado, estado alimenta filtros, filtros producen lista visible, sort ordena copia, map renderiza.
+        
+    - Notas locales con agregar y eliminar
+        
+        Quiero construir una app simple de notas locales.
+        
+        No me des todo el código final de golpe.
+        
+        Primero trabaja en consola.
+        
+        Crea un array de notas.
+        
+        Crea función agregarNota.
+        
+        Crea función eliminarNota con filter.
+        
+        Crea función buscarNotas con filter.
+        
+        Explica cómo cambia el array en cada paso.
+        
+        Después llévalo a React desde cero con Vite.
+        
+        Usa npm create vite@latest.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea NotesApp.jsx.
+        
+        Usa useState para notas, texto nuevo y búsqueda.
+        
+        Renderiza formulario y lista.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: usuario escribe nota, submit crea objeto, spread agrega, filter busca, botón elimina, render actualiza.
+        
+    - Control de gastos con reduce
+        
+        Quiero construir un control de gastos simple para aprender reduce en React.
+        
+        Primero trabaja en consola.
+        
+        Crea gastos con nombre, categoría y monto.
+        
+        Usa reduce para total general.
+        
+        Usa filter y reduce para total por categoría.
+        
+        Usa map para mostrar renglones.
+        
+        Explica la ruta de datos.
+        
+        Después crea proyecto con Vite.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea ExpenseTracker.jsx.
+        
+        Usa useState para gastos.
+        
+        Crea formulario simple para agregar gasto.
+        
+        Muestra lista y total.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: gasto entra por formulario, se agrega al array, reduce recalcula total, UI muestra lista y resumen.
+        
+    - Hábitos semanales con map y every
+        
+        Quiero construir un tracker simple de hábitos semanales.
+        
+        Primero trabaja en consola.
+        
+        Crea hábitos con nombre y días completados.
+        
+        Usa map para mostrar resumen.
+        
+        Usa every para saber si un hábito completó toda la semana.
+        
+        Usa some para saber si hay hábitos pendientes.
+        
+        Explica cada método.
+        
+        Después crea proyecto React con Vite.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea HabitTracker.jsx.
+        
+        Usa useState para hábitos.
+        
+        Permite alternar un día como completado.
+        
+        Muestra progreso por hábito.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: click en día, map actualiza hábito, nuevo estado, every recalcula completado, render muestra progreso.
+        
+    - Kanban simple sin drag and drop
+        
+        Quiero construir un kanban simple sin drag and drop para aprender estado y filtros.
+        
+        Primero trabaja en consola.
+        
+        Crea tareas con título y status: pendiente, en progreso y hecho.
+        
+        Usa filter para separar columnas.
+        
+        Usa map para mostrar tarjetas.
+        
+        Crea una función moverTarea que cambie status usando map.
+        
+        Explica el flujo.
+        
+        Después crea proyecto React con Vite.
+        
+        Usa npm install.
+        
+        Indica que no se necesita dependencia extra.
+        
+        Crea SimpleKanban.jsx.
+        
+        Usa useState para tareas.
+        
+        Renderiza tres columnas con filter.
+        
+        Agrega botones para mover tarea entre estados.
+        
+        Importa y conecta en App.jsx.
+        
+        Explica el flujo completo: botón envía id y nuevo status, map crea nuevo array, setTasks actualiza, columnas se recalculan con filter.
+        
+- 13 — Prompts para convertir y profundizar
+    - Convertir snippet de consola a componente React
+        
+        Voy a pegar después de este mensaje un snippet de JavaScript puro.
+        
+        Quiero que lo conviertas a React por capas.
+        
+        Primero explícame qué hace el snippet en consola.
+        
+        Después identifica datos iniciales.
+        
+        Después identifica funciones.
+        
+        Después identifica métodos de array.
+        
+        Después dime qué sería estado en React.
+        
+        Después crea proyecto desde npm create vite@latest.
+        
+        Después npm install.
+        
+        Después indica dependencia extra solo si realmente aplica.
+        
+        Después crea el componente.
+        
+        Después importa y conecta en App.jsx.
+        
+        Después explica el flujo completo.
+        
+        No me des el componente final completo hasta explicar la versión de consola.
+        
+    - Convertir componente grande a capas
+        
+        Voy a pegar después de este mensaje un componente React grande.
+        
+        Quiero que me lo expliques y lo dividas mentalmente por capas.
+        
+        Primero identifica datos.
+        
+        Después identifica estado.
+        
+        Después identifica funciones handler.
+        
+        Después identifica métodos de array.
+        
+        Después identifica render condicional.
+        
+        Después identifica props.
+        
+        Después identifica qué podría extraerse a componentes pequeños.
+        
+        Después identifica qué podría extraerse a custom hook.
+        
+        No refactorices todo de golpe.
+        
+        Primero dame el mapa mental y la ruta completa del flujo.
+        
+    - De feature a estructura de archivos
+        
+        Quiero construir una feature de catálogo de productos con búsqueda, filtro y orden.
+        
+        No me des código final todavía.
+        
+        Primero proponme una estructura de archivos simple para React.
+        
+        Incluye App.jsx, componentes, hooks si realmente hacen falta y datos mock.
+        
+        Después explica qué responsabilidad tiene cada archivo.
+        
+        Después dime qué archivo crearía primero.
+        
+        Después dime qué archivo conectaría después.
+        
+        Después empieza con la versión más simple y avanza por capas.
+        
+        Explica el flujo completo: datos mock, estado de filtros, cálculo de productos visibles, render de lista, eventos de usuario.
+        
+    - De feature simple a custom hook
+        
+        Quiero aprender cuándo una feature debería convertirse en custom hook.
+        
+        Usa una lista editable de tareas.
+        
+        Primero crea mentalmente la versión simple dentro de un componente.
+        
+        Después identifica qué lógica es de estado.
+        
+        Después identifica qué lógica es de UI.
+        
+        Después explica qué se puede extraer.
+        
+        Después crea useTasks.
+        
+        Después muestra cómo el componente queda más limpio.
+        
+        Después explica el trade-off de extraer lógica.
+        
+        No lo hagas por arquitectura perfecta; hazlo para aprender claridad y reutilización.
+        
+    - Explicar código como si lo estuviera escribiendo
+        
+        Voy a pegar después de este mensaje un bloque de código JavaScript o React.
+        
+        Quiero que me lo expliques como si yo lo estuviera escribiendo desde cero.
+        
+        Primero dime qué escribiría primero.
+        
+        Después qué escribiría segundo.
+        
+        Después qué problema resuelve cada línea importante.
+        
+        Después qué dato entra.
+        
+        Después qué dato sale.
+        
+        Después qué parte conecta con otra.
+        
+        Después escribe la ruta completa del flujo.
+        
+        No me des una explicación superficial.
+        
+        Explícame términos técnicos la primera vez que aparezcan.
+        
+- 14 — Rutas de curso listas
+    - Ruta de 14 días JavaScript a React
+        
+        Créame una ruta de 14 días para aprender JavaScript moderno y React por capas.
+        
+        Cada día debe tener:
+        
+        1. Concepto principal.
+        2. Ejemplo en consola si es JavaScript.
+        3. Ejemplo en React si aplica.
+        4. Mini ejercicio.
+        5. Pregunta de repaso.
+        6. Qué debería dominar antes de avanzar.
+        
+        Distribuye así:
+        
+        Día 1 funciones, parámetros y return.
+        
+        Día 2 arrow functions y callbacks.
+        
+        Día 3 objetos y destructuring.
+        
+        Día 4 spread, rest y copias sin mutar.
+        
+        Día 5 map, filter y find.
+        
+        Día 6 reduce, some y every.
+        
+        Día 7 sort, includes, slice y splice.
+        
+        Día 8 React con Vite, App.jsx y componentes.
+        
+        Día 9 props, children y composición.
+        
+        Día 10 eventos, inputs y formularios controlados.
+        
+        Día 11 useState y estado derivado.
+        
+        Día 12 useEffect y useRef.
+        
+        Día 13 useMemo, useReducer y useContext.
+        
+        Día 14 custom hooks y mini proyecto final.
+        
+        No incluyas testing, login ni debugging.
+        
+    - Ruta de 30 prompts para practicar
+        
+        Dame 30 prompts de práctica para aprender JavaScript y React.
+        
+        Los prompts deben estar listos para copiar.
+        
+        No deben depender de backend, login, testing ni debugging.
+        
+        Deben cubrir funciones, arrays, objetos, métodos de array, componentes, props, eventos, formularios, hooks y custom hooks.
+        
+        Cada prompt debe obligar a explicar por capas y escribir el flujo completo.
+        
+        Cada prompt debe pedir primero JavaScript puro cuando aplique y luego React desde Vite cuando aplique.
+        
+        Organiza los 30 prompts en dificultad progresiva: principiante, intermedio y mini features.
+        
+    - Curso con checkpoints
+        
+        Quiero un curso de JavaScript a React con checkpoints.
+        
+        Checkpoint 1: entiendo funciones, parámetros, argumentos y return.
+        
+        Checkpoint 2: entiendo callbacks y arrow functions.
+        
+        Checkpoint 3: entiendo objetos, arrays y destructuring.
+        
+        Checkpoint 4: entiendo map, filter, find y reduce.
+        
+        Checkpoint 5: entiendo React con componentes y props.
+        
+        Checkpoint 6: entiendo eventos, formularios y estado.
+        
+        Checkpoint 7: entiendo hooks principales.
+        
+        Checkpoint 8: puedo construir una feature simple por capas.
+        
+        Para cada checkpoint dame explicación, ejemplo, ejercicio, pregunta de validación y señal de que ya puedo avanzar.
+        
+        No me des todos los códigos finales de golpe.
