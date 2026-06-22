@@ -169,19 +169,19 @@
     ];
 
     const MODELS = [
-      { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
-      { id: 'mistral-large-latest', label: 'Mistral Large 3', provider: 'mistral', tag: 'Mistral' },
-      { id: 'openai/gpt-oss-120b', label: 'GPT OSS 120B', provider: 'groq', tag: 'Groq' },
-      { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
       { id: 'gpt-oss-120b', label: 'GPT OSS 120B', provider: 'cerebras', tag: 'Cerebras' },
       { id: 'zai-glm-4.7', label: 'ZAI GLM 4.7', provider: 'cerebras', tag: 'Cerebras' },
-      { id: 'mistral-small-latest', label: 'Mistral Small 4', provider: 'mistral', tag: 'Mistral' },
+      { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
+      // { id: 'openai/gpt-oss-120b', label: 'GPT OSS 120B', provider: 'groq', tag: 'Groq' },
+      // { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B', provider: 'groq', tag: 'Groq' },
+      // { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
+      { id: 'mistral-large-latest', label: 'Mistral Large 3', provider: 'mistral', tag: 'Mistral' },
+      // { id: 'mistral-small-latest', label: 'Mistral Small 4', provider: 'mistral', tag: 'Mistral' },
       { id: 'DeepSeek-V3.1', label: 'DeepSeek V3.1', provider: 'sambanova', tag: 'SambaNova' },
       { id: 'command-a-reasoning-08-2025', label: 'Command A Reasoning', provider: 'cohere', tag: 'Cohere' },
-      { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B', provider: 'groq', tag: 'Groq' },
       { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
-      { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', provider: 'google', tag: 'Google' },
-      { id: 'open-mistral-nemo', label: 'Mistral NeMo', provider: 'mistral', tag: 'Mistral' },
+      // { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', provider: 'google', tag: 'Google' },
+      // { id: 'open-mistral-nemo', label: 'Mistral NeMo', provider: 'mistral', tag: 'Mistral' },
       { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
     ];
 
@@ -192,7 +192,7 @@
       'openai/gpt-oss-120b',
       'gpt-oss-120b',
     ];
-    const DEFAULT_THINKING_MODEL_ID = 'mistral-large-latest';
+    const DEFAULT_THINKING_MODEL_ID = 'openai/gpt-oss-120b';
     const THINKING_LOADING_STEPS = [
       'Preparando contexto...',
       'Extrayendo evidencia...',
@@ -215,7 +215,7 @@
     const MAX_IMAGES = 5;
     const PROMPTS_FILE = '/prompts.json';
 
-    let selectedModel = MODELS.find(m => m.id === 'codestral-latest') || MODELS[0];
+    let selectedModel = MODELS.find(m => m.id === 'gpt-oss-120b') || MODELS[0];
     let messages = [];
     let attachedImages = [];
     let isLoading = false;
@@ -572,7 +572,7 @@
       const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
       if (iconEl && p) iconEl.style.color = p.color;
       modelLabel.textContent = p
-        ? `${thinkingMode ? 'Final · ' : ''}${p.name} · ${selectedModel.label}`
+        ? `${thinkingMode ? 'Thinking · ' : ''}${p.name} · ${selectedModel.label}`
         : selectedModel.label;
     }
 
