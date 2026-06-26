@@ -175,31 +175,24 @@
       // { id: 'openai/gpt-oss-120b', label: 'GPT OSS 120B', provider: 'groq', tag: 'Groq' },
       // { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B', provider: 'groq', tag: 'Groq' },
       // { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
+      { id: 'DeepSeek-V3.1', label: 'DeepSeek V3.1', provider: 'sambanova', tag: 'SambaNova' },
+      { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
       { id: 'mistral-large-latest', label: 'Mistral Large 3', provider: 'mistral', tag: 'Mistral' },
       // { id: 'mistral-small-latest', label: 'Mistral Small 4', provider: 'mistral', tag: 'Mistral' },
-      { id: 'DeepSeek-V3.1', label: 'DeepSeek V3.1', provider: 'sambanova', tag: 'SambaNova' },
-      { id: 'command-a-reasoning-08-2025', label: 'Command A Reasoning', provider: 'cohere', tag: 'Cohere' },
-      { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
+      // { id: 'command-a-reasoning-08-2025', label: 'Command A Reasoning', provider: 'cohere', tag: 'Cohere' },
       // { id: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', provider: 'google', tag: 'Google' },
       // { id: 'open-mistral-nemo', label: 'Mistral NeMo', provider: 'mistral', tag: 'Mistral' },
       { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
     ];
 
-    const THINKING_FINAL_MODEL_IDS = [
-      'command-a-reasoning-08-2025',
-      'DeepSeek-V3.1',
-      'mistral-large-latest',
-      'openai/gpt-oss-120b',
-      'gpt-oss-120b',
-    ];
-    const DEFAULT_THINKING_MODEL_ID = 'openai/gpt-oss-120b';
+    const THINKING_MODEL_META = { id: 'thinking-mode', label: 'Thinking Mode', provider: 'cerebras', tag: 'Thinking' };
     const THINKING_LOADING_STEPS = [
-      'Preparando contexto...',
-      'Extrayendo evidencia...',
-      'Integrando hallazgos...',
-      'Razonando respuesta...',
-      'Validando con critico...',
-      'Redactando respuesta final...',
+      'Preparando contexto',
+      'Extrayendo evidencia',
+      'Integrando hallazgos',
+      'Razonando respuesta',
+      'Validando con critico',
+      'Redactando respuesta final',
     ];
 
     const ENDPOINTS = {
@@ -559,31 +552,34 @@
       });
     }
 
-    function thinkingModels() {
-      return MODELS.filter(m => THINKING_FINAL_MODEL_IDS.includes(m.id));
-    }
-
     function availableModels() {
-      return thinkingMode ? thinkingModels() : MODELS;
+      return MODELS;
     }
 
     function updateModelDisplay() {
+      if (thinkingMode) {
+        const p = PROVIDERS.find(pp => pp.id === THINKING_MODEL_META.provider);
+        const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
+        if (iconEl && p) iconEl.style.color = p.color;
+        modelLabel.textContent = 'Thinking Mode';
+        return;
+      }
+
       const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
       const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
       if (iconEl && p) iconEl.style.color = p.color;
       modelLabel.textContent = p
-        ? `${thinkingMode ? 'Thinking · ' : ''}${p.name} · ${selectedModel.label}`
+        ? `${p.name} · ${selectedModel.label}`
         : selectedModel.label;
     }
 
     function setThinkingMode(enabled) {
       thinkingMode = enabled;
-      if (thinkingMode && !THINKING_FINAL_MODEL_IDS.includes(selectedModel.id)) {
-        selectedModel = MODELS.find(m => m.id === DEFAULT_THINKING_MODEL_ID) || thinkingModels()[0];
-      }
       thinkingToggleBtn.classList.toggle('active', thinkingMode);
       thinkingToggleBtn.setAttribute('aria-pressed', String(thinkingMode));
-      modelSearch.placeholder = thinkingMode ? 'Buscar modelo final...' : 'Buscar modelo...';
+      modelBtn.setAttribute('aria-disabled', String(thinkingMode));
+      modelSearch.placeholder = 'Buscar modelo...';
+      if (thinkingMode) closeDropdown();
       updateModelDisplay();
       buildDropdown();
       updateSendBtn();
@@ -616,6 +612,7 @@
     }
 
     function openDropdown() {
+      if (thinkingMode) return;
       modelDropdown.classList.add('open');
       modelBtn.setAttribute('aria-expanded', 'true');
       setTimeout(() => modelSearch.focus(), 60);
@@ -781,11 +778,12 @@
       const typing = appendTyping(thinkingMode ? THINKING_LOADING_STEPS[0] : '');
       const stopLoading = thinkingMode ? startThinkingLoading(typing) : null;
       try {
+        const messageModel = thinkingMode ? THINKING_MODEL_META : selectedModel;
         const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images, thinkingMode);
         if (stopLoading) stopLoading();
         typing.remove();
-        messages.push({ role: 'assistant', content: reply, model: selectedModel });
-        appendMessage('assistant', reply, selectedModel);
+        messages.push({ role: 'assistant', content: reply, model: messageModel });
+        appendMessage('assistant', reply, messageModel);
         
         const conv = conversations.find(c => c.id === currentConversationId);
         if (conv) {
@@ -799,7 +797,7 @@
         typing.remove();
         showToast(` ${err.message}`);
         messages.pop();
-        appendMessage('assistant', `**Error:** ${err.message}`, selectedModel);
+        appendMessage('assistant', `**Error:** ${err.message}`, thinkingMode ? THINKING_MODEL_META : selectedModel);
       } finally {
         isLoading = false;
         updateSendBtn();
@@ -898,11 +896,12 @@
       wrap.className = 'msg assistant';
       const meta = document.createElement('div');
       meta.className = 'msg-meta';
-      if (selectedModel) {
-        const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
+      const activeModel = thinkingMode ? THINKING_MODEL_META : selectedModel;
+      if (activeModel) {
+        const p = PROVIDERS.find(pp => pp.id === activeModel.provider);
         meta.innerHTML = thinkingMode
-          ? `<span style="color:${p.color}">●</span> Thinking Mode · ${selectedModel.label}`
-          : `<span style="color:${p.color}">●</span> ${p.name} · ${selectedModel.label}`;
+          ? `<span style="color:${p.color}">●</span> Thinking Mode`
+          : `<span style="color:${p.color}">●</span> ${p.name} · ${activeModel.label}`;
       }
       const ind = document.createElement('div');
       ind.className = `typing-indicator${statusText ? ' thinking-loading' : ''}`;

@@ -34,19 +34,13 @@ const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
 const THINKING_EXTRACTORS = [
-  { provider: 'mistral', model: 'mistral-small-latest', label: 'Mistral Small 4' },
-  { provider: 'groq', model: 'openai/gpt-oss-20b', label: 'GPT OSS 20B' },
-  { provider: 'cerebras', model: 'zai-glm-4.7', label: 'ZAI GLM 4.7' },
-];
-const THINKING_INTEGRATOR = { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' };
-const THINKING_CRITIC = { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' };
-const THINKING_FINAL_MODELS = [
-  { provider: 'cohere', model: 'command-a-reasoning-08-2025', label: 'Command A Reasoning' },
+  { provider: 'groq', model: 'qwen/qwen3-32b', label: 'Qwen 3 32B' },
   { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
   { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
-  { provider: 'groq', model: 'openai/gpt-oss-120b', label: 'GPT OSS 120B' },
-  { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' },
 ];
+const THINKING_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
+const THINKING_CRITIC = { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' };
+const THINKING_FINAL_MODEL = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
 const HARNESS_LIMITS = {
   array: 18,
   evidenceItems: 40,
@@ -167,10 +161,8 @@ async function parseImages(messages, images) {
   }]);
 }
 
-async function runThinkingPipeline({ provider, model, messages }) {
-  const finalModel = THINKING_FINAL_MODELS.find((m) => m.provider === provider && m.model === model);
-  if (!finalModel) throw new Error('Modelo final no permitido en Thinking Mode');
-
+async function runThinkingPipeline({ messages }) {
+  const finalModel = THINKING_FINAL_MODEL;
   const evidence = await Promise.all(THINKING_EXTRACTORS.map(async (extractor, index) => {
     const raw = await callChatCompletion(extractor.provider, extractor.model, extractorMessages(messages, extractor));
     return validateExtraction(parseHarnessJson(raw), extractor, index, raw);
@@ -475,24 +467,27 @@ function integrationMessages(messages, evidence) {
   return [
     {
       role: 'system',
-      content: `Eres el integrador de evidencia de un reasoning harness.
+      content: `Eres el concentrador inclusivo de evidencia de un reasoning harness.
 
 Rol de esta etapa:
 - No respondas al usuario.
 - No redactes la respuesta final.
-- Convierte evidence packets de varios extractores en un brief integrado, normalizado y util para el modelo final.
+- Convierte evidence packets de exactamente 3 extractores en un brief integrado, normalizado, completo y util para el modelo final.
+- Tu prioridad es concentrar sin omitir: si un extractor menciona algo util que otros pasaron por alto, debes conservarlo.
 
 Tareas:
-1. Fusiona duplicados semanticos.
+1. Fusiona duplicados semanticos sin perder matices.
 2. Detecta consenso entre extractores.
-3. Detecta contradicciones o tension entre evidencias.
-4. Separa hechos, inferencias, preferencias y requisitos.
-5. Preserva restricciones importantes del usuario.
-6. Decide que debe incluir y evitar la respuesta final.
-7. Convierte criterios implicitos en success_criteria observables.
-8. Relaciona requisitos importantes con evidence_ids en support_map.
-9. Propone verification_plan y safety_checks si aplican.
-10. Anade task_diagnostics para diagnosticar tipo de tarea, modalidad y entorno.
+3. Detecta menciones unicas que solo aparecen en un extractor y conservalas si son utiles o plausibles.
+4. Detecta contradicciones o tension entre evidencias.
+5. Separa hechos, inferencias, preferencias y requisitos.
+6. Preserva restricciones importantes del usuario.
+7. Engloba y extiende el brief con todo lo relevante: requisitos, riesgos, preferencias, unknowns, criterios y pasos concretos.
+8. Decide que debe incluir y evitar la respuesta final.
+9. Convierte criterios implicitos en success_criteria observables.
+10. Relaciona requisitos importantes con evidence_ids en support_map.
+11. Propone verification_plan y safety_checks si aplican.
+12. Anade task_diagnostics para diagnosticar tipo de tarea, modalidad y entorno.
 
 Devuelve SOLO JSON valido, sin markdown, sin texto alrededor.
 
@@ -540,6 +535,9 @@ Schema exacto:
 Reglas:
 - No trates consenso como verdad absoluta.
 - No elimines requisitos unicos solo porque aparecen en un extractor.
+- No omitas una senal relevante por ser redundante parcialmente; fusiona lo repetido y conserva el detalle nuevo.
+- Si una evidencia unica no es segura pero puede cambiar la respuesta, incluyela en low_confidence_items, risks u open_questions.
+- El brief debe ser mas completo que cualquiera de los extractores individuales, no un promedio ni un resumen corto.
 - No conviertas opiniones en hechos.
 - No incluyas requisitos sin soporte; si el soporte es debil, usa low_confidence_items u open_questions.
 - support_map debe conservar ids de evidence_items cuando existan.
