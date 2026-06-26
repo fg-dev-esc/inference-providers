@@ -34,11 +34,11 @@ const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
 const THINKING_EXTRACTORS = [
-  { provider: 'groq', model: 'qwen/qwen3-32b', label: 'Qwen 3 32B' },
+  { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' },
   { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
   { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
 ];
-const THINKING_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
+const THINKING_INTEGRATOR = { provider: 'groq', model: 'qwen/qwen3-32b', label: 'Qwen 3 32B' };
 const THINKING_CRITIC = { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' };
 const THINKING_FINAL_MODEL = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
 const HARNESS_LIMITS = {
@@ -162,37 +162,41 @@ async function parseImages(messages, images) {
 }
 
 async function runThinkingPipeline({ messages }) {
-  const finalModel = THINKING_FINAL_MODEL;
   const evidence = await Promise.all(THINKING_EXTRACTORS.map(async (extractor, index) => {
     const raw = await callChatCompletion(extractor.provider, extractor.model, extractorMessages(messages, extractor));
     return validateExtraction(parseHarnessJson(raw), extractor, index, raw);
   }));
 
-  const integratedRaw = await callChatCompletion(
+  return callChatCompletion(
     THINKING_INTEGRATOR.provider,
     THINKING_INTEGRATOR.model,
     integrationMessages(messages, evidence),
   );
-  const integrated = validateIntegration(parseHarnessJson(integratedRaw), integratedRaw);
 
-  const draft = await callChatCompletion(
-    finalModel.provider,
-    finalModel.model,
-    finalMessages(messages, formatHarnessJson(integrated)),
-  );
-
-  const critiqueRaw = await callChatCompletion(
-    THINKING_CRITIC.provider,
-    THINKING_CRITIC.model,
-    criticMessages(messages, formatHarnessJson(integrated), draft),
-  );
-  const critique = validateCritique(parseHarnessJson(critiqueRaw), critiqueRaw);
-
-  return callChatCompletion(
-    finalModel.provider,
-    finalModel.model,
-    revisionMessages(messages, formatHarnessJson(integrated), draft, formatHarnessJson(critique)),
-  );
+  // Legacy temporal: modelo final + critico + revision final.
+  // const finalModel = THINKING_FINAL_MODEL;
+  // const integratedRaw = await callChatCompletion(
+  //   THINKING_INTEGRATOR.provider,
+  //   THINKING_INTEGRATOR.model,
+  //   integrationMessages(messages, evidence),
+  // );
+  // const integrated = validateIntegration(parseHarnessJson(integratedRaw), integratedRaw);
+  // const draft = await callChatCompletion(
+  //   finalModel.provider,
+  //   finalModel.model,
+  //   finalMessages(messages, formatHarnessJson(integrated)),
+  // );
+  // const critiqueRaw = await callChatCompletion(
+  //   THINKING_CRITIC.provider,
+  //   THINKING_CRITIC.model,
+  //   criticMessages(messages, formatHarnessJson(integrated), draft),
+  // );
+  // const critique = validateCritique(parseHarnessJson(critiqueRaw), critiqueRaw);
+  // return callChatCompletion(
+  //   finalModel.provider,
+  //   finalModel.model,
+  //   revisionMessages(messages, formatHarnessJson(integrated), draft, formatHarnessJson(critique)),
+  // );
 }
 
 function parseHarnessJson(raw) {
