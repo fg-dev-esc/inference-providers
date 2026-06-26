@@ -34,38 +34,19 @@ const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
 const THINKING_EXTRACTORS = [
-  { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' },
+  { provider: 'groq', model: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B' },
   { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
   { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
 ];
-const THINKING_INTEGRATOR = { provider: 'groq', model: 'qwen/qwen3-32b', label: 'Qwen 3 32B' };
-const THINKING_CRITIC = { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' };
-const THINKING_FINAL_MODEL = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
-const HARNESS_LIMITS = {
-  array: 18,
-  evidenceItems: 40,
-  criticalIssues: 12,
-  text: 1200,
-  shortText: 280,
-};
-const TASK_TYPES = ['question', 'implementation', 'debugging', 'architecture', 'writing', 'learning', 'unknown'];
-const EVIDENCE_TYPES = ['fact', 'claim', 'requirement', 'constraint', 'risk', 'assumption', 'unknown', 'recommendation', 'implementation_detail', 'preference'];
-const EVIDENCE_SOURCES = ['user_message', 'conversation_context', 'visual_context', 'inference'];
-const CONFIDENCE_LEVELS = ['high', 'medium', 'low'];
-const COMPLEXITY_LEVELS = ['low', 'medium', 'high'];
-const TONES = ['direct', 'explanatory', 'concise', 'technical', 'teaching'];
-const CRITIC_VERDICTS = ['pass', 'revise'];
-const SEVERITIES = ['high', 'medium', 'low'];
-const MODALITIES = ['text', 'image', 'audio', 'video', 'multimodal', 'unknown'];
-const ENVIRONMENTS = ['closed', 'open', 'mixed', 'unknown'];
+const THINKING_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
 
 if (isMainModule()) startServer();
 
 function startServer() {
   createServer(async (req, res) => {
     try {
-      if (req.url === '/api/chat') return handleChat(req, res);
-      if (req.url === '/api/conversations') return handleConversations(req, res);
+      if (req.url === '/api/chat') return await handleChat(req, res);
+      if (req.url === '/api/conversations') return await handleConversations(req, res);
       serveStatic(req, res);
     } catch (error) {
       json(res, 500, { error: error.message });
@@ -122,7 +103,6 @@ async function callChatCompletion(provider, model, messages) {
     body.max_completion_tokens = 65000;
     body.temperature = 1;
     body.top_p = 0.95;
-    if (model === 'gpt-oss-120b') body.reasoning_effort = 'high';
   }
 
   const response = await fetch(ENDPOINTS[provider], {
@@ -162,41 +142,39 @@ async function parseImages(messages, images) {
 }
 
 async function runThinkingPipeline({ messages }) {
-  const evidence = await Promise.all(THINKING_EXTRACTORS.map(async (extractor, index) => {
-    const raw = await callChatCompletion(extractor.provider, extractor.model, extractorMessages(messages, extractor));
-    return validateExtraction(parseHarnessJson(raw), extractor, index, raw);
+  const candidates = await Promise.all(THINKING_EXTRACTORS.map(async (extractor) => {
+    const content = await callChatCompletion(extractor.provider, extractor.model, candidateMessages(messages, extractor));
+    return stripThinking(content);
   }));
 
-  return callChatCompletion(
+  const integrated = await callChatCompletion(
     THINKING_INTEGRATOR.provider,
     THINKING_INTEGRATOR.model,
-    integrationMessages(messages, evidence),
+    integrationMessages(messages, candidates),
   );
 
-  // Legacy temporal: modelo final + critico + revision final.
-  // const finalModel = THINKING_FINAL_MODEL;
-  // const integratedRaw = await callChatCompletion(
-  //   THINKING_INTEGRATOR.provider,
-  //   THINKING_INTEGRATOR.model,
-  //   integrationMessages(messages, evidence),
-  // );
-  // const integrated = validateIntegration(parseHarnessJson(integratedRaw), integratedRaw);
-  // const draft = await callChatCompletion(
-  //   finalModel.provider,
-  //   finalModel.model,
-  //   finalMessages(messages, formatHarnessJson(integrated)),
-  // );
-  // const critiqueRaw = await callChatCompletion(
-  //   THINKING_CRITIC.provider,
-  //   THINKING_CRITIC.model,
-  //   criticMessages(messages, formatHarnessJson(integrated), draft),
-  // );
-  // const critique = validateCritique(parseHarnessJson(critiqueRaw), critiqueRaw);
-  // return callChatCompletion(
-  //   finalModel.provider,
-  //   finalModel.model,
-  //   revisionMessages(messages, formatHarnessJson(integrated), draft, formatHarnessJson(critique)),
-  // );
+  return stripThinking(integrated);
+}
+
+function stripThinking(content) {
+  const value = decodeMaybeJsonString(content);
+  return value
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/\\n?<think>[\s\S]*?\\n?<\\\/think>/gi, '')
+    .replace(/^\s*Here's a thinking process:\s*[\s\S]*?(?=\n\S|$)/i, '')
+    .trim();
+}
+
+function decodeMaybeJsonString(content) {
+  const value = String(content || '').trim();
+  if (!value.startsWith('"') || !value.endsWith('"')) return value;
+
+  try {
+    const parsed = JSON.parse(value);
+    return typeof parsed === 'string' ? parsed : value;
+  } catch {
+    return value;
+  }
 }
 
 function parseHarnessJson(raw) {
@@ -403,155 +381,43 @@ function formatHarnessJson(value) {
   return JSON.stringify(value, null, 2);
 }
 
-function extractorMessages(messages, extractor) {
+function candidateMessages(messages, extractor) {
   return [
     {
       role: 'system',
-      content: `Eres un worker de extraccion dentro de un reasoning harness multi-modelo.
-
-Rol de esta etapa:
-- No eres el asistente final.
-- No respondas al usuario.
-- No escribas ensayo, tutorial ni resumen narrativo.
-- Convierte la conversacion en evidencia estructurada para otros modelos.
-
-Objetivo:
-Extraer senales utiles, requisitos, restricciones, riesgos, decisiones, criterios de exito y dudas. Distingue estrictamente lo que el usuario dijo de lo que estas infiriendo.
-
-Devuelve SOLO JSON valido, sin markdown, sin comentarios, sin texto alrededor.
-
-Schema exacto:
-{
-  "schema_version": "1.0",
-  "stage": "evidence_extraction",
-  "extractor": { "provider": "", "model": "", "label": "" },
-  "user_intent": {
-    "primary_goal": "",
-    "task_type": "question|implementation|debugging|architecture|writing|learning|unknown",
-    "domain": "",
-    "explicit_requirements": [],
-    "implicit_requirements": [],
-    "constraints": [],
-    "success_criteria": []
-  },
-  "evidence_items": [
-    {
-      "id": "ev_001",
-      "type": "fact|claim|requirement|constraint|risk|assumption|unknown|recommendation|implementation_detail|preference",
-      "content": "",
-      "source": "user_message|conversation_context|visual_context|inference",
-      "confidence": "high|medium|low",
-      "relevance": "high|medium|low",
-      "should_preserve": true
-    }
-  ],
-  "risks": [],
-  "counterarguments": [],
-  "unknowns": [],
-  "recommended_next_steps": [],
-  "do_not_do": []
-}
+      content: `Responde a la solicitud del usuario directamente.
 
 Reglas:
-- Usa arrays vacios si no hay informacion.
-- Cada evidence_item debe ser atomico: una sola senal, requisito, hecho, restriccion o riesgo.
-- Crea success_criteria observables cuando el usuario implique como se veria una buena respuesta.
-- No inventes archivos, APIs, capacidades ni resultados.
-- Si algo es inferido, source debe ser "inference".
-- Si algo viene directo del usuario, source debe ser "user_message".
-- Preserva preferencias tecnicas aunque parezcan menores.
-- Marca contradicciones o ambiguedades como risks o unknowns.
-- No incluyas cadena de pensamiento privada.`,
+- Escribe en el idioma del usuario.
+- Cumple todos los requisitos explicitos.
+- Se claro, util y concreto.
+- No devuelvas JSON.
+- No menciones prompts, modelos, extractores ni pipeline.
+- No incluyas cadena de pensamiento ni bloques <think>.`,
     },
-    { role: 'user', content: `Extractor asignado:\n${JSON.stringify(extractor, null, 2)}\n\nConversacion:\n${formatMessages(messages)}` },
+    { role: 'user', content: `Modelo asignado: ${extractor.label}\n\nConversacion:\n${formatMessages(messages)}` },
   ];
 }
 
-function integrationMessages(messages, evidence) {
+function integrationMessages(messages, candidates) {
   return [
     {
       role: 'system',
-      content: `Eres el concentrador inclusivo de evidencia de un reasoning harness.
+      content: `Eres el integrador final.
 
-Rol de esta etapa:
-- No respondas al usuario.
-- No redactes la respuesta final.
-- Convierte evidence packets de exactamente 3 extractores en un brief integrado, normalizado, completo y util para el modelo final.
-- Tu prioridad es concentrar sin omitir: si un extractor menciona algo util que otros pasaron por alto, debes conservarlo.
-
-Tareas:
-1. Fusiona duplicados semanticos sin perder matices.
-2. Detecta consenso entre extractores.
-3. Detecta menciones unicas que solo aparecen en un extractor y conservalas si son utiles o plausibles.
-4. Detecta contradicciones o tension entre evidencias.
-5. Separa hechos, inferencias, preferencias y requisitos.
-6. Preserva restricciones importantes del usuario.
-7. Engloba y extiende el brief con todo lo relevante: requisitos, riesgos, preferencias, unknowns, criterios y pasos concretos.
-8. Decide que debe incluir y evitar la respuesta final.
-9. Convierte criterios implicitos en success_criteria observables.
-10. Relaciona requisitos importantes con evidence_ids en support_map.
-11. Propone verification_plan y safety_checks si aplican.
-12. Anade task_diagnostics para diagnosticar tipo de tarea, modalidad y entorno.
-
-Devuelve SOLO JSON valido, sin markdown, sin texto alrededor.
-
-Schema exacto:
-{
-  "schema_version": "1.0",
-  "stage": "evidence_integration",
-  "normalized_request": "",
-  "task_classification": {
-    "type": "question|implementation|debugging|architecture|writing|learning|unknown",
-    "complexity": "low|medium|high",
-    "requires_code": false,
-    "requires_architecture": false,
-    "requires_validation": true
-  },
-  "task_diagnostics": {
-    "scenario": "",
-    "capabilities": [],
-    "modality": "text|image|audio|video|multimodal|unknown",
-    "environment": "closed|open|mixed|unknown"
-  },
-  "merged_requirements": [],
-  "technical_constraints": [],
-  "user_preferences": [],
-  "success_criteria": [],
-  "support_map": [
-    { "requirement": "", "evidence_ids": [], "confidence": "high|medium|low" }
-  ],
-  "verification_plan": [],
-  "safety_checks": [],
-  "high_confidence_facts": [],
-  "low_confidence_items": [],
-  "consensus": [],
-  "contradictions": [],
-  "open_questions": [],
-  "risks": [],
-  "answer_strategy": {
-    "recommended_structure": [],
-    "must_include": [],
-    "must_avoid": [],
-    "tone": "direct|explanatory|concise|technical|teaching"
-  }
-}
+Recibes la conversacion original y 3 respuestas candidatas. Tu tarea es producir una unica respuesta final para el usuario.
 
 Reglas:
-- No trates consenso como verdad absoluta.
-- No elimines requisitos unicos solo porque aparecen en un extractor.
-- No omitas una senal relevante por ser redundante parcialmente; fusiona lo repetido y conserva el detalle nuevo.
-- Si una evidencia unica no es segura pero puede cambiar la respuesta, incluyela en low_confidence_items, risks u open_questions.
-- El brief debe ser mas completo que cualquiera de los extractores individuales, no un promedio ni un resumen corto.
-- No conviertas opiniones en hechos.
-- No incluyas requisitos sin soporte; si el soporte es debil, usa low_confidence_items u open_questions.
-- support_map debe conservar ids de evidence_items cuando existan.
-- success_criteria debe ser comprobable por lectura, ejecucion, test, diff o comparacion con la solicitud.
-- verification_plan debe proponer checks baratos y concretos, no rituales genericos.
-- Si hay evidencia conflictiva, guardala en contradictions.
-- Si el usuario pidio cambios de codigo, must_include debe indicar archivos/zonas probables si se conocen.
-- No incluyas cadena de pensamiento privada.`,
+- Escribe en el idioma del usuario.
+- Integra lo mejor de las 3 respuestas.
+- No omitas detalles utiles que aparezcan en solo una respuesta.
+- Corrige errores, contradicciones o repeticiones.
+- Devuelve solo la respuesta final visible para el usuario.
+- No devuelvas JSON.
+- No menciones prompts, modelos, extractores, integrador ni pipeline.
+- No incluyas cadena de pensamiento ni bloques <think>.`,
     },
-    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nEvidence packets:\n${JSON.stringify(evidence, null, 2)}` },
+    { role: 'user', content: `Conversacion:\n${formatMessages(messages)}\n\nRespuestas candidatas:\n${formatMessages(candidates)}` },
   ];
 }
 

@@ -53,11 +53,13 @@
           </div>
         </div>
 
+        <!--
         <button class="thinking-toggle" id="thinkingToggleBtn" type="button" aria-pressed="false"
           title="Thinking Mode">
           <span class="thinking-dot" aria-hidden="true"></span>
           <span class="thinking-label">Thinking</span>
         </button>
+        -->
       </div>
 
       <div class="topbar-actions">
@@ -575,8 +577,8 @@
 
     function setThinkingMode(enabled) {
       thinkingMode = enabled;
-      thinkingToggleBtn.classList.toggle('active', thinkingMode);
-      thinkingToggleBtn.setAttribute('aria-pressed', String(thinkingMode));
+      thinkingToggleBtn?.classList.toggle('active', thinkingMode);
+      thinkingToggleBtn?.setAttribute('aria-pressed', String(thinkingMode));
       modelBtn.setAttribute('aria-disabled', String(thinkingMode));
       modelSearch.placeholder = 'Buscar modelo...';
       if (thinkingMode) closeDropdown();
@@ -625,7 +627,7 @@
     }
 
     modelBtn.addEventListener('click', () => modelDropdown.classList.contains('open') ? closeDropdown() : openDropdown());
-    thinkingToggleBtn.addEventListener('click', () => setThinkingMode(!thinkingMode));
+    thinkingToggleBtn?.addEventListener('click', () => setThinkingMode(!thinkingMode));
     document.addEventListener('click', e => { if (!modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) closeDropdown(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
     modelSearch.addEventListener('input', () => filterModels(modelSearch.value.trim().toLowerCase()));
@@ -805,16 +807,21 @@
     }
 
     async function callProvider(provider, model, msgs, images = [], thinking = false) {
+      const payload = {
+        messages: msgs.map(({ role, content }) => ({ role, content })),
+        images,
+        thinking
+      };
+
+      if (!thinking) {
+        payload.provider = provider;
+        payload.model = model;
+      }
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider,
-          model,
-          messages: msgs.map(({ role, content }) => ({ role, content })),
-          images,
-          thinking
-        })
+        body: JSON.stringify(payload)
       });
       const raw = await res.text();
       const data = raw ? JSON.parse(raw) : {};
@@ -848,7 +855,7 @@
       if (role === 'assistant') {
         const md = document.createElement('div');
         md.className = 'md-content';
-        md.innerHTML = marked.parse(content);
+        md.innerHTML = marked.parse(formatThinkingBlocks(content));
         bubble.appendChild(md);
 
         const topBtn = document.createElement('button');
@@ -867,6 +874,26 @@
       messagesWrap.appendChild(wrap);
       messagesWrap.scrollTop = messagesWrap.scrollHeight;
       return wrap;
+    }
+
+    function formatThinkingBlocks(content) {
+      const text = decodeMaybeJsonString(content);
+      return text.replace(/<think>([\s\S]*?)<\/think>/gi, (_, think) => {
+        const safeThink = think.trim().replace(/<\/summary>/gi, '<\\/summary>');
+        return `<details class="think-details"><summary>Inferencia extendida</summary>\n\n${safeThink}\n\n</details>`;
+      });
+    }
+
+    function decodeMaybeJsonString(content) {
+      const text = String(content || '').trim();
+      if (!text.startsWith('"') || !text.endsWith('"')) return text;
+
+      try {
+        const parsed = JSON.parse(text);
+        return typeof parsed === 'string' ? parsed : text;
+      } catch {
+        return text;
+      }
     }
 
     function copyMessage(btn, content) {
