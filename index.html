@@ -277,11 +277,11 @@
         conversations = data.conversations || [];
         saveToLocalStorage();
         renderConversations();
-        statusEl.textContent = '● Neon';
+        statusEl.textContent = '●';
         statusEl.classList.add('connected');
         window.dbReady = true;
       } catch (e) {
-        statusEl.textContent = '○ Local';
+        statusEl.textContent = '○';
         loadFromLocalStorage();
         window.dbReady = false;
       }
