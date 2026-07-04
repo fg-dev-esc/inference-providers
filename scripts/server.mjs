@@ -33,12 +33,12 @@ const IMAGE_PARSER_PROVIDER = 'groq';
 const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
-const THINKING_EXTRACTORS = [
-  { provider: 'groq', model: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B' },
-  { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
+const AETHRA_MODELS = [
   { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
+  { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
+  { provider: 'groq', model: 'openai/gpt-oss-120b', label: 'GPT OSS 120B' },
 ];
-const THINKING_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
+const AETHRA_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
 
 if (isMainModule()) startServer();
 
@@ -100,9 +100,20 @@ async function callChatCompletion(provider, model, messages) {
   };
 
   if (provider === 'cerebras') {
-    body.max_completion_tokens = 65000;
+    body.max_completion_tokens = 65536;
     body.temperature = 1;
-    body.top_p = 0.95;
+    body.top_p = 1;
+    body.reasoning_effort = 'high';
+  }
+
+  if (provider === 'groq') {
+    body.temperature = 1;
+    body.max_completion_tokens = safeGroqMaxCompletionTokens(model);
+  }
+
+  if (provider === 'mistral' || provider === 'sambanova') {
+    body.temperature = 1;
+    body.max_completion_tokens = 8192;
   }
 
   const response = await fetch(ENDPOINTS[provider], {
@@ -130,6 +141,12 @@ async function callChatCompletion(provider, model, messages) {
   return choice?.message?.content || choice?.text || '';
 }
 
+function safeGroqMaxCompletionTokens(model) {
+  if (model === 'qwen/qwen3-32b') return 2048;
+  if (model === 'qwen/qwen3.6-27b') return 2048;
+  return 4096;
+}
+
 async function parseImages(messages, images) {
   const lastUserText = [...messages].reverse().find((m) => m.role === 'user')?.content || '';
   return callChatCompletion(IMAGE_PARSER_PROVIDER, IMAGE_PARSER_MODEL, [{
@@ -142,18 +159,68 @@ async function parseImages(messages, images) {
 }
 
 async function runThinkingPipeline({ messages }) {
-  const candidates = await Promise.all(THINKING_EXTRACTORS.map(async (extractor) => {
-    const content = await callChatCompletion(extractor.provider, extractor.model, candidateMessages(messages, extractor));
-    return stripThinking(content);
+  const originalQuestion = [...messages].reverse().find((message) => message.role === 'user')?.content || '';
+
+  const modelResponses = await Promise.all(AETHRA_MODELS.map(async (model) => {
+    try {
+      const content = await callChatCompletion(model.provider, model.model, messages);
+      const { reasoning, text } = extractThinkTags(content);
+      return {
+        ok: true,
+        model,
+        response: text,
+        reasoning,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        model,
+        response: `Error: ${error.message}`,
+        reasoning: '',
+      };
+    }
   }));
 
+  const concatenatedResponses = modelResponses
+    .map(({ model, response }) => `### ${model.label}\n${response}`)
+    .join('\n\n---\n\n');
+
   const integrated = await callChatCompletion(
-    THINKING_INTEGRATOR.provider,
-    THINKING_INTEGRATOR.model,
-    integrationMessages(messages, candidates),
+    AETHRA_INTEGRATOR.provider,
+    AETHRA_INTEGRATOR.model,
+    [
+      {
+        role: 'system',
+        content:
+          'Eres un asistente experto en sintetizar y consolidar informacion de multiples modelos. Tu tarea es analizar profundamente cada respuesta, identificar patrones, similitudes, diferencias, errores y omisiones. Integra lo mejor de todas las respuestas en una respuesta final extensa, clara, precisa, accionable y completa. No reduzcas ni simplifiques en exceso.',
+      },
+      {
+        role: 'user',
+        content: `Pregunta original del usuario: "${originalQuestion}"\n\n===== RESPUESTAS DE MULTIPLES MODELOS =====\n\n${concatenatedResponses}\n\n===== TU TAREA =====\n\nGenera un mega-resumen consolidado que:\n- Integre toda la informacion util\n- Profundice en cada punto relevante\n- Identifique insights unicos de cada modelo\n- Corrija contradicciones o errores\n- Entregue una respuesta final completa y accionable`,
+      },
+    ],
   );
 
-  return stripThinking(integrated);
+  const { reasoning, text } = extractThinkTags(integrated);
+  const individualSections = modelResponses
+    .map(({ model, response }) => `## ${model.label}\n\n${response}`)
+    .join('\n\n---\n\n');
+
+  return `${individualSections}\n\n---\n\n# Resumen Consolidado\n\n${reasoning ? `<think>${reasoning}</think>\n\n` : ''}${text}`.trim();
+}
+
+function extractThinkTags(content) {
+  const value = decodeMaybeJsonString(content);
+  const thinkRegex = /<think>([\s\S]*?)<\/think>/gi;
+  const matches = value.match(thinkRegex);
+  if (!matches) return { reasoning: '', text: value };
+
+  const reasoning = matches
+    .map((match) => match.replace(/<\/?think>/gi, '').trim())
+    .join('\n\n');
+  const text = value.replace(thinkRegex, '').trim();
+
+  return { reasoning, text };
 }
 
 function stripThinking(content) {

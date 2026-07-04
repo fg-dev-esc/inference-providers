@@ -384,6 +384,10 @@ select {
   box-shadow: 0 0 12px rgba(168, 180, 240, .7)
 }
 
+.thinking-toggle.active {
+  color: #a8b4f0
+}
+
 /* ─── TOPBAR ACTIONS ─────────────────────────────────────── */
 .topbar-actions {
   display: flex;
@@ -718,6 +722,19 @@ select {
 }
 
 .msg.assistant .msg-bubble .code-block-wrap {
+  overflow-x: auto;
+  max-width: 100%
+}
+
+.msg.assistant .msg-content {
+  width: 100%;
+  line-height: 1.6;
+  font-size: var(--text-base);
+  color: var(--color-text);
+  word-break: break-word
+}
+
+.msg.assistant .msg-content .code-block-wrap {
   overflow-x: auto;
   max-width: 100%
 }

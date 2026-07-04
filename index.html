@@ -53,13 +53,11 @@
           </div>
         </div>
 
-        <!--
         <button class="thinking-toggle" id="thinkingToggleBtn" type="button" aria-pressed="false"
-          title="Thinking Mode">
+          title="Aethra Mode">
           <span class="thinking-dot" aria-hidden="true"></span>
-          <span class="thinking-label">Thinking</span>
+          <span class="thinking-label">Aethra</span>
         </button>
-        -->
       </div>
 
       <div class="topbar-actions">
@@ -187,7 +185,8 @@
       { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
     ];
 
-    const THINKING_MODEL_META = { id: 'thinking-mode', label: 'Thinking Mode', provider: 'cerebras', tag: 'Thinking' };
+    const THINKING_MODEL_META = { id: 'aethra-mode', label: 'Aethra', provider: 'cerebras', tag: 'Aethra' };
+    const AETHRA_COLOR = '#a8b4f0';
     const THINKING_LOADING_STEPS = [
       'Preparando contexto',
       'Extrayendo evidencia',
@@ -560,10 +559,9 @@
 
     function updateModelDisplay() {
       if (thinkingMode) {
-        const p = PROVIDERS.find(pp => pp.id === THINKING_MODEL_META.provider);
         const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
-        if (iconEl && p) iconEl.style.color = p.color;
-        modelLabel.textContent = 'Thinking Mode';
+        if (iconEl) iconEl.style.color = AETHRA_COLOR;
+        modelLabel.textContent = 'Aethra';
         return;
       }
 
@@ -777,8 +775,8 @@
       isLoading = true;
       updateSendBtn();
 
-      const typing = appendTyping(thinkingMode ? THINKING_LOADING_STEPS[0] : '');
-      const stopLoading = thinkingMode ? startThinkingLoading(typing) : null;
+      const typing = appendTyping('');
+      const stopLoading = null;
       try {
         const messageModel = thinkingMode ? THINKING_MODEL_META : selectedModel;
         const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images, thinkingMode);
@@ -851,7 +849,7 @@
       copyBtn.title = 'Copiar';
       meta.appendChild(copyBtn);
       const bubble = document.createElement('div');
-      bubble.className = 'msg-bubble';
+      bubble.className = role === 'assistant' ? 'msg-content' : 'msg-bubble';
       if (role === 'assistant') {
         const md = document.createElement('div');
         md.className = 'md-content';
@@ -927,7 +925,7 @@
       if (activeModel) {
         const p = PROVIDERS.find(pp => pp.id === activeModel.provider);
         meta.innerHTML = thinkingMode
-          ? `<span style="color:${p.color}">●</span> Thinking Mode`
+          ? `<span style="color:${AETHRA_COLOR}">●</span> Aethra`
           : `<span style="color:${p.color}">●</span> ${p.name} · ${activeModel.label}`;
       }
       const ind = document.createElement('div');
