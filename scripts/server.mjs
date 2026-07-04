@@ -206,7 +206,7 @@ async function runThinkingPipeline({ messages }) {
     .map(({ model, response }) => `## ${model.label}\n\n${response}`)
     .join('\n\n---\n\n');
 
-  return `${individualSections}\n\n---\n\n# Resumen Consolidado\n\n${reasoning ? `<think>${reasoning}</think>\n\n` : ''}${text}`.trim();
+  return `${individualSections}\n\n---\n\n# Aethra\n\n${reasoning ? `<think>${reasoning}</think>\n\n` : ''}${text}`.trim();
 }
 
 function extractThinkTags(content) {
