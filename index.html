@@ -61,14 +61,22 @@
       </div>
 
       <div class="topbar-actions">
+        <button class="icon-btn" id="copyConversationBtn" aria-label="Copiar conversación" title="Copiar conversación">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
         <button class="icon-btn" id="clearBtn" aria-label="Nueva conversación" title="Nueva conversación">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 5v14M5 12h14" />
           </svg>
         </button>
-        <button class="icon-btn" id="themeBtn" aria-label="Cambiar tema" title="Cambiar tema">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="theme-toggle" id="themeBtn" aria-label="Cambiar tema" title="Cambiar tema">
+          <svg class="theme-toggle-icon moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="theme-toggle-icon sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
           </svg>
         </button>
         <span class="db-status" id="dbStatus"></span>
@@ -242,6 +250,7 @@
     const conversationSearch = document.getElementById('conversationSearch');
     const newChatBtn = document.getElementById('newChatBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+    const copyConversationBtn = document.getElementById('copyConversationBtn');
 
     function generateId() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -905,6 +914,35 @@
       });
     }
 
+    function formatConversationForCopy() {
+      return messages.map(msg => {
+        const author = msg.role === 'user' ? 'Tú' : 'Asistente';
+        const model = msg.role === 'assistant' && msg.model?.label ? ` (${msg.model.label})` : '';
+        const imageNote = msg.role === 'user' && msg.imageCount
+          ? `\n[${msg.imageCount} imagen${msg.imageCount > 1 ? 'es' : ''} adjunta${msg.imageCount > 1 ? 's' : ''}]`
+          : '';
+        return `${author}${model}:\n${msg.content}${imageNote}`;
+      }).join('\n\n---\n\n');
+    }
+
+    function copyConversation(btn) {
+      if (!messages.length) {
+        showToast('No hay conversación para copiar');
+        return;
+      }
+
+      navigator.clipboard.writeText(formatConversationForCopy()).then(() => {
+        const original = btn.innerHTML;
+        btn.classList.add('active');
+        btn.innerHTML = `<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>`;
+        showToast('Conversación copiada');
+        setTimeout(() => {
+          btn.classList.remove('active');
+          btn.innerHTML = original;
+        }, 2000);
+      });
+    }
+
     function startThinkingLoading(wrap) {
       const statusEl = wrap.querySelector('.thinking-status');
       if (!statusEl) return null;
@@ -945,19 +983,67 @@
     const hljsLight = document.getElementById('hljs-light');
 
     themeBtn.addEventListener('click', () => {
-      document.documentElement.style.transition = 'background-color 300ms ease, color 300ms ease';
-      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      hljsDark.disabled = currentTheme !== 'dark';
-      hljsLight.disabled = currentTheme !== 'light';
-      themeBtn.style.transform = 'rotate(180deg)';
-      themeBtn.innerHTML = currentTheme === 'dark'
-        ? '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>'
-        : '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      const applyTheme = () => {
+        currentTheme = nextTheme;
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        hljsDark.disabled = currentTheme !== 'dark';
+        hljsLight.disabled = currentTheme !== 'light';
+      };
+
+      if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        applyTheme();
+        return;
+      }
+
+      const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const { top, left, width, height } = themeBtn.getBoundingClientRect();
+      const x = left + width / 2;
+      const y = top + height / 2;
+      const maxRadius = Math.hypot(
+        Math.max(x, viewportWidth - x),
+        Math.max(y, viewportHeight - y)
+      );
+      const clipPath = getThemeClipPaths(x, y, maxRadius);
+      const root = document.documentElement;
+
+      root.dataset.themeVt = 'active';
+      root.style.setProperty('--theme-vt-duration', '500ms');
+      root.style.setProperty('--theme-vt-clip-from', clipPath[0]);
+
+      const transition = document.startViewTransition(applyTheme);
+      transition.finished.finally(() => {
+        delete root.dataset.themeVt;
+        root.style.removeProperty('--theme-vt-duration');
+        root.style.removeProperty('--theme-vt-clip-from');
+      });
+
+      transition.ready.then(() => {
+        document.documentElement.animate({
+          clipPath
+        }, {
+          duration: 500,
+          easing: 'ease-in-out',
+          fill: 'forwards',
+          pseudoElement: '::view-transition-new(root)'
+        });
+      });
+
+      themeBtn.classList.remove('animating');
+      void themeBtn.offsetWidth;
+      themeBtn.classList.add('animating');
       setTimeout(() => {
-        themeBtn.style.transform = 'rotate(0deg)';
+        themeBtn.classList.remove('animating');
       }, 300);
     });
+
+    function getThemeClipPaths(cx, cy, maxRadius) {
+      return [
+        `circle(0px at ${cx}px ${cy}px)`,
+        `circle(${maxRadius}px at ${cx}px ${cy}px)`
+      ];
+    }
 
     let toastTimer;
     function showToast(msg) {
@@ -970,6 +1056,7 @@
     drawerBtn.addEventListener('click', toggleDrawer);
     drawerOverlay.addEventListener('click', closeDrawer);
     closeDrawerBtn.addEventListener('click', closeDrawer);
+    copyConversationBtn.addEventListener('click', () => copyConversation(copyConversationBtn));
     newChatBtn.addEventListener('click', () => {
       resetConversationDraft();
       closeDrawer();
