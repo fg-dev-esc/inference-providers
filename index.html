@@ -433,39 +433,6 @@
         });
       });
 
-      drawerList.addEventListener('blur', (e) => {
-        if (e.target.classList.contains('conversation-title') && e.target.contentEditable === 'true') {
-          const titleEl = e.target;
-          titleEl.contentEditable = false;
-          titleEl.classList.remove('editing');
-          const id = titleEl.dataset.editId;
-          const conv = conversations.find(c => c.id === id);
-          if (!conv) return;
-          const newTitle = titleEl.textContent.trim();
-          if (newTitle && newTitle !== conv.title) {
-            updateConversation(id, newTitle, conv.messages);
-            renderConversations(conversationSearch.value.trim());
-          } else {
-            titleEl.textContent = conv.title;
-          }
-        }
-      }, true);
-
-      drawerList.addEventListener('keydown', (e) => {
-        if (e.target.classList.contains('conversation-title') && e.target.contentEditable === 'true') {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            e.target.blur();
-          }
-          if (e.key === 'Escape') {
-            const id = e.target.dataset.editId;
-            const conv = conversations.find(c => c.id === id);
-            e.target.textContent = conv?.title || '';
-            e.target.blur();
-          }
-        }
-      }, true);
-
       drawerList.querySelectorAll('.conv-action-btn.delete').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
@@ -475,6 +442,39 @@
         });
       });
     }
+
+    drawerList.addEventListener('blur', (e) => {
+      if (e.target.classList.contains('conversation-title') && e.target.contentEditable === 'true') {
+        const titleEl = e.target;
+        titleEl.contentEditable = false;
+        titleEl.classList.remove('editing');
+        const id = titleEl.dataset.editId;
+        const conv = conversations.find(c => c.id === id);
+        if (!conv) return;
+        const newTitle = titleEl.textContent.trim();
+        if (newTitle && newTitle !== conv.title) {
+          updateConversation(id, newTitle, conv.messages);
+          renderConversations(conversationSearch.value.trim());
+        } else {
+          titleEl.textContent = conv.title;
+        }
+      }
+    }, true);
+
+    drawerList.addEventListener('keydown', (e) => {
+      if (e.target.classList.contains('conversation-title') && e.target.contentEditable === 'true') {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          e.target.blur();
+        }
+        if (e.key === 'Escape') {
+          const id = e.target.dataset.editId;
+          const conv = conversations.find(c => c.id === id);
+          e.target.textContent = conv?.title || '';
+          e.target.blur();
+        }
+      }
+    }, true);
 
     function toggleDrawer() {
       drawer.classList.toggle('open');
