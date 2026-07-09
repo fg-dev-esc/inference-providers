@@ -161,6 +161,17 @@
 
   <div class="toast" id="toast" role="alert"></div>
 
+  <div class="confirm-overlay" id="deleteConfirmOverlay" aria-hidden="true">
+    <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="deleteConfirmTitle">
+      <h2 id="deleteConfirmTitle">Eliminar conversación</h2>
+      <p>Esta acción no se puede deshacer.</p>
+      <div class="confirm-actions">
+        <button class="confirm-btn secondary" id="cancelDeleteBtn" type="button">Cancelar</button>
+        <button class="confirm-btn danger" id="confirmDeleteBtn" type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const STORAGE_KEY = 'inferencia_conversations';
     let conversations = [];
@@ -251,6 +262,10 @@
     const newChatBtn = document.getElementById('newChatBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
     const copyConversationBtn = document.getElementById('copyConversationBtn');
+    const deleteConfirmOverlay = document.getElementById('deleteConfirmOverlay');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    let pendingDeleteId = null;
 
     function generateId() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -351,6 +366,23 @@
       showToast('Conversación eliminada');
     }
 
+    function focusChatInput() {
+      setTimeout(() => chatInput.focus({ preventScroll: true }), 80);
+    }
+
+    function openDeleteDialog(id) {
+      pendingDeleteId = id;
+      deleteConfirmOverlay.classList.add('open');
+      deleteConfirmOverlay.setAttribute('aria-hidden', 'false');
+      setTimeout(() => confirmDeleteBtn.focus(), 60);
+    }
+
+    function closeDeleteDialog() {
+      pendingDeleteId = null;
+      deleteConfirmOverlay.classList.remove('open');
+      deleteConfirmOverlay.setAttribute('aria-hidden', 'true');
+    }
+
     function selectConversation(id) {
       const conv = conversations.find(c => c.id === id);
       if (!conv) return;
@@ -358,6 +390,7 @@
       messages = conv.messages || [];
       renderMessages();
       closeDrawer();
+      focusChatInput();
     }
 
     function renderConversations(filter = '') {
@@ -436,9 +469,7 @@
       drawerList.querySelectorAll('.conv-action-btn.delete').forEach(btn => {
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          if (confirm('¿Eliminar esta conversación?')) {
-            deleteConversation(btn.dataset.id);
-          }
+          openDeleteDialog(btn.dataset.id);
         });
       });
     }
@@ -507,6 +538,7 @@
       imageCounter.textContent = '';
       renderImagePreview();
       updateSendBtn();
+      focusChatInput();
     }
 
     function renderMessages() {
@@ -1057,6 +1089,18 @@
     drawerOverlay.addEventListener('click', closeDrawer);
     closeDrawerBtn.addEventListener('click', closeDrawer);
     copyConversationBtn.addEventListener('click', () => copyConversation(copyConversationBtn));
+    cancelDeleteBtn.addEventListener('click', closeDeleteDialog);
+    deleteConfirmOverlay.addEventListener('click', (e) => {
+      if (e.target === deleteConfirmOverlay) closeDeleteDialog();
+    });
+    confirmDeleteBtn.addEventListener('click', () => {
+      if (!pendingDeleteId) return;
+      const id = pendingDeleteId;
+      deleteConfirmOverlay.classList.remove('open');
+      deleteConfirmOverlay.setAttribute('aria-hidden', 'true');
+      pendingDeleteId = null;
+      deleteConversation(id);
+    });
     newChatBtn.addEventListener('click', () => {
       resetConversationDraft();
       closeDrawer();
@@ -1066,6 +1110,7 @@
     updateModelDisplay();
     buildDropdown();
     updateSendBtn();
+    focusChatInput();
     
     if (window.lucide) {
       lucide.createIcons();
