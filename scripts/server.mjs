@@ -654,7 +654,8 @@ export async function handleConversations(req, res) {
 }
 
 function serveStatic(req, res) {
-  const url = req.url === '/' ? '/index.html' : req.url;
+  const pathname = new URL(req.url, `http://localhost:${port}`).pathname;
+  const url = pathname === '/' || /^\/chat\/[^/]+$/.test(pathname) ? '/index.html' : pathname;
   const file = join(process.cwd(), decodeURIComponent(url.split('?')[0]));
 
   if (!existsSync(file)) {

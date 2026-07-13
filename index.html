@@ -12,7 +12,7 @@
     href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap"
     rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/style.css">
 
   <link id="hljs-dark" rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
@@ -290,6 +290,7 @@
         conversations = [];
       }
       renderConversations();
+      loadConversationFromUrl();
     }
 
     async function initDB() {
@@ -301,6 +302,7 @@
         conversations = data.conversations || [];
         saveToLocalStorage();
         renderConversations();
+        loadConversationFromUrl();
         statusEl.textContent = '●';
         statusEl.classList.add('connected');
         window.dbReady = true;
@@ -334,6 +336,7 @@
       saveToLocalStorage();
       syncToNeon(newConv, 'upsert');
       currentConversationId = newConv.id;
+      setConversationUrl(newConv.id);
       messages = [];
       messagesWrap.innerHTML = '';
       messagesWrap.appendChild(emptyState);
@@ -358,9 +361,7 @@
       conversations = conversations.filter(c => c.id !== id);
       saveToLocalStorage();
       if (currentConversationId === id) {
-        currentConversationId = null;
-        messages = [];
-        clearMessagesUI();
+        resetConversationDraft();
       }
       renderConversations();
       showToast('Conversación eliminada');
@@ -383,12 +384,41 @@
       deleteConfirmOverlay.setAttribute('aria-hidden', 'true');
     }
 
-    function selectConversation(id) {
+    function setConversationUrl(id, replace = false) {
+      const url = id ? `/chat/${encodeURIComponent(id)}` : '/';
+      history[replace ? 'replaceState' : 'pushState'](null, '', url);
+    }
+
+    function getConversationIdFromUrl() {
+      const match = window.location.pathname.match(/^\/chat\/([^/]+)$/);
+      if (!match) return null;
+
+      try {
+        return decodeURIComponent(match[1]);
+      } catch {
+        return null;
+      }
+    }
+
+    function loadConversationFromUrl() {
+      const id = getConversationIdFromUrl();
+      if (id && conversations.some(conv => conv.id === id)) {
+        selectConversation(id, false);
+        return;
+      }
+
+      resetConversationDraft(false);
+      if (id) setConversationUrl(null, true);
+    }
+
+    function selectConversation(id, updateUrl = true) {
       const conv = conversations.find(c => c.id === id);
       if (!conv) return;
       currentConversationId = id;
+      if (updateUrl) setConversationUrl(id);
       messages = conv.messages || [];
       renderMessages();
+      renderConversations(conversationSearch.value.trim());
       closeDrawer();
       focusChatInput();
     }
@@ -525,9 +555,10 @@
       emptyState.style.display = '';
     }
 
-    function resetConversationDraft() {
+    function resetConversationDraft(updateUrl = true) {
       messages = [];
       currentConversationId = null;
+      if (updateUrl) setConversationUrl(null);
       messagesWrap.innerHTML = '';
       messagesWrap.appendChild(emptyState);
       emptyState.style.display = '';
@@ -1106,6 +1137,7 @@
       closeDrawer();
     });
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
+    window.addEventListener('popstate', loadConversationFromUrl);
 
     updateModelDisplay();
     buildDropdown();
