@@ -112,13 +112,6 @@
       </div>
       <div class="input-box">
         <input id="imageInput" type="file" accept="image/*" multiple hidden>
-        <button class="image-btn" id="imageBtn" type="button" aria-label="Adjuntar imágenes" title="Adjuntar imágenes">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-        </button>
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje…" aria-label="Mensaje"
           autocomplete="off" spellcheck="true"></textarea>
         <button class="send-btn" id="sendBtn" aria-label="Enviar" disabled>
@@ -735,7 +728,7 @@
       sendBtn.disabled = isLoading || (!chatInput.value.trim() && attachedImages.length === 0) || !selectedModel;
     }
 
-    imageBtn.addEventListener('click', () => imageInput.click());
+    imageBtn?.addEventListener('click', () => imageInput.click());
     imageInput.addEventListener('change', async () => {
       await addImageFiles([...imageInput.files]);
       imageInput.value = '';
