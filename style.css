@@ -737,7 +737,8 @@ select {
   border-radius: 50%;
   font-size: 10px;
   font-weight: 600;
-  line-height: 1
+  line-height: 1;
+  cursor: pointer
 }
 
 .aethra-step.ok {

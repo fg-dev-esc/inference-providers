@@ -909,8 +909,13 @@
               const status = typeof step === 'boolean'
                 ? { ok: step, label: `Etapa ${index + 1}` }
                 : step;
-              return `<span class="aethra-step ${status.ok ? 'ok' : 'failed'}" title="${escapeHtml(status.label)}">${status.ok ? '✓' : '×'}</span>`;
+              return `<button class="aethra-step ${status.ok ? 'ok' : 'failed'}" type="button" title="${escapeHtml(status.label)}" aria-label="${escapeHtml(status.label)}">${status.ok ? '✓' : '×'}</button>`;
             }).join('');
+            steps.querySelectorAll('.aethra-step').forEach((step, index) => {
+              const status = aethraStatus[index];
+              const label = typeof status === 'boolean' ? `Etapa ${index + 1}` : status.label;
+              step.addEventListener('click', () => showToast(label));
+            });
             meta.appendChild(steps);
           }
         } else {
