@@ -722,6 +722,34 @@ select {
   transition: all 200ms
 }
 
+.aethra-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 2px
+}
+
+.aethra-step {
+  display: inline-grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1
+}
+
+.aethra-step.ok {
+  color: #a8d5b8;
+  background: rgba(168, 213, 184, .12)
+}
+
+.aethra-step.failed {
+  color: #ef9a9a;
+  background: rgba(239, 154, 154, .12)
+}
+
 .msg-copy-btn {
   display: flex;
   align-items: center;

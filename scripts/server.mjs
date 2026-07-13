@@ -71,14 +71,14 @@ export async function handleChat(req, res) {
       ]
     : cleanMessages;
 
-  const content = thinking
+  const result = thinking
     ? await runThinkingPipeline({ provider, model, messages: finalMessages })
-    : await callChatCompletion(provider, model, finalMessages);
+    : { content: await callChatCompletion(provider, model, finalMessages) };
 
-  json(res, 200, { content });
+  json(res, 200, result);
 }
 
-async function callChatCompletion(provider, model, messages, { aethra = false } = {}) {
+async function callChatCompletion(provider, model, messages, { aethra = false, aethraIntegrator = false } = {}) {
   if (!ENDPOINTS[provider]) throw new Error(`Proveedor no soportado: ${provider}`);
   if (!API_KEYS[provider]) throw new Error(`Falta API key para ${provider}`);
 
@@ -103,7 +103,10 @@ async function callChatCompletion(provider, model, messages, { aethra = false } 
     body.max_completion_tokens = 65536;
     body.temperature = 1;
     body.top_p = 1;
-    body.reasoning_effort = 'high';
+    if (aethraIntegrator) {
+      body.reasoning_effort = 'high';
+      body.reasoning_format = 'hidden';
+    }
   }
 
   if (provider === 'groq') {
@@ -210,8 +213,11 @@ async function runThinkingPipeline({ messages }) {
     }
   }));
 
-  const concatenatedResponses = modelResponses
-    .map(({ model, response }) => `### ${model.label}\n${response}`)
+  const successfulResponses = modelResponses.filter(({ ok }) => ok);
+  if (!successfulResponses.length) throw new Error('Todos los modelos internos de Aethra fallaron');
+
+  const concatenatedResponses = successfulResponses
+    .map(({ response }) => response)
     .join('\n\n---\n\n');
 
   const integrated = await callChatCompletion(
@@ -221,21 +227,25 @@ async function runThinkingPipeline({ messages }) {
       {
         role: 'system',
         content:
-          'Eres un asistente experto en sintetizar y consolidar informacion de multiples modelos. Tu tarea es analizar profundamente cada respuesta, identificar patrones, similitudes, diferencias, errores y omisiones. Integra lo mejor de todas las respuestas en una respuesta final extensa, clara, precisa, accionable y completa. No reduzcas ni simplifiques en exceso.',
+          'Responde como un unico experto. Usa el material recibido para elaborar una respuesta final extensa, clara, precisa y accionable. Integra los hallazgos utiles, corrige contradicciones y cubre los detalles relevantes. No menciones modelos, respuestas previas, borradores, integracion, fuentes internas ni tu proceso de razonamiento. No reveles razonamiento privado.',
       },
       {
         role: 'user',
-        content: `Pregunta original del usuario: "${originalQuestion}"\n\n===== RESPUESTAS DE MULTIPLES MODELOS =====\n\n${concatenatedResponses}\n\n===== TU TAREA =====\n\nGenera un mega-resumen consolidado que:\n- Integre toda la informacion util\n- Profundice en cada punto relevante\n- Identifique insights unicos de cada modelo\n- Corrija contradicciones o errores\n- Entregue una respuesta final completa y accionable`,
+        content: `Pregunta del usuario:\n${originalQuestion}\n\nMaterial de apoyo:\n${concatenatedResponses}\n\nEntrega directamente la mejor respuesta posible para el usuario.`,
       },
     ],
+    { aethraIntegrator: true },
   );
 
-  const { reasoning, text } = extractThinkTags(integrated);
-  const individualSections = modelResponses
-    .map(({ model, response }) => `## ${model.label}\n\n${response}`)
-    .join('\n\n---\n\n');
-
-  return `${individualSections}\n\n---\n\n# Aethra\n\n${reasoning ? `<think>${reasoning}</think>\n\n` : ''}${text}`.trim();
+  return {
+    content: stripThinking(integrated),
+    aethra: {
+      steps: [
+        ...modelResponses.map(({ ok, model }) => ({ ok, label: model.label })),
+        { ok: true, label: AETHRA_INTEGRATOR.label },
+      ],
+    },
+  };
 }
 
 function extractThinkTags(content) {

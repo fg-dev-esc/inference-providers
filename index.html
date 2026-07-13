@@ -584,7 +584,7 @@
         const displayContent = msg.role === 'user' && msg.imageCount
           ? `${msg.content}\n\n[${msg.imageCount} imagen${msg.imageCount > 1 ? 'es' : ''} adjunta${msg.imageCount > 1 ? 's' : ''}]`
           : msg.content;
-        appendMessage(msg.role, displayContent, msg.model);
+        appendMessage(msg.role, displayContent, msg.model, msg.aethraStatus);
       });
     }
 
@@ -842,11 +842,13 @@
       const stopLoading = null;
       try {
         const messageModel = thinkingMode ? THINKING_MODEL_META : selectedModel;
-        const reply = await callProvider(selectedModel.provider, selectedModel.id, messages, images, thinkingMode);
+        const result = await callProvider(selectedModel.provider, selectedModel.id, messages, images, thinkingMode);
+        const reply = result.content;
+        const aethraStatus = result.aethra?.steps;
         if (stopLoading) stopLoading();
         typing.remove();
-        messages.push({ role: 'assistant', content: reply, model: messageModel });
-        appendMessage('assistant', reply, messageModel);
+        messages.push({ role: 'assistant', content: reply, model: messageModel, aethraStatus });
+        appendMessage('assistant', reply, messageModel, aethraStatus);
         
         const conv = conversations.find(c => c.id === currentConversationId);
         if (conv) {
@@ -887,19 +889,36 @@
       const raw = await res.text();
       const data = raw ? JSON.parse(raw) : {};
       if (!res.ok) throw new Error(data?.error?.message || data?.error || data?.message || `HTTP ${res.status}`);
-      return data.content || '';
+      return data;
     }
 
-    function appendMessage(role, content, model) {
+    function appendMessage(role, content, model, aethraStatus) {
       const wrap = document.createElement('div');
       wrap.className = `msg ${role}`;
       const meta = document.createElement('div');
       meta.className = 'msg-meta';
       if (role === 'assistant' && model) {
-        const p = PROVIDERS.find(pp => pp.id === model.provider);
-        meta.innerHTML = p
-          ? `<span style="color:${p.color}">●</span> ${p.name} · ${model.label}`
-          : `Asistente · ${model.label || model.id || 'Modelo'}`;
+        if (model.id === 'aethra-mode') {
+          meta.innerHTML = `<span style="color:${AETHRA_COLOR}">●</span> Aethra`;
+          if (Array.isArray(aethraStatus)) {
+            const steps = document.createElement('span');
+            steps.className = 'aethra-status';
+            const completed = aethraStatus.filter(step => typeof step === 'boolean' ? step : step.ok).length;
+            steps.setAttribute('aria-label', `${completed} de ${aethraStatus.length} modelos completados`);
+            steps.innerHTML = aethraStatus.map((step, index) => {
+              const status = typeof step === 'boolean'
+                ? { ok: step, label: `Etapa ${index + 1}` }
+                : step;
+              return `<span class="aethra-step ${status.ok ? 'ok' : 'failed'}" title="${escapeHtml(status.label)}">${status.ok ? '✓' : '×'}</span>`;
+            }).join('');
+            meta.appendChild(steps);
+          }
+        } else {
+          const p = PROVIDERS.find(pp => pp.id === model.provider);
+          meta.innerHTML = p
+            ? `<span style="color:${p.color}">●</span> ${p.name} · ${model.label}`
+            : `Asistente · ${model.label || model.id || 'Modelo'}`;
+        }
       } else if (role === 'assistant') {
         meta.textContent = 'Asistente';
       } else {
