@@ -35,8 +35,8 @@ const MAX_IMAGES = 5;
 
 const AETHRA_MODELS = [
   { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
-  { provider: 'sambanova', model: 'DeepSeek-V3.1', label: 'DeepSeek V3.1' },
-  { provider: 'groq', model: 'openai/gpt-oss-120b', label: 'GPT OSS 120B' },
+  { provider: 'groq', model: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B' },
+  { provider: 'google', model: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash' },
 ];
 const AETHRA_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
 

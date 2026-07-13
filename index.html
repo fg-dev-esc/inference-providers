@@ -196,7 +196,7 @@
       // { id: 'openai/gpt-oss-20b', label: 'GPT OSS 20B', provider: 'groq', tag: 'Groq' },
       // { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
       { id: 'DeepSeek-V3.1', label: 'DeepSeek V3.1', provider: 'sambanova', tag: 'SambaNova' },
-      { id: 'gemini-3-flash-preview', label: 'Gemini 3 Flash', provider: 'google', tag: 'Google' },
+      { id: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash', provider: 'google', tag: 'Google' },
       { id: 'mistral-large-latest', label: 'Mistral Large 3', provider: 'mistral', tag: 'Mistral' },
       // { id: 'mistral-small-latest', label: 'Mistral Small 4', provider: 'mistral', tag: 'Mistral' },
       // { id: 'command-a-reasoning-08-2025', label: 'Command A Reasoning', provider: 'cohere', tag: 'Cohere' },
@@ -233,7 +233,7 @@
     let messages = [];
     let attachedImages = [];
     let isLoading = false;
-    let thinkingMode = false;
+    let thinkingMode = true;
     let currentTheme = 'dark';
     window.dbReady = false;
 
@@ -1130,9 +1130,7 @@
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
     window.addEventListener('popstate', loadConversationFromUrl);
 
-    updateModelDisplay();
-    buildDropdown();
-    updateSendBtn();
+    setThinkingMode(thinkingMode);
     focusChatInput();
     
     if (window.lucide) {
