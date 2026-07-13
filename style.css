@@ -148,6 +148,22 @@ select {
   background: var(--color-bg)
 }
 
+.initial-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--color-bg);
+  transition: opacity var(--tr), visibility var(--tr)
+}
+
+.initial-loading.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none
+}
+
 /* ─── TOPBAR ─────────────────────────────────────────────── */
 .topbar {
   display: flex;
@@ -288,7 +304,7 @@ select {
 
 .dropdown-search input:focus {
   outline: none;
-  border-color: var(--color-text);
+  border-color: var(--color-border);
   background: var(--color-surface-offset)
 }
 
@@ -388,7 +404,7 @@ select {
 }
 
 .thinking-toggle.active {
-  border-color: var(--color-text)
+  border-color: var(--color-border)
 }
 
 .thinking-dot {
