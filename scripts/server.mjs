@@ -78,7 +78,7 @@ export async function handleChat(req, res) {
   json(res, 200, { content });
 }
 
-async function callChatCompletion(provider, model, messages) {
+async function callChatCompletion(provider, model, messages, { aethra = false } = {}) {
   if (!ENDPOINTS[provider]) throw new Error(`Proveedor no soportado: ${provider}`);
   if (!API_KEYS[provider]) throw new Error(`Falta API key para ${provider}`);
 
@@ -111,6 +111,14 @@ async function callChatCompletion(provider, model, messages) {
     body.max_completion_tokens = safeGroqMaxCompletionTokens(model);
   }
 
+  const isAethraQwen = aethra && provider === 'groq' && model === 'qwen/qwen3.6-27b';
+  if (isAethraQwen) {
+    body.max_completion_tokens = 4096;
+    body.top_p = 0.95;
+    body.reasoning_effort = 'none';
+    body.stream = true;
+  }
+
   if (provider === 'mistral' || provider === 'sambanova') {
     body.temperature = 1;
     body.max_completion_tokens = 8192;
@@ -123,6 +131,8 @@ async function callChatCompletion(provider, model, messages) {
   });
 
   const raw = await response.text();
+  if (body.stream && response.ok) return parseStreamContent(raw);
+
   let data = {};
 
   if (raw) {
@@ -139,6 +149,25 @@ async function callChatCompletion(provider, model, messages) {
 
   const choice = data.choices?.[0];
   return choice?.message?.content || choice?.text || '';
+}
+
+function parseStreamContent(raw) {
+  let content = '';
+
+  for (const line of raw.split(/\r?\n/)) {
+    if (!line.startsWith('data: ')) continue;
+    const payload = line.slice(6).trim();
+    if (!payload || payload === '[DONE]') continue;
+
+    try {
+      const chunk = JSON.parse(payload);
+      content += chunk.choices?.[0]?.delta?.content || '';
+    } catch {
+      // Ignore keep-alive and malformed stream events.
+    }
+  }
+
+  return content;
 }
 
 function safeGroqMaxCompletionTokens(model) {
@@ -163,7 +192,7 @@ async function runThinkingPipeline({ messages }) {
 
   const modelResponses = await Promise.all(AETHRA_MODELS.map(async (model) => {
     try {
-      const content = await callChatCompletion(model.provider, model.model, messages);
+      const content = await callChatCompletion(model.provider, model.model, messages, { aethra: true });
       const { reasoning, text } = extractThinkTags(content);
       return {
         ok: true,
