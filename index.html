@@ -1199,6 +1199,12 @@
         return;
       }
 
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        copyConversation(copyConversationBtn);
+        return;
+      }
+
       if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle) return;
 
       if (e.key === 'ArrowDown') {
