@@ -1733,6 +1733,11 @@ select {
   border-color: var(--color-border)
 }
 
+.conversation-item.keyboard-selected {
+  background: var(--color-surface-offset);
+  border-color: var(--color-text-muted)
+}
+
 .conversation-content {
   flex: 1;
   min-width: 0

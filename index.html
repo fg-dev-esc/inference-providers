@@ -268,6 +268,7 @@
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     let pendingDeleteId = null;
+    let keyboardConversationIndex = -1;
 
     function generateId() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -445,7 +446,9 @@
         return;
       }
 
-      drawerList.innerHTML = filtered.map(conv => {
+      if (keyboardConversationIndex >= filtered.length) keyboardConversationIndex = -1;
+
+      drawerList.innerHTML = filtered.map((conv, index) => {
         const isActive = conv.id === currentConversationId;
         const date = new Date(conv.updated_at).toLocaleDateString('es', {
           month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
@@ -453,7 +456,7 @@
         const msgCount = (conv.messages || []).length;
         
         return `
-          <div class="conversation-item ${isActive ? 'active' : ''}" data-id="${conv.id}">
+          <div class="conversation-item ${isActive ? 'active' : ''} ${index === keyboardConversationIndex ? 'keyboard-selected' : ''}" data-id="${conv.id}">
             <div class="conversation-content">
               <div class="conversation-title" data-id="${conv.id}">${conv.title}</div>
               <div class="conversation-meta">
@@ -539,15 +542,48 @@
     }, true);
 
     function toggleDrawer() {
-      drawer.classList.toggle('open');
-      drawerOverlay.classList.toggle('open');
-      document.body.classList.toggle('drawer-open');
+      const willOpen = !drawer.classList.contains('open');
+      drawer.classList.toggle('open', willOpen);
+      drawerOverlay.classList.toggle('open', willOpen);
+      document.body.classList.toggle('drawer-open', willOpen);
+      if (willOpen) {
+        const filter = conversationSearch.value.trim().toLowerCase();
+        const visibleConversations = conversations.filter(conv =>
+          conv.title.toLowerCase().includes(filter)
+        );
+        const currentIndex = visibleConversations.findIndex(conv => conv.id === currentConversationId);
+        keyboardConversationIndex = currentIndex >= 0 ? currentIndex : (visibleConversations.length > 0 ? 0 : -1);
+        renderConversations(filter);
+      } else {
+        keyboardConversationIndex = -1;
+      }
     }
 
     function closeDrawer() {
       drawer.classList.remove('open');
       drawerOverlay.classList.remove('open');
       document.body.classList.remove('drawer-open');
+      keyboardConversationIndex = -1;
+    }
+
+    function startNewConversation() {
+      if (currentConversationId && messages.length > 0) {
+        const conv = conversations.find(c => c.id === currentConversationId);
+        updateConversation(currentConversationId, conv?.title || 'Nueva conversación', messages);
+      }
+      resetConversationDraft();
+    }
+
+    function navigateConversations(direction) {
+      const items = [...drawerList.querySelectorAll('.conversation-item')];
+      if (items.length === 0) return;
+
+      keyboardConversationIndex = direction > 0
+        ? Math.min(keyboardConversationIndex + 1, items.length - 1)
+        : Math.max(keyboardConversationIndex - 1, 0);
+      renderConversations(conversationSearch.value.trim());
+      drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex]
+        ?.scrollIntoView({ block: 'nearest' });
     }
 
     function clearMessagesUI() {
@@ -805,13 +841,7 @@
       chatInput.focus();
     });
 
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      if (currentConversationId && messages.length > 0) {
-        const conv = conversations.find(c => c.id === currentConversationId);
-        updateConversation(currentConversationId, conv?.title || 'Nueva conversación', messages);
-      }
-      resetConversationDraft();
-    });
+    document.getElementById('clearBtn').addEventListener('click', startNewConversation);
 
     sendBtn.addEventListener('click', handleSend);
 
@@ -1148,10 +1178,41 @@
       deleteConversation(id);
     });
     newChatBtn.addEventListener('click', () => {
-      resetConversationDraft();
+      startNewConversation();
       closeDrawer();
     });
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
+    document.addEventListener('keydown', (e) => {
+      const isConversationSearch = e.target === conversationSearch;
+      const isEditingTitle = e.target.matches('[contenteditable="true"]');
+
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'o') {
+        e.preventDefault();
+        startNewConversation();
+        return;
+      }
+
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        toggleDrawer();
+        return;
+      }
+
+      if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        navigateConversations(1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        navigateConversations(-1);
+      } else if (e.key === 'Enter' && keyboardConversationIndex >= 0) {
+        const item = drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex];
+        if (item) selectConversation(item.dataset.id);
+      } else if (e.key === 'Escape') {
+        closeDrawer();
+      }
+    });
     window.addEventListener('popstate', loadConversationFromUrl);
 
     setThinkingMode(thinkingMode);
