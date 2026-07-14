@@ -1205,6 +1205,12 @@
         return;
       }
 
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        themeBtn.click();
+        return;
+      }
+
       if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle) return;
 
       if (e.key === 'ArrowDown') {
