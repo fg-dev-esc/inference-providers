@@ -136,12 +136,6 @@
           </svg>
         </button>
       </div>
-      <button class="new-chat-btn" id="newChatBtn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12h14" />
-        </svg>
-        Nueva conversación
-      </button>
       <div class="drawer-search">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
@@ -261,7 +255,6 @@
     const drawerOverlay = document.getElementById('drawerOverlay');
     const drawerList = document.getElementById('conversationList');
     const conversationSearch = document.getElementById('conversationSearch');
-    const newChatBtn = document.getElementById('newChatBtn');
     const closeDrawerBtn = document.getElementById('closeDrawerBtn');
     const copyConversationBtn = document.getElementById('copyConversationBtn');
     const deleteConfirmOverlay = document.getElementById('deleteConfirmOverlay');
@@ -1177,10 +1170,6 @@
       pendingDeleteId = null;
       deleteConversation(id);
     });
-    newChatBtn.addEventListener('click', () => {
-      startNewConversation();
-      closeDrawer();
-    });
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
     document.addEventListener('keydown', (e) => {
       const isConversationSearch = e.target === conversationSearch;
@@ -1189,6 +1178,7 @@
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'o') {
         e.preventDefault();
         startNewConversation();
+        closeDrawer();
         return;
       }
 
