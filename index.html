@@ -269,6 +269,7 @@
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     let pendingDeleteId = null;
     let keyboardConversationIndex = -1;
+    let keyboardConversationAction = null;
 
     function generateId() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -457,7 +458,7 @@
         
         return `
           <div class="conversation-item ${isActive ? 'active' : ''} ${index === keyboardConversationIndex ? 'keyboard-selected' : ''}" data-id="${conv.id}">
-            <div class="conversation-content">
+            <div class="conversation-content" tabindex="-1">
               <div class="conversation-title" data-id="${conv.id}">${conv.title}</div>
               <div class="conversation-meta">
                 <span>${date}</span>
@@ -490,6 +491,7 @@
 
       drawerList.querySelectorAll('.conv-action-btn.edit').forEach(btn => {
         btn.addEventListener('click', () => {
+          keyboardConversationAction = null;
           const id = btn.dataset.id;
           const conv = conversations.find(c => c.id === id);
           if (!conv) return;
@@ -556,6 +558,7 @@
         renderConversations(filter);
       } else {
         keyboardConversationIndex = -1;
+        keyboardConversationAction = null;
       }
     }
 
@@ -564,6 +567,7 @@
       drawerOverlay.classList.remove('open');
       document.body.classList.remove('drawer-open');
       keyboardConversationIndex = -1;
+      keyboardConversationAction = null;
     }
 
     function startNewConversation() {
@@ -581,9 +585,24 @@
       keyboardConversationIndex = direction > 0
         ? Math.min(keyboardConversationIndex + 1, items.length - 1)
         : Math.max(keyboardConversationIndex - 1, 0);
+      keyboardConversationAction = null;
       renderConversations(conversationSearch.value.trim());
       drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex]
         ?.scrollIntoView({ block: 'nearest' });
+    }
+
+    function focusConversationAction(action) {
+      const item = drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex];
+      const button = item?.querySelector(`.conv-action-btn.${action}`);
+      if (!button) return;
+      keyboardConversationAction = action;
+      button.focus();
+    }
+
+    function focusKeyboardConversation() {
+      const item = drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex];
+      keyboardConversationAction = null;
+      item?.querySelector('.conversation-content')?.focus();
     }
 
     function clearMessagesUI() {
@@ -687,11 +706,16 @@
       thinkingToggleBtn?.classList.toggle('active', thinkingMode);
       thinkingToggleBtn?.setAttribute('aria-pressed', String(thinkingMode));
       modelBtn.setAttribute('aria-disabled', String(thinkingMode));
-      modelSearch.placeholder = 'Buscar modelo...';
       if (thinkingMode) closeDropdown();
       updateModelDisplay();
       buildDropdown();
       updateSendBtn();
+    }
+
+    function updateModelSearchMode() {
+      const isOpenRouter = !thinkingMode && selectedModel.provider === 'openrouter';
+      modelSearch.placeholder = isOpenRouter ? 'ID de modelo OpenRouter...' : 'Buscar modelo...';
+      dropdownBody.hidden = false;
     }
 
     function buildDropdown() {
@@ -706,7 +730,10 @@
         opt.setAttribute('role', 'option');
         opt.tabIndex = 0;
         opt.innerHTML = `<span class="opt-dot" style="background:${p.color}"></span><span class="opt-name">${m.label}</span><span class="opt-tag">${m.tag}</span>`;
-        opt.addEventListener('click', () => selectModel(m));
+        opt.addEventListener('click', (event) => {
+          event.stopPropagation();
+          selectModel(m);
+        });
         opt.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectModel(m); } });
         dropdownBody.appendChild(opt);
       });
@@ -715,8 +742,19 @@
     function selectModel(m) {
       selectedModel = m;
       updateModelDisplay();
-      closeDropdown();
       buildDropdown();
+      if (m.provider === 'openrouter') {
+        modelSearch.value = m.id;
+        updateModelSearchMode();
+        modelDropdown.classList.add('open');
+        modelBtn.setAttribute('aria-expanded', 'true');
+        setTimeout(() => {
+          modelSearch.focus();
+          modelSearch.select();
+        }, 60);
+      } else {
+        closeDropdown();
+      }
       updateSendBtn();
     }
 
@@ -724,9 +762,18 @@
       if (thinkingMode) return;
       modelDropdown.classList.add('open');
       modelBtn.setAttribute('aria-expanded', 'true');
-      setTimeout(() => modelSearch.focus(), 60);
-      modelSearch.value = '';
-      filterModels('');
+      if (selectedModel.provider === 'openrouter') {
+        modelSearch.value = selectedModel.id;
+        updateModelSearchMode();
+      } else {
+        modelSearch.value = '';
+        updateModelSearchMode();
+        filterModels('');
+      }
+      setTimeout(() => {
+        modelSearch.focus();
+        if (selectedModel.provider === 'openrouter') modelSearch.select();
+      }, 60);
     }
     function closeDropdown() {
       modelDropdown.classList.remove('open');
@@ -737,7 +784,23 @@
     thinkingToggleBtn?.addEventListener('click', () => setThinkingMode(!thinkingMode));
     document.addEventListener('click', e => { if (!modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) closeDropdown(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
-    modelSearch.addEventListener('input', () => filterModels(modelSearch.value.trim().toLowerCase()));
+    modelSearch.addEventListener('input', () => {
+      if (selectedModel.provider !== 'openrouter') {
+        filterModels(modelSearch.value.trim().toLowerCase());
+        return;
+      }
+
+      const id = modelSearch.value.trim();
+      selectedModel = id
+        ? { id, label: id, provider: 'openrouter', tag: 'OpenRouter' }
+        : MODELS.find(m => m.id === 'openrouter/free');
+      updateModelDisplay();
+      buildDropdown();
+      updateSendBtn();
+    });
+    modelSearch.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && selectedModel.provider === 'openrouter') closeDropdown();
+    });
 
     function filterModels(q) {
       dropdownBody.querySelectorAll('.model-option').forEach(opt => {
@@ -1176,6 +1239,7 @@
       deleteConfirmOverlay.setAttribute('aria-hidden', 'true');
       pendingDeleteId = null;
       deleteConversation(id);
+      setTimeout(focusKeyboardConversation, 0);
     });
     newChatBtn.addEventListener('click', () => {
       startNewConversation();
@@ -1183,8 +1247,20 @@
     });
     conversationSearch.addEventListener('input', () => renderConversations(conversationSearch.value.trim()));
     document.addEventListener('keydown', (e) => {
+      if (deleteConfirmOverlay.classList.contains('open')) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          confirmDeleteBtn.click();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          closeDeleteDialog();
+        }
+        return;
+      }
+
       const isConversationSearch = e.target === conversationSearch;
       const isEditingTitle = e.target.matches('[contenteditable="true"]');
+      const isConversationAction = e.target.classList.contains('conv-action-btn');
 
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'o') {
         e.preventDefault();
@@ -1211,7 +1287,7 @@
         return;
       }
 
-      if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle) return;
+      if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle || (e.key === 'Enter' && isConversationAction)) return;
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
@@ -1219,6 +1295,15 @@
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         navigateConversations(-1);
+      } else if (e.key === 'ArrowRight' && keyboardConversationIndex >= 0) {
+        e.preventDefault();
+        focusConversationAction('delete');
+      } else if (e.key === 'ArrowLeft' && keyboardConversationAction === 'delete') {
+        e.preventDefault();
+        focusConversationAction('edit');
+      } else if (e.key === 'ArrowLeft' && keyboardConversationAction === 'edit') {
+        e.preventDefault();
+        focusKeyboardConversation();
       } else if (e.key === 'Enter' && keyboardConversationIndex >= 0) {
         const item = drawerList.querySelectorAll('.conversation-item')[keyboardConversationIndex];
         if (item) selectConversation(item.dataset.id);
