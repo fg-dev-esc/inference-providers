@@ -1281,6 +1281,12 @@
         return;
       }
 
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        setThinkingMode(!thinkingMode);
+        return;
+      }
+
       if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 't') {
         e.preventDefault();
         themeBtn.click();
