@@ -1794,6 +1794,10 @@ select {
   opacity: 1
 }
 
+.conversation-item.keyboard-selected .conversation-actions {
+  opacity: 1
+}
+
 .conv-action-btn {
   display: flex;
   align-items: center;
