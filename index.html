@@ -782,18 +782,7 @@
       selectedModel = m;
       updateModelDisplay();
       buildDropdown();
-      if (m.provider === 'openrouter') {
-        modelSearch.value = m.id;
-        updateModelSearchMode();
-        modelDropdown.classList.add('open');
-        modelBtn.setAttribute('aria-expanded', 'true');
-        setTimeout(() => {
-          modelSearch.focus();
-          modelSearch.select();
-        }, 60);
-      } else {
-        closeDropdown();
-      }
+      closeDropdown();
       updateSendBtn();
     }
 
