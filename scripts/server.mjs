@@ -34,11 +34,11 @@ const IMAGE_PARSER_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
 
 const AETHRA_MODELS = [
-  { provider: 'mistral', model: 'mistral-large-latest', label: 'Mistral Large 3' },
+  { provider: 'mistral', model: 'codestral-latest', label: 'Codestral' },
   { provider: 'groq', model: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B' },
-  { provider: 'google', model: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash' },
+  { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' }
 ];
-const AETHRA_INTEGRATOR = { provider: 'cerebras', model: 'gpt-oss-120b', label: 'GPT OSS 120B' };
+const AETHRA_INTEGRATOR = { provider: 'cohere', model: 'north-mini-code-1-0', label: 'North Mini Code 1.0' };
 
 if (isMainModule()) startServer();
 
